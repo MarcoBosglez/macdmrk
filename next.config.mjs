@@ -1,8 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {env: {
-    GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID,
-  },};
-
-
+const nextConfig = {};
 
 export default nextConfig;

@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# macdmrk
 
-## Getting Started
+Marco Bosquez's personal portfolio — a terminal/desktop-OS themed site split between the professional side (work, about, contact) and a gallery of illustrations, with a bilingual (English/Spanish) toggle.
 
-First, run the development server:
+## Stack
+
+- **Next.js 15** (App Router) + TypeScript
+- **Tailwind CSS v4** — theme tokens live in `src/app/globals.css` (`@theme` block)
+- **shadcn/ui** — primitives in `src/components/ui/`
+- **Motion** (Framer Motion) — window open/close and mobile nav animations
+- **three.js** — the 3D avatar and penguin easter egg on the home page, hand-built rather than via `@react-three/fiber` (that library conflicts with Next's server rendering)
+- **next-themes** — dark/light mode, default dark
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # production build + type-check
+npm run lint    # ESLint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Project structure
 
-## Learn More
+```
+src/
+  app/                 # one folder per route (Next.js App Router)
+    layout.tsx         # shared chrome: window frame, top bar, providers
+    page.tsx           # home page (hero)
+    work/, gallery/, about/, faq/, contact/
 
-To learn more about Next.js, take a look at the following resources:
+  components/
+    chrome/             # top bar, bordered window frame, mobile nav, language toggle
+    providers/          # theme, sound, and locale context providers
+    hub/, work/, gallery/, about/, faq/, contact/   # per-section UI
+    ui/                 # shadcn/ui primitives
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  lib/
+    data/                # placeholder content (projects, FAQs, experience) — edit these to add real content
+    i18n/                # EN/ES dictionary + Locale type
+    three/               # 3D scene builders + the mount/render hook
+    utils.ts
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Content
 
-## Deploy on Vercel
+Placeholder project, illustration, FAQ, and experience data lives in `src/lib/data/`. Swap in real content there — each entry is typed, so TypeScript will flag anything missing.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Language
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The whole site is translated via `src/lib/i18n/dictionaries.ts`. Terminal-style text (`whoami`, `work.exe`, `ls -la`, fake filenames) is intentionally left untranslated — it's meant to read as literal shell output in either language. To add a string, add it to the `Dictionary` type and both the `en` and `es` objects; to add a third language, add it to the `Locale` type and `DICTIONARIES`.
+
+## Note on the design
+
+The visual design and illustrations are original human work — AI tools were only used to help write the code (see the disclaimer on the About page).
