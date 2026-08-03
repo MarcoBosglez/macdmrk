@@ -26,7 +26,7 @@ export function MobileNavBubbles() {
   const { t } = useLocale();
 
   function closeAfterNavigating() {
-    playClick();
+    playClick("nav");
     setOpen(false);
   }
 
@@ -74,7 +74,7 @@ export function MobileNavBubbles() {
 
       <button
         onClick={() => {
-          playClick();
+          playClick("toggle");
           setOpen((wasOpen) => !wasOpen);
         }}
         aria-label={open ? "Close menu" : "Open menu"}

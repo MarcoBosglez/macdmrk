@@ -27,14 +27,14 @@ export function AppWindow({
       initial={{ opacity: 0, scale: 0.94 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.22, ease: "easeOut" }}
-      className="absolute inset-3 z-10 flex flex-col overflow-hidden rounded-2xl border border-border bg-bg md:inset-5"
+      className="absolute inset-x-3 inset-y-2 z-10 flex flex-col overflow-hidden rounded-2xl border border-border bg-bg md:inset-x-5 md:inset-y-3"
     >
       <NoiseOverlay />
       <div className="relative z-10 flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5 md:px-6">
         <span className="font-mono text-xs text-muted">{title}</span>
         <Link
           href="/"
-          onClick={playClick}
+          onClick={() => playClick("close")}
           className="p-1 font-mono text-base leading-none text-ink transition-transform hover:scale-115 hover:text-emerald"
           aria-label="Close"
         >

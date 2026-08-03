@@ -24,7 +24,7 @@ export function FaqAccordion() {
             <div key={faq.q.en} className="border-b border-border py-4">
               <button
                 onClick={() => {
-                  playClick();
+                  playClick("toggle");
                   setOpenIndex(open ? null : i);
                 }}
                 className="flex w-full items-center justify-between gap-4 text-left"

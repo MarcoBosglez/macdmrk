@@ -16,6 +16,9 @@ export type Project = {
   // cuts off the part of a tall screenshot that actually matters —
   // this lets each project pick what stays in frame. Defaults to "center".
   focus?: string;
+  // Live site or repo link. Omit to hide the "open in new tab" icon in
+  // the detail panel.
+  url?: string;
 };
 
 export const PROJECTS: Project[] = [
@@ -32,6 +35,7 @@ export const PROJECTS: Project[] = [
     status: { en: "active development", es: "desarrollo activo" },
     image: "/work/portfolio.PNG",
     focus: "top",
+    url: "https://github.com/MarcoBosglez/macdmrk",
   },
   {
     slug: "spotify-banner",
@@ -45,6 +49,7 @@ export const PROJECTS: Project[] = [
     },
     status: { en: "shipped", es: "publicado" },
     image: "/work/banneronerpm.PNG",
+    url: "https://github.com/MarcoBosglez/banner-interactivo",
   },
   {
     slug: "aws-recording-system",
@@ -59,6 +64,7 @@ export const PROJECTS: Project[] = [
     status: { en: "shipped", es: "publicado" },
     image: "/work/rsh.PNG",
     focus: "top",
+    url: "https://www.linkedin.com/feed/update/urn:li:activity:6943381454940753920/",
   },
   {
     slug: "sentiment-analysis",
@@ -73,5 +79,6 @@ export const PROJECTS: Project[] = [
     status: { en: "shipped", es: "publicado" },
     image: "/work/ml_article.PNG",
     focus: "top",
+    url: "https://rcs.cic.ipn.mx/2023_152_12/Development%20of%20a%20Front-End%20with%20Dynamic%20Searches%20for%20Chatbot%20Retraining%20Using%20ReactJS.pdf",
   },
 ];

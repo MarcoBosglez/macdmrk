@@ -63,10 +63,34 @@ export type Dictionary = {
     answerPrefix: string;
   };
   contact: {
-    emailLabel: string;
-    instagramLabel: string;
-    linkedinLabel: string;
-    githubLabel: string;
+    heading: string;
+    blurb: string;
+    form: {
+      heading: string;
+      nameLabel: string;
+      namePlaceholder: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      messageLabel: string;
+      messagePlaceholder: string;
+      send: string;
+      sending: string;
+      success: string;
+      genericError: string;
+      captchaRequired: string;
+      captchaLoading: string;
+    };
+  };
+  notFound: {
+    title: string;
+    description: string;
+    cta: string;
+  };
+  errorPage: {
+    title: string;
+    description: string;
+    retry: string;
+    cta: string;
   };
 };
 
@@ -116,10 +140,34 @@ const en: Dictionary = {
     answerPrefix: "A:",
   },
   contact: {
-    emailLabel: "EMAIL",
-    instagramLabel: "INSTAGRAM",
-    linkedinLabel: "LINKEDIN",
-    githubLabel: "GITHUB",
+    heading: "Wanna talk?",
+    blurb: "Send me a message and let's get in touch, or find me directly:",
+    form: {
+      heading: "~/ ./send_message.sh",
+      nameLabel: "NAME",
+      namePlaceholder: "Your name",
+      emailLabel: "EMAIL",
+      emailPlaceholder: "you@example.com",
+      messageLabel: "MESSAGE",
+      messagePlaceholder: "What's up?",
+      send: "→ send",
+      sending: "sending...",
+      success: "Message sent — I'll get back to you soon.",
+      genericError: "Something went wrong. Please try again.",
+      captchaRequired: "Please complete the CAPTCHA.",
+      captchaLoading: "loading captcha...",
+    },
+  },
+  notFound: {
+    title: "404",
+    description: "This page doesn't exist — the file was moved, deleted, or never here.",
+    cta: "→ back_home",
+  },
+  errorPage: {
+    title: "something broke",
+    description: "An unexpected error occurred. You can try again, or head back home.",
+    retry: "→ try_again",
+    cta: "→ back_home",
   },
 };
 
@@ -169,10 +217,34 @@ const es: Dictionary = {
     answerPrefix: "R:",
   },
   contact: {
-    emailLabel: "CORREO",
-    instagramLabel: "INSTAGRAM",
-    linkedinLabel: "LINKEDIN",
-    githubLabel: "GITHUB",
+    heading: "¿Quieres platicar?",
+    blurb: "Envíame un mensaje y hagamos contacto, o encuéntrame directamente:",
+    form: {
+      heading: "~/ ./enviar_mensaje.sh",
+      nameLabel: "NOMBRE",
+      namePlaceholder: "Tu nombre",
+      emailLabel: "CORREO",
+      emailPlaceholder: "tu@ejemplo.com",
+      messageLabel: "MENSAJE",
+      messagePlaceholder: "¿Qué tal?",
+      send: "→ enviar",
+      sending: "enviando...",
+      success: "Mensaje enviado — te responderé pronto.",
+      genericError: "Algo salió mal. Por favor intenta de nuevo.",
+      captchaRequired: "Por favor completa el CAPTCHA.",
+      captchaLoading: "cargando captcha...",
+    },
+  },
+  notFound: {
+    title: "404",
+    description: "Esta página no existe — el archivo fue movido, eliminado, o nunca existió.",
+    cta: "→ volver_al_inicio",
+  },
+  errorPage: {
+    title: "algo se rompió",
+    description: "Ocurrió un error inesperado. Puedes intentar de nuevo, o volver al inicio.",
+    retry: "→ intentar_de_nuevo",
+    cta: "→ volver_al_inicio",
   },
 };
 

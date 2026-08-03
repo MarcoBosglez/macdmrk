@@ -55,14 +55,14 @@ export function Hero() {
         <div className="flex gap-5">
           <Link
             href="/work"
-            onClick={playClick}
+            onClick={() => playClick("nav")}
             className="font-mono text-[13px] font-bold text-emerald hover:underline"
           >
             {t.hero.ctaWork}
           </Link>
           <Link
             href="/gallery"
-            onClick={playClick}
+            onClick={() => playClick("nav")}
             className="font-mono text-[13px] font-bold text-mint hover:underline"
           >
             {t.hero.ctaGallery}

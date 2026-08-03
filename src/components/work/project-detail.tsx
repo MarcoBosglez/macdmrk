@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { ExternalLink } from "lucide-react";
 import { useLocale } from "@/components/providers/locale-provider";
+import { useSound } from "@/components/providers/sound-provider";
 import { localize } from "@/lib/i18n/dictionaries";
 import type { Project } from "@/lib/data/projects";
 
@@ -19,6 +21,7 @@ function KeyValueRow({ label, value, accent }: { label: string; value: string; a
 // languages — only the surrounding labels and prose are translated.
 export function ProjectDetail({ project }: { project: Project }) {
   const { locale, t } = useLocale();
+  const { playClick } = useSound();
 
   return (
     <div className="flex max-w-[640px] flex-col gap-3 overflow-y-auto p-6 md:p-10">
@@ -35,8 +38,22 @@ export function ProjectDetail({ project }: { project: Project }) {
           t.work.previewPlaceholder
         )}
       </div>
-      <div className="font-mono text-xl font-bold md:text-[22px]">
-        {localize(project.title, locale)}
+      <div className="flex items-center gap-2.5">
+        <div className="font-mono text-xl font-bold md:text-[22px]">
+          {localize(project.title, locale)}
+        </div>
+        {project.url ? (
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => playClick("nav")}
+            aria-label="Open project in a new tab"
+            className="shrink-0 rounded-full border border-border p-1.5 text-muted transition-colors hover:border-emerald hover:text-emerald"
+          >
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+          </a>
+        ) : null}
       </div>
       <p className="text-sm leading-relaxed text-muted">{localize(project.desc, locale)}</p>
       <KeyValueRow label={t.work.categoryLabel} value={localize(project.category, locale)} />

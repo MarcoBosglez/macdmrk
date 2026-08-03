@@ -19,7 +19,7 @@ function NavPill({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      onClick={playClick}
+      onClick={() => playClick("nav")}
       className={cn(
         "rounded-full px-4.5 py-2 font-mono text-[13px] font-bold tracking-wide transition-colors",
         active ? "bg-ink text-bg" : "text-ink hover:text-emerald"
@@ -72,7 +72,7 @@ export function TopBar() {
       <div className="grid grid-cols-2 items-center gap-4 px-4 py-5 md:grid-cols-[1fr_auto_1fr] md:px-10">
         <Link
           href="/"
-          onClick={playClick}
+          onClick={() => playClick("nav")}
           className="justify-self-start font-mono text-xl font-bold text-emerald"
         >
           [m]
@@ -87,7 +87,7 @@ export function TopBar() {
         <div className="flex justify-self-end gap-2 md:gap-3">
           <ToggleButton
             onClick={() => {
-              playClick();
+              playClick("toggle");
               toggleMute();
             }}
           >
@@ -95,7 +95,7 @@ export function TopBar() {
           </ToggleButton>
           <ToggleButton
             onClick={() => {
-              playClick();
+              playClick("toggle");
               setTheme(resolvedTheme === "dark" ? "light" : "dark");
             }}
           >

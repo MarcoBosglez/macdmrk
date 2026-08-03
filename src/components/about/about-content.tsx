@@ -64,7 +64,7 @@ export function AboutContent() {
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={playClick}
+              onClick={() => playClick("nav")}
               className="rounded-full border border-border px-3 py-1.5 font-mono text-xs font-bold transition-colors hover:border-emerald hover:text-emerald"
             >
               {link.label}
@@ -73,7 +73,7 @@ export function AboutContent() {
         </div>
         <Link
           href="/contact"
-          onClick={playClick}
+          onClick={() => playClick("nav")}
           className="rounded-full bg-emerald px-4.5 py-2 font-mono text-[13px] font-bold text-bg"
         >
           {t.about.contactCta}

@@ -43,7 +43,10 @@ export default async function IllustrationPage({
             />
           )}
         </div>
-        <div className="font-mono text-sm"># {illustration.caption}</div>
+        <div className="mb-1.5 font-mono text-sm"># {illustration.caption}</div>
+        {illustration.description ? (
+          <p className="text-sm leading-relaxed text-muted">{illustration.description}</p>
+        ) : null}
       </div>
     </AppWindow>
   );

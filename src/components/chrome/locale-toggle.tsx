@@ -14,7 +14,7 @@ export function LocaleToggle() {
   return (
     <button
       onClick={() => {
-        playClick();
+        playClick("toggle");
         setLocale(nextLocale);
       }}
       aria-label={`Switch language to ${nextLocale === "en" ? "English" : "Español"}`}

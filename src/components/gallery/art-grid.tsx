@@ -20,6 +20,33 @@ export type OpenWindow = {
   z: number;
 };
 
+// Non-maximized windows are sized from the illustration's own aspect
+// ratio instead of one fixed box for every piece, so a tall portrait
+// doesn't open into a mostly-empty landscape window (or vice versa).
+// MAX/MIN bound the image area itself; CHROME_W/H then add back the
+// header bar, content padding, and caption/hint text around it so the
+// whole window — not just the image — ends up that size.
+const MAX_IMAGE_W = 560;
+const MAX_IMAGE_H = 420;
+const MIN_IMAGE_W = 260;
+const MIN_IMAGE_H = 200;
+const CHROME_W = 40; // p-5 left + right padding around the image
+const CHROME_H = 151; // header bar + p-5 top/bottom + caption/hint text
+
+function windowSizeFor(illustration: Illustration | undefined) {
+  if (!illustration) return { w: 420, h: 340 };
+  const ratio = illustration.width / illustration.height;
+  let imageW = MAX_IMAGE_W;
+  let imageH = imageW / ratio;
+  if (imageH > MAX_IMAGE_H) {
+    imageH = MAX_IMAGE_H;
+    imageW = imageH * ratio;
+  }
+  imageW = Math.max(imageW, MIN_IMAGE_W);
+  imageH = Math.max(imageH, MIN_IMAGE_H);
+  return { w: Math.round(imageW + CHROME_W), h: Math.round(imageH + CHROME_H) };
+}
+
 // The gallery grid plus a tiny in-memory "window manager" for the
 // floating lightbox windows that open on top of it. Multiple pieces
 // can be open (and dragged around) at once, which is why this is
@@ -34,7 +61,8 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   const [nextZ, setNextZ] = useState(20);
 
   function openWindow(id: string) {
-    playClick();
+    playClick("open");
+    const { w, h } = windowSizeFor(illustrations.find((i) => i.slug === id));
     const z = nextZ;
     setNextZ(z + 1);
     setOpenWindows((prev) => {
@@ -46,12 +74,14 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
       // so opening several in a row doesn't stack them in an identical
       // spot on top of each other.
       const offset = (prev.length % 5) * 26;
-      return [...prev, { id, x: 100 + offset, y: 20 + offset, w: 420, h: 340, maximized: false, z }];
+      return [...prev, { id, x: 100 + offset, y: 20 + offset, w, h, maximized: false, z }];
     });
   }
 
   function closeWindow(id: string) {
-    playClick();
+    // The sound plays at the call site (ArtWindow's close button)
+    // instead of here, since that's the only place that ever calls
+    // this — playing it here too would fire it twice per click.
     setOpenWindows((prev) => prev.filter((w) => w.id !== id));
   }
 
@@ -66,7 +96,10 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   }
 
   function toggleMaximize(id: string) {
-    playClick();
+    // Same as closeWindow above: the sound plays at the call site
+    // (ArtWindow's maximize button), which is the only caller, and it
+    // needs win.maximized to know whether to play `maximize` or
+    // `minimize` — this function doesn't have that context.
     setOpenWindows((prev) => prev.map((w) => (w.id === id ? { ...w, maximized: !w.maximized } : w)));
   }
 

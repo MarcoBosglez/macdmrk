@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { useSound } from "@/components/providers/sound-provider";
@@ -58,19 +59,11 @@ export function ArtWindow({
     dragState.current = null;
   }, []);
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.94 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
-      onPointerDownCapture={onFocus}
-      className="absolute flex flex-col overflow-hidden rounded-lg border border-border bg-panel shadow-2xl"
-      style={
-        win.maximized
-          ? { left: 16, top: 16, right: 16, bottom: 16, zIndex: win.z }
-          : { left: win.x, top: win.y, width: win.w, height: win.h, zIndex: win.z }
-      }
-    >
+  // Shared between both layouts below — only the outer wrapper (and
+  // where it renders) differs between a normal floating window and a
+  // maximized one.
+  const chrome = (
+    <>
       <div
         onPointerDown={onHeaderPointerDown}
         onPointerMove={onHeaderPointerMove}
@@ -88,7 +81,7 @@ export function ArtWindow({
             // redirects this button's click away before it can fire.
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => {
-              playClick();
+              playClick(win.maximized ? "minimize" : "maximize");
               onToggleMaximize();
             }}
             className="font-mono text-[11px] text-muted hover:text-emerald hover:underline"
@@ -98,7 +91,7 @@ export function ArtWindow({
           <button
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => {
-              playClick();
+              playClick("close");
               onClose();
             }}
             className="font-mono text-xs text-muted transition-transform hover:scale-115 hover:text-emerald"
@@ -133,8 +126,47 @@ export function ArtWindow({
           )}
         </div>
         <div className="mb-1.5 shrink-0 font-mono text-sm"># {illustration.caption}</div>
+        {illustration.description ? (
+          <p className="mb-1.5 shrink-0 text-[13px] leading-relaxed text-muted">
+            {illustration.description}
+          </p>
+        ) : null}
         <div className="shrink-0 font-mono text-[11px] text-muted">{t.gallery.dragHint}</div>
       </div>
+    </>
+  );
+
+  // Maximized windows are portaled straight to document.body and
+  // fixed to the viewport, rather than just growing to fill their
+  // absolutely-positioned slot inside the gallery pane — that slot is
+  // itself inset within the page's window chrome, so "maximize" would
+  // otherwise only ever fill part of the screen. Rendering outside
+  // that whole DOM subtree is what makes it a true full-screen window.
+  if (win.maximized) {
+    return createPortal(
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.16, ease: "easeOut" }}
+        onPointerDownCapture={onFocus}
+        className="fixed inset-0 z-50 flex flex-col overflow-hidden border border-border bg-panel"
+      >
+        {chrome}
+      </motion.div>,
+      document.body
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.94 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
+      onPointerDownCapture={onFocus}
+      className="absolute flex flex-col overflow-hidden rounded-lg border border-border bg-panel shadow-2xl"
+      style={{ left: win.x, top: win.y, width: win.w, height: win.h, zIndex: win.z }}
+    >
+      {chrome}
     </motion.div>
   );
 }
