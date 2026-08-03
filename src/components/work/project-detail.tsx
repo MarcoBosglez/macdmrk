@@ -7,11 +7,25 @@ import { useSound } from "@/components/providers/sound-provider";
 import { localize } from "@/lib/i18n/dictionaries";
 import type { Project } from "@/lib/data/projects";
 
-function KeyValueRow({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+const TONE_CLASSES = {
+  green: "text-emerald",
+  blue: "text-blue-500 dark:text-blue-400",
+  red: "text-destructive",
+} as const;
+
+function KeyValueRow({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone?: keyof typeof TONE_CLASSES;
+}) {
   return (
     <div className="flex gap-3.5 border-t border-border pt-3 font-mono text-[13px]">
       <span className="w-20 shrink-0 text-muted">{label}</span>
-      <span className={accent ? "text-emerald" : undefined}>{value}</span>
+      <span className={tone ? TONE_CLASSES[tone] : undefined}>{value}</span>
     </div>
   );
 }
@@ -55,13 +69,16 @@ export function ProjectDetail({ project }: { project: Project }) {
           </a>
         ) : null}
       </div>
+      {project.url ? (
+        <div className="-mt-2 font-mono text-[11px] text-muted">{t.work.linkHint}</div>
+      ) : null}
       <p className="text-sm leading-relaxed text-muted">{localize(project.desc, locale)}</p>
       <KeyValueRow label={t.work.categoryLabel} value={localize(project.category, locale)} />
       <KeyValueRow label={t.work.stackLabel} value={project.tags.join(", ")} />
       <KeyValueRow
         label={t.work.statusLabel}
         value={localize(project.status, locale)}
-        accent
+        tone={project.statusTone ?? "green"}
       />
     </div>
   );

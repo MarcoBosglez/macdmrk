@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useSound } from "@/components/providers/sound-provider";
+import { useLocale } from "@/components/providers/locale-provider";
 import { ArtWindow } from "@/components/gallery/art-window";
 import type { Illustration } from "@/lib/data/illustrations";
 
@@ -54,6 +55,7 @@ function windowSizeFor(illustration: Illustration | undefined) {
 // one thing at a time, but this view intentionally allows several.
 export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   const { playClick } = useSound();
+  const { t } = useLocale();
   const [openWindows, setOpenWindows] = useState<OpenWindow[]>([]);
   // Monotonically increasing counter used purely for z-index — every
   // time a window is opened or focused it claims the next number, so
@@ -105,7 +107,8 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
 
   return (
     <div className="relative h-full overflow-y-auto p-6 md:p-8">
-      <div className="mb-4.5 font-mono text-[13px] text-mint">~/art/ ls -la</div>
+      <div className="mb-1 font-mono text-[13px] text-mint">~/art/ ls -la</div>
+      <div className="mb-4.5 font-mono text-[11px] text-muted">{t.gallery.gridHint}</div>
       {/* CSS multi-column masonry: each tile sizes to its own image's
           real aspect ratio (via width/height below) instead of a
           fixed, hand-picked height, so nothing gets cropped. */}
@@ -120,7 +123,7 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
                 : `repeating-linear-gradient(135deg, oklch(60% 0.1 ${ill.hue} / 0.18) 0px, oklch(60% 0.1 ${ill.hue} / 0.18) 12px, var(--panel) 12px, var(--panel) 24px)`,
               aspectRatio: ill.image ? undefined : `${ill.width} / ${ill.height}`,
             }}
-            className="relative mb-3 block w-full break-inside-avoid overflow-hidden rounded border border-border p-1.5 text-left transition-transform hover:-translate-y-0.5 md:mb-3.5"
+            className="relative mb-3 block w-full break-inside-avoid overflow-hidden rounded p-1.5 text-left transition-transform hover:-translate-y-0.5 md:mb-3.5"
           >
             {ill.image ? (
               <Image

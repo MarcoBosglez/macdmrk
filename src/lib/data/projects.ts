@@ -8,6 +8,10 @@ export type Project = {
   category: Localized;
   desc: Localized;
   status: Localized;
+  // Color the status value renders in on the detail panel. Defaults to
+  // "green" (shipped/done) when omitted — only in-progress or negative
+  // states need to set this explicitly.
+  statusTone?: "green" | "blue" | "red";
   // Path under /public, e.g. "/projects/web-portfolio.png". Omit to
   // fall back to the "// preview.png" placeholder.
   image?: string;
@@ -27,13 +31,14 @@ export const PROJECTS: Project[] = [
     num: "01",
     tags: ["NextJS", "TSX", "Tailwind CSS"],
     title: { en: "Web Portfolio", es: "Portfolio Web" },
-    category: { en: "Web Design / Digital Hub", es: "Desarrollo Web / Hub Digital" },
+    category: { en: "Web Portfolio", es: "Desarrollo Web / Hub Digital" },
     desc: {
       en: "Developing an interactive personal platform designed to showcase both my Computer Science background and Digital Art",
       es: "Desarrollando plataforma interactiva, diseñada para mostrar mi carrera de Ciencias de Computación y Arte Digital.",
     },
     status: { en: "active development", es: "desarrollo activo" },
-    image: "/work/portfolio.PNG",
+    statusTone: "blue",
+    image: "",
     focus: "top",
     url: "https://github.com/MarcoBosglez/macdmrk",
   },
@@ -48,21 +53,21 @@ export const PROJECTS: Project[] = [
       es: "Creé un banner promocional de Spotify de alta-visibilidad para campañas de distribución musical. Scripts customizables y diseño HTML/CSS",
     },
     status: { en: "shipped", es: "publicado" },
-    image: "/work/banneronerpm.PNG",
+    image: "",
     url: "https://github.com/MarcoBosglez/banner-interactivo",
   },
   {
-    slug: "aws-recording-system",
+    slug: "aws-rsh",
     num: "03",
     tags: ["Java", "Spring", "Docker", "ReactJS"],
     title: { en: "Amazon Recorder System Helper", es: "Amazon Recorder System Helper" },
-    category: { en: "Tooling", es: "Herramientas" },
+    category: { en: "AWS Tooling", es: "Herramientas" },
     desc: {
       en: "Full-stack project that works as an extension for Amazon Connect. This web service was used to record all interactions between call center employees and customers to provide business insights and performance metrics for audit and training purposes.",
       es: "Proyecto full-stack que funciona como una extensión de Amazon Connect. Este servicio web es usado para grabar llamados e interacciones de un call center con empleados y usuarios, esto provee análisis de negocio y metricas para revisión y propósitos de entrenamiento.",
     },
     status: { en: "shipped", es: "publicado" },
-    image: "/work/rsh.PNG",
+    image: "",
     focus: "top",
     url: "https://www.linkedin.com/feed/update/urn:li:activity:6943381454940753920/",
   },
@@ -71,13 +76,13 @@ export const PROJECTS: Project[] = [
     num: "04",
     tags: ["Machine Learning", "Python", "NLTK"],
     title: { en: "ML Sentiment Analysis Project", es: "Proyecto de ML, Analisis Sentimental" },
-    category: { en: "Machine Learning Article", es: "Artículo de Machine Learning" },
+    category: { en: "ML Paper", es: "Artículo de Machine Learning" },
     desc: {
       en: "An application of Natural Language Processing based on mental health tweets. Applying multiclass and multi-label classification of 625 manually labeled tweets to identify the accuracy of our negative sentiment model.",
       es: "Una aplicación de procesamiento de lenguaje natural basada en tuits sobre salud mental. Se aplica una clasificación multiclase y multietiqueta a 625 tuits etiquetados manualmente para determinar la precisión de nuestro modelo de sentimiento negativo.",
     },
     status: { en: "shipped", es: "publicado" },
-    image: "/work/ml_article.PNG",
+    image: "",
     focus: "top",
     url: "https://rcs.cic.ipn.mx/2023_152_12/Development%20of%20a%20Front-End%20with%20Dynamic%20Searches%20for%20Chatbot%20Retraining%20Using%20ReactJS.pdf",
   },

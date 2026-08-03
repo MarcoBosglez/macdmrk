@@ -8,16 +8,23 @@
   --ink: #0b3124;
   --muted: #4c6b5c;
   --border: #b7dcc7;
-  --emerald: #3eb488;
+  /* #3eb488 (the dark theme's brand emerald) only clears ~2.3:1
+     contrast against this light background — well under the 4.5:1
+     WCAG AA minimum for text — which is why "whoami", links, and the
+     contact CTA button all read as faint in light mode. This darker
+     shade clears ~4.8:1, and improves the CTA button too since it uses
+     this as a background under light-colored text (contrast is
+     symmetric either way). */
+  --emerald: #147a54;
   --mint: #0b3124;
 }
 
 .dark {
-  --bg: #020d08;
-  --panel: #172b22;
+  --bg: #0B3124;
+  --panel: #0f1f17;
   --ink: #edefec;
   --muted: #7fa394;
-  --border: #243b31;
+  --border: #2e9973;
   --emerald: #2e9973;
   --mint: #55c79a;
 }
@@ -184,6 +191,14 @@ body {
   animation: penguin-bob 1.8s ease-in-out infinite;
 }
 
+/* Set by the inline script in layout.tsx, before React hydrates, when
+   sessionStorage shows the boot animation already played this tab
+   session — hides the boot screen the instant it's painted so repeat
+   page loads never flash it, even for one frame. */
+html.skip-boot .boot-screen {
+  display: none !important;
+}
+
 .noise-overlay {
   position: absolute;
   inset: -20%;
@@ -195,4 +210,28 @@ body {
   mix-blend-mode: screen;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: noise-shift 0.2s steps(2) infinite;
+}
+
+.scanline-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, transparent 60%, rgba(0, 0, 0, 0.4) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.22) 0px,
+      rgba(0, 0, 0, 0.22) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+  /* `overlay` was the original choice, but it multiplies dark backdrop
+     pixels while screening light ones — and screening black onto
+     anything leaves it ~unchanged, so scanlines showed over the dark
+     background but vanished over light-colored text. `multiply`
+     darkens every backdrop color the same way regardless of its own
+     luminance, so text gets the effect too. */
+  mix-blend-mode: multiply;
+  opacity: 0.45;
 }

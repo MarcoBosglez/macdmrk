@@ -6,6 +6,11 @@ import * as THREE from "three";
 type Options = {
   autorotate?: boolean;
   cameraDistance?: number;
+  // Fired on click/tap with the actual built object (the same instance
+  // `buildObject` returned), so callers can reach into it by name — see
+  // penguin-scene.ts's `flapPenguinWings` — without this hook needing
+  // to know anything scene-specific.
+  onClick?: (object: THREE.Object3D) => void;
 };
 
 // Mounts a plain (non-React) three.js scene into a container div and
@@ -26,7 +31,7 @@ type Options = {
 export function useThreeStage(
   containerRef: RefObject<HTMLDivElement | null>,
   buildObject: () => THREE.Object3D,
-  { autorotate = true, cameraDistance = 2.6 }: Options = {}
+  { autorotate = true, cameraDistance = 2.6, onClick }: Options = {}
 ) {
   useEffect(() => {
     const container = containerRef.current;
@@ -64,6 +69,9 @@ export function useThreeStage(
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(container);
 
+    const handleClick = () => onClick?.(object);
+    if (onClick) container.addEventListener("click", handleClick);
+
     let raf = 0;
     const animate = () => {
       if (autorotate) object.rotation.y += 0.006;
@@ -78,8 +86,9 @@ export function useThreeStage(
     return () => {
       cancelAnimationFrame(raf);
       resizeObserver.disconnect();
+      if (onClick) container.removeEventListener("click", handleClick);
       renderer.dispose();
       container.removeChild(renderer.domElement);
     };
-  }, [containerRef, buildObject, autorotate, cameraDistance]);
+  }, [containerRef, buildObject, autorotate, cameraDistance, onClick]);
 }

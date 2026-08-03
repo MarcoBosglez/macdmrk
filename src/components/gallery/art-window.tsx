@@ -142,6 +142,10 @@ export function ArtWindow({
   // itself inset within the page's window chrome, so "maximize" would
   // otherwise only ever fill part of the screen. Rendering outside
   // that whole DOM subtree is what makes it a true full-screen window.
+  // It's also the one gallery view that can cleanly sit above the
+  // global scanline overlay (z-index 110): being a body-level sibling
+  // rather than nested inside AppWindow's own stacking context (z-10),
+  // its z-index competes directly against the overlay's.
   if (win.maximized) {
     return createPortal(
       <motion.div
@@ -149,7 +153,7 @@ export function ArtWindow({
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.16, ease: "easeOut" }}
         onPointerDownCapture={onFocus}
-        className="fixed inset-0 z-50 flex flex-col overflow-hidden border border-border bg-panel"
+        className="fixed inset-0 z-[120] flex flex-col overflow-hidden border border-border bg-panel"
       >
         {chrome}
       </motion.div>,

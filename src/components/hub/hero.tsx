@@ -26,7 +26,7 @@ export function Hero() {
       <div className="md:absolute md:top-10 md:left-14">
         <div className="mb-2 font-mono text-sm text-emerald">whoami</div>
         <h1 className="font-mono text-[15vw] leading-none font-bold tracking-tight md:text-[46px]">
-          MARCO
+          M4RK_
         </h1>
       </div>
 
@@ -51,6 +51,7 @@ export function Hero() {
           <span className="font-mono text-base text-muted">{t.hero.role}</span>
           <span className="animate-cursor-blink font-mono text-base text-emerald">▌</span>
         </div>
+        <div className="mb-2 font-mono text-xs text-muted">{t.hero.origin}</div>
         <p className="mb-4.5 text-sm leading-relaxed">{t.hero.description}</p>
         <div className="flex gap-5">
           <Link

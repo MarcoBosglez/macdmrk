@@ -125,7 +125,8 @@ export function ContactForm() {
             required
             maxLength={200}
             placeholder={t.contact.form.namePlaceholder}
-            className="rounded border border-border bg-transparent px-3 py-2 text-sm outline-none transition-colors focus:border-emerald"
+            onKeyDown={() => playClick("nav")}
+            className="rounded border border-border bg-transparent px-3 py-2 font-mono text-sm outline-none transition-colors focus:border-emerald"
           />
         </label>
 
@@ -137,7 +138,8 @@ export function ContactForm() {
             required
             maxLength={320}
             placeholder={t.contact.form.emailPlaceholder}
-            className="rounded border border-border bg-transparent px-3 py-2 text-sm outline-none transition-colors focus:border-emerald"
+            onKeyDown={() => playClick("nav")}
+            className="rounded border border-border bg-transparent px-3 py-2 font-mono text-sm outline-none transition-colors focus:border-emerald"
           />
         </label>
 
@@ -149,7 +151,8 @@ export function ContactForm() {
             maxLength={5000}
             rows={5}
             placeholder={t.contact.form.messagePlaceholder}
-            className="resize-none rounded border border-border bg-transparent px-3 py-2 text-sm outline-none transition-colors focus:border-emerald"
+            onKeyDown={() => playClick("nav")}
+            className="resize-none rounded border border-border bg-transparent px-3 py-2 font-mono text-sm outline-none transition-colors focus:border-emerald"
           />
         </label>
 

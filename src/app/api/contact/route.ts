@@ -14,10 +14,15 @@ const CONTACT_TO_EMAIL = "mark.bosglez@gmail.com";
 // Override via RESEND_FROM_EMAIL once a real domain is verified.
 const CONTACT_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "macdmrk contact form <onboarding@resend.dev>";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Both of these are lazily constructed so a missing env var only
+// breaks this route (at request time) instead of failing the whole
+// build — `next build` loads this module to collect route data, and
+// both the Resend and Redis clients throw immediately if constructed
+// eagerly with a missing key.
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
-// Lazily constructed so a missing env var only breaks this route (at
-// request time) instead of failing the whole build.
 function getRatelimit() {
   const redis = Redis.fromEnv();
   return new Ratelimit({
@@ -99,7 +104,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: CONTACT_FROM_EMAIL,
       to: CONTACT_TO_EMAIL,
       replyTo: email,

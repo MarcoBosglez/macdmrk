@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Space_Mono, Work_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -6,9 +7,10 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SoundProvider } from "@/components/providers/sound-provider";
 import { LocaleProvider } from "@/components/providers/locale-provider";
 import { TopBar } from "@/components/chrome/top-bar";
-import { NoiseOverlay } from "@/components/chrome/noise-overlay";
 import { LocaleToggle } from "@/components/chrome/locale-toggle";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
+import { BootScreen } from "@/components/chrome/boot-screen";
+import { ScanlineOverlay } from "@/components/chrome/scanline-overlay";
 
 // Space Mono carries the "terminal" identity (nav, headers, code-like
 // labels); Work Sans is used for actual paragraph copy so long text
@@ -52,6 +54,14 @@ export default function RootLayout({
       className={`${spaceMono.variable} ${workSans.variable}`}
     >
       <body className="font-sans">
+        <Script id="skip-boot-check" strategy="beforeInteractive">
+          {`try {
+            if (sessionStorage.getItem("macdmrk-booted")) {
+              document.documentElement.classList.add("skip-boot");
+            }
+          } catch (e) {}`}
+        </Script>
+        <BootScreen />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <SoundProvider>
             <LocaleProvider>
@@ -67,7 +77,6 @@ export default function RootLayout({
                 {/* The bordered "window frame" — everything a visitor
                     would call the actual site lives inside this box. */}
                 <div className="relative flex flex-1 flex-col overflow-hidden rounded-[10px] border border-ink">
-                  <NoiseOverlay />
                   <TopBar />
                   <div className="relative min-h-0 flex-1 overflow-hidden">{children}</div>
                 </div>
@@ -79,6 +88,7 @@ export default function RootLayout({
             </LocaleProvider>
           </SoundProvider>
         </ThemeProvider>
+        <ScanlineOverlay />
       </body>
     </html>
   );

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useSound } from "@/components/providers/sound-provider";
-import { NoiseOverlay } from "@/components/chrome/noise-overlay";
 
 // The bordered "window" chrome every non-hub page renders inside —
 // title bar with a close (✕) button that just links back to "/", plus
@@ -29,7 +28,6 @@ export function AppWindow({
       transition={{ duration: 0.22, ease: "easeOut" }}
       className="absolute inset-x-3 inset-y-2 z-10 flex flex-col overflow-hidden rounded-2xl border border-border bg-bg md:inset-x-5 md:inset-y-3"
     >
-      <NoiseOverlay />
       <div className="relative z-10 flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5 md:px-6">
         <span className="font-mono text-xs text-muted">{title}</span>
         <Link

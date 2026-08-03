@@ -87,7 +87,10 @@ export function TopBar() {
         <div className="flex justify-self-end gap-2 md:gap-3">
           <ToggleButton
             onClick={() => {
-              playClick("toggle");
+              // `muted` here is the pre-click state, so this picks the
+              // variant matching the action the click is about to take
+              // — mute if we're currently audible, unmute if we're not.
+              playClick(muted ? "unmute" : "mute");
               toggleMute();
             }}
           >
@@ -95,8 +98,9 @@ export function TopBar() {
           </ToggleButton>
           <ToggleButton
             onClick={() => {
-              playClick("toggle");
-              setTheme(resolvedTheme === "dark" ? "light" : "dark");
+              const next = resolvedTheme === "dark" ? "light" : "dark";
+              playClick(next === "light" ? "themeLight" : "themeDark");
+              setTheme(next);
             }}
           >
             {mounted

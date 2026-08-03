@@ -36,12 +36,14 @@ export type Dictionary = {
   };
   hero: {
     role: string;
+    origin: string;
     description: string;
     ctaWork: string;
     ctaGallery: string;
   };
   work: {
     previewPlaceholder: string;
+    linkHint: string;
     categoryLabel: string;
     stackLabel: string;
     statusLabel: string;
@@ -50,6 +52,7 @@ export type Dictionary = {
     maximize: string;
     restore: string;
     dragHint: string;
+    gridHint: string;
   };
   about: {
     photoPlaceholder: string;
@@ -111,6 +114,7 @@ const en: Dictionary = {
   },
   hero: {
     role: "software dev & digital artist",
+    origin: "🇲🇽 Mexico City → Seattle, WA",
     description:
       "martial arts practitioner, videogame enthusiast",
     ctaWork: "→ view_work",
@@ -118,6 +122,7 @@ const en: Dictionary = {
   },
   work: {
     previewPlaceholder: "// preview.png",
+    linkHint: "click the link to open the project",
     categoryLabel: "CATEGORY",
     stackLabel: "STACK",
     statusLabel: "STATUS",
@@ -126,14 +131,15 @@ const en: Dictionary = {
     maximize: "[ maximize ]",
     restore: "[ restore ]",
     dragHint: "drag the title bar to move",
+    gridHint: "maximize a piece to see it at full resolution, no filters",
   },
   about: {
     photoPlaceholder: "photo.jpg",
-    bio: "Born in Mexico based in Seattle, WA. Software Engineer and Digital Artist pursuing my M.S. in Computer Science at DigiPen. I specialize in backend development, AI integration, full-stack web development, and digital art.",
+    bio: "Born in Mexico City, now based in Seattle, WA for my Master's.\n\nSoftware Engineer and Digital Artist pursuing my M.S. in Computer Science at DigiPen. I specialize in backend development, AI integration, full-stack web development, and digital art.",
     skills: "nodejs · typescript · python · react · clip studio paint · affinity",
     contactCta: "→ contact_me",
     disclaimer:
-      "Disclaimer: Design, Illustration, Layout was made by me. AI tools were only used to help write code.",
+      "Every visual aspect of this portfolio—including its design, illustrations, and layout—was designed and created by me. AI tools were used exclusively to assist with software development and code generation",
   },
   faq: {
     questionPrefix: "Q:",
@@ -188,6 +194,7 @@ const es: Dictionary = {
   },
   hero: {
     role: "desarrollador de software & artista digital",
+    origin: "🇲🇽 Ciudad de México → Seattle, WA",
     description:
       "practicante de artes marciales y entusiaste de videojuegos.",
     ctaWork: "→ ver_trabajo",
@@ -195,6 +202,7 @@ const es: Dictionary = {
   },
   work: {
     previewPlaceholder: "// vista_previa.png",
+    linkHint: "haz clic en el enlace para abrir el proyecto",
     categoryLabel: "CATEGORÍAS",
     stackLabel: "STACK",
     statusLabel: "ESTADO",
@@ -203,14 +211,15 @@ const es: Dictionary = {
     maximize: "[ maximizar ]",
     restore: "[ restaurar ]",
     dragHint: "arrastra la barra de título para mover",
+    gridHint: "maximiza una pieza para verla en resolución completa, sin filtros",
   },
   about: {
     photoPlaceholder: "photo.jpg",
-    bio: "Desarrollador de Software y Artista Digital. Persiguiendo una Maestría en Ciencias de Computación en DigiPen. Me especializo en desarrollo backend, integración con IA, desarrollo full stack y arte digital.",
+    bio: "Nací en la Ciudad de México, ahora estoy en Seattle WA por mi maestria.\n\nDesarrollador de Software y Artista Digital. Persiguiendo una Maestría en Ciencias de Computación en DigiPen. Me especializo en desarrollo backend, integración con IA, desarrollo full stack y arte digital.",
     skills: "nodejs · typescript · python · react · clip studio paint · affinity",
     contactCta: "→ contacta_me",
     disclaimer:
-      "Disclaimer: Diseño, Ilustraciones y Layout hechos por mi. Herramientas de IA solo fueron usadas para ayudar a escribir código.",
+      "Todos los aspectos visuales de este portafolio, incluyendo su diseño, ilustraciones y composición, fueron diseñados y creados por mí. Las herramientas de IA se utilizaron exclusivamente como apoyo para el desarrollo de software y la generación de código.",
  },
   faq: {
     questionPrefix: "P:",

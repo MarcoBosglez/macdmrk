@@ -28,16 +28,16 @@ export function AboutContent() {
     <div className="flex h-full flex-col gap-3 overflow-y-auto p-6 md:p-10">
       <div className="mb-1 font-mono text-[13px] text-mint">~/ cat about.txt</div>
 
-      <div className="flex items-center gap-6">
-        <div className="relative flex h-[92px] w-[92px] shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border font-mono text-[11px] text-muted [background:repeating-linear-gradient(135deg,var(--panel)_0px,var(--panel)_12px,var(--bg)_12px,var(--bg)_24px)]">
+      <div className="flex items-center gap-7">
+        <div className="relative flex h-[200px] w-[200px] shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border font-mono text-[11px] text-muted [background:repeating-linear-gradient(135deg,var(--panel)_0px,var(--panel)_12px,var(--bg)_12px,var(--bg)_24px)]">
           {PHOTO_SRC ? (
-            <Image src={PHOTO_SRC} alt="" fill sizes="92px" className="object-cover" />
+            <Image src={PHOTO_SRC} alt="" fill sizes="200px" className="object-cover" />
           ) : (
             t.about.photoPlaceholder
           )}
         </div>
-        <div className="flex max-w-[480px] flex-col">
-          <p className="my-1.5 text-[13px] leading-snug">{t.about.bio}</p>
+        <div className="flex max-w-[480px] flex-col gap-2.5">
+          <p className="text-[14px] leading-relaxed whitespace-pre-line">{t.about.bio}</p>
           <div className="font-mono text-[10px] text-muted">{t.about.skills}</div>
         </div>
       </div>
@@ -47,7 +47,7 @@ export function AboutContent() {
         {EXPERIENCE.map((entry) => (
           <div
             key={entry.company}
-            className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-1 font-mono text-[11px]"
+            className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-1 font-mono text-[13px]"
           >
             <span className="w-[100px] shrink-0 text-muted">{localize(entry.period, locale)}</span>
             <span className="w-[180px] shrink-0 font-bold">{localize(entry.role, locale)}</span>
@@ -82,7 +82,7 @@ export function AboutContent() {
 
       {/* A short, honest disclosure: the site's visuals were designed
           by hand, only the code was AI-assisted. */}
-      <div className="flex items-start gap-2.5 rounded-lg border border-border bg-panel/60 p-3">
+      <div className="mt-auto flex items-start gap-2.5 rounded-lg border border-border bg-panel/60 p-3">
         <BotOff className="mt-0.5 h-4 w-4 shrink-0 text-emerald" aria-hidden="true" />
         <p className="font-mono text-[11px] leading-relaxed text-muted">{t.about.disclaimer}</p>
       </div>

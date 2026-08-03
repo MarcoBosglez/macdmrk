@@ -30,7 +30,7 @@ export function ProjectList({
             <Link
               key={project.slug}
               href={`/work/${project.slug}`}
-              onClick={() => playClick("nav")}
+              onClick={() => playClick("pageOpen")}
               className={cn(
                 "flex items-center gap-3.5 rounded px-3.5 py-3 transition-colors",
                 active ? "bg-emerald text-bg" : "hover:bg-panel"
