@@ -199,6 +199,57 @@ html.skip-boot .boot-screen {
   display: none !important;
 }
 
+/* The boot screen's "channel change" reveal panel — geometry mirrors
+   layout.tsx's own outer padding (`p-3 md:p-7`) at the exact same
+   breakpoint, so it's pixel-identical to the real window frame it's
+   standing in for rather than an approximation that can drift out of
+   sync. Collapsed to a horizontal line (scaleY 0) until `.boot-reveal-
+   open` is added, then snaps to full size — no width/height animation
+   needed since the box is already the right size and position the
+   whole time. */
+.boot-reveal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--ink);
+  background: var(--bg);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@media (min-width: 768px) {
+  .boot-reveal {
+    top: 28px;
+    right: 28px;
+    bottom: 28px;
+    left: 28px;
+  }
+}
+.boot-reveal.boot-reveal-open {
+  transform: scaleY(1);
+}
+
+/* Plays once when mounted (see boot-screen.tsx — the element itself is
+   only rendered once `closing` is true) and fully finishes — up and
+   back down to nothing — before the reveal panel starts its snap. */
+@keyframes boot-flash {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.boot-flash {
+  animation: boot-flash 0.2s ease-out forwards;
+}
+
 .noise-overlay {
   position: absolute;
   inset: -20%;
@@ -218,7 +269,7 @@ html.skip-boot .boot-screen {
   z-index: 110;
   pointer-events: none;
   background:
-    radial-gradient(circle, transparent 60%, rgba(0, 0, 0, 0.4) 100%),
+    radial-gradient(circle, transparent 45%, rgba(0, 0, 0, 0.5) 100%),
     repeating-linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0.22) 0px,
