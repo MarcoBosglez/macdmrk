@@ -76,7 +76,11 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
       // so opening several in a row doesn't stack them in an identical
       // spot on top of each other.
       const offset = (prev.length % 5) * 26;
-      return [...prev, { id, x: 100 + offset, y: 20 + offset, w, h, maximized: false, z }];
+      // x/y are viewport coordinates now that ArtWindow portals to
+      // document.body (see art-window.tsx) — 220/160 clears the top
+      // bar and the nav sidebar on open instead of spawning underneath
+      // them.
+      return [...prev, { id, x: 220 + offset, y: 160 + offset, w, h, maximized: false, z }];
     });
   }
 

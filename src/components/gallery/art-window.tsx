@@ -4,6 +4,7 @@ import { useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion } from "motion/react";
+import { Maximize2, Minimize2 } from "lucide-react";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
 import type { Illustration } from "@/lib/data/illustrations";
@@ -84,9 +85,11 @@ export function ArtWindow({
               playClick(win.maximized ? "minimize" : "maximize");
               onToggleMaximize();
             }}
-            className="font-mono text-[11px] text-muted hover:text-emerald hover:underline"
+            aria-label={win.maximized ? "Restore" : "Maximize"}
+            title={win.maximized ? "Restore" : "Maximize"}
+            className="text-muted hover:text-emerald"
           >
-            {win.maximized ? t.gallery.restore : t.gallery.maximize}
+            {win.maximized ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
           </button>
           <button
             onPointerDown={(e) => e.stopPropagation()}
@@ -136,41 +139,37 @@ export function ArtWindow({
     </>
   );
 
-  // Maximized windows are portaled straight to document.body and
-  // fixed to the viewport, rather than just growing to fill their
-  // absolutely-positioned slot inside the gallery pane — that slot is
-  // itself inset within the page's window chrome, so "maximize" would
-  // otherwise only ever fill part of the screen. Rendering outside
-  // that whole DOM subtree is what makes it a true full-screen window.
-  // It's also the one gallery view that can cleanly sit above the
-  // global scanline overlay (z-index 110): being a body-level sibling
-  // rather than nested inside AppWindow's own stacking context (z-10),
-  // its z-index competes directly against the overlay's.
-  if (win.maximized) {
-    return createPortal(
-      <motion.div
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.16, ease: "easeOut" }}
-        onPointerDownCapture={onFocus}
-        className="fixed inset-0 z-[120] flex flex-col overflow-hidden border border-border bg-panel"
-      >
-        {chrome}
-      </motion.div>,
-      document.body
-    );
-  }
-
-  return (
+  // Both maximized and normal windows portal straight to document.body
+  // and use fixed (viewport) positioning rather than rendering inline
+  // inside the gallery grid. A normal window used to be absolutely
+  // positioned inside the grid's own scrolling pane, which clipped it
+  // the moment a drag carried it past that pane's edges — you couldn't
+  // pull it out over the top bar or the nav. Being a body-level sibling
+  // like the maximized view already was removes that boundary entirely
+  // (see win.x/win.y's viewport-space starting offsets in art-grid.tsx,
+  // chosen to clear the top bar and nav sidebar on open). It's also why
+  // maximized windows can sit above the global scanline overlay
+  // (z-index 110) — nested inside AppWindow's own stacking context
+  // (z-10) they couldn't, no matter their own z-index.
+  return createPortal(
     <motion.div
-      initial={{ opacity: 0, scale: 0.94 }}
+      initial={{ opacity: 0, scale: win.maximized ? 0.98 : 0.94 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
+      transition={{ duration: win.maximized ? 0.16 : 0.18, ease: "easeOut" }}
       onPointerDownCapture={onFocus}
-      className="absolute flex flex-col overflow-hidden rounded-lg border border-border bg-panel shadow-2xl"
-      style={{ left: win.x, top: win.y, width: win.w, height: win.h, zIndex: win.z }}
+      className={
+        win.maximized
+          ? "fixed inset-0 z-[120] flex flex-col overflow-hidden border border-border bg-panel"
+          : "fixed flex flex-col overflow-hidden rounded-lg border border-border bg-panel shadow-2xl"
+      }
+      style={
+        win.maximized
+          ? undefined
+          : { left: win.x, top: win.y, width: win.w, height: win.h, zIndex: win.z }
+      }
     >
       {chrome}
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }

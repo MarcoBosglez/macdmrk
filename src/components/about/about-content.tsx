@@ -28,15 +28,15 @@ export function AboutContent() {
     <div className="flex h-full flex-col gap-3 overflow-y-auto p-6 md:p-10">
       <div className="mb-1 font-mono text-[13px] text-mint">~/ cat about.txt</div>
 
-      <div className="flex items-center gap-7">
-        <div className="relative flex h-[200px] w-[200px] shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border font-mono text-[11px] text-muted [background:repeating-linear-gradient(135deg,var(--panel)_0px,var(--panel)_12px,var(--bg)_12px,var(--bg)_24px)]">
+      <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-center md:gap-7 md:text-left">
+        <div className="relative flex h-[140px] w-[140px] shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border font-mono text-[11px] text-muted [background:repeating-linear-gradient(135deg,var(--panel)_0px,var(--panel)_12px,var(--bg)_12px,var(--bg)_24px)] md:h-[200px] md:w-[200px]">
           {PHOTO_SRC ? (
-            <Image src={PHOTO_SRC} alt="" fill sizes="200px" className="object-cover" />
+            <Image src={PHOTO_SRC} alt="" fill sizes="(max-width: 768px) 140px, 200px" className="object-cover" />
           ) : (
             t.about.photoPlaceholder
           )}
         </div>
-        <div className="flex max-w-[480px] flex-col gap-2.5">
+        <div className="flex w-full flex-col gap-2.5 md:max-w-[480px]">
           <p className="text-[14px] leading-relaxed whitespace-pre-line">{t.about.bio}</p>
           <div className="font-mono text-[10px] text-muted">{t.about.skills}</div>
         </div>

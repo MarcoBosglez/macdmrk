@@ -25,7 +25,7 @@ function KeyValueRow({
   return (
     <div className="flex gap-3.5 border-t border-border pt-3 font-mono text-[13px]">
       <span className="w-20 shrink-0 text-muted">{label}</span>
-      <span className={tone ? TONE_CLASSES[tone] : undefined}>{value}</span>
+      <span className={`min-w-0 break-words ${tone ? TONE_CLASSES[tone] : ""}`}>{value}</span>
     </div>
   );
 }

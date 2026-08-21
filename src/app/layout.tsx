@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SoundProvider } from "@/components/providers/sound-provider";
 import { LocaleProvider } from "@/components/providers/locale-provider";
 import { TopBar } from "@/components/chrome/top-bar";
+import { NavDock } from "@/components/chrome/nav-dock";
 import { LocaleToggle } from "@/components/chrome/locale-toggle";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
 import { BootScreen } from "@/components/chrome/boot-screen";
@@ -30,12 +31,13 @@ const workSans = Work_Sans({
 export const metadata: Metadata = {
   title: "macdmrk",
   description: "Marco Bosquez — Software Developer & Digital Artist",
-  // favicon.svg lives in public/ rather than src/app/ — Next's
-  // automatic favicon detection only recognizes files literally named
-  // "icon.svg" in the app directory, so a file named "favicon.svg"
-  // needs to be wired up explicitly here instead.
+  // logo.svg lives in public/ rather than src/app/ — Next's automatic
+  // favicon detection only recognizes files literally named "icon.svg"
+  // in the app directory, so it needs to be wired up explicitly here
+  // instead. Traced from public/logo.png (the same mark used in
+  // TopBar) rather than the old favicon.svg placeholder.
   icons: {
-    icon: "/favicon.svg",
+    icon: "/logo.svg",
   },
 };
 
@@ -76,9 +78,12 @@ export default function RootLayout({
 
                 {/* The bordered "window frame" — everything a visitor
                     would call the actual site lives inside this box. */}
-                <div className="relative flex flex-1 flex-col overflow-hidden rounded-[10px] border border-ink">
+                <div className="relative flex flex-1 flex-col overflow-hidden rounded-[10px] border border-mint">
                   <TopBar />
-                  <div className="relative min-h-0 flex-1 overflow-hidden">{children}</div>
+                  <div className="flex min-h-0 flex-1 overflow-hidden">
+                    <NavDock />
+                    <div className="relative min-h-0 flex-1 overflow-hidden">{children}</div>
+                  </div>
                 </div>
 
                 {/* Mobile-only floating nav; the desktop pill nav lives

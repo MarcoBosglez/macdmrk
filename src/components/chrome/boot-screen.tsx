@@ -116,7 +116,7 @@ export function BootScreen() {
   return (
     <div className="boot-screen fixed inset-0 z-[100] overflow-hidden bg-bg" aria-hidden="true">
       <div
-        className="absolute top-[60px] left-[60px] max-w-[calc(100vw-120px)] font-mono text-[14px] leading-[1.8] text-mint"
+        className="absolute top-6 left-6 max-w-[calc(100vw-48px)] font-mono text-[14px] leading-[1.8] text-mint md:top-[60px] md:left-[60px] md:max-w-[calc(100vw-120px)]"
         style={{ opacity: closing ? 0 : 1, transition: "opacity 0.2s ease" }}
       >
         {lines.map((line, i) => (
@@ -130,7 +130,7 @@ export function BootScreen() {
         </div>
 
         <div className="mt-4 flex items-center gap-2.5">
-          <div className="h-1.5 w-[220px] overflow-hidden rounded-full border border-mint/40 bg-panel">
+          <div className="h-1.5 w-[50vw] max-w-[220px] overflow-hidden rounded-full border border-mint/40 bg-panel">
             <div
               className="h-full bg-mint"
               style={{ width: `${progress}%`, transition: "width 0.1s linear" }}

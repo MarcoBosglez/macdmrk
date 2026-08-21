@@ -3,20 +3,28 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --bg: #eaf6ef;
-  --panel: #d3ebdd;
-  --ink: #0b3124;
+  /* A light tint of --emerald (the contact_me color) rather than a
+     near-neutral cream — mixing emerald with white at ~30/38/48%
+     ratios for bg/panel/border keeps them all clearly on the same
+     green hue (so the page reads as green, not off-white) while
+     staying light enough for --ink below to still be near-black and
+     legible, instead of needing light text like the earlier attempt
+     at using the full-strength emerald as the background. */
+  --bg: #c5e0dd;
+  --panel: #e8f3ef;
+  --ink: #043122;
   --muted: #4c6b5c;
-  --border: #b7dcc7;
-  /* #3eb488 (the dark theme's brand emerald) only clears ~2.3:1
-     contrast against this light background — well under the 4.5:1
-     WCAG AA minimum for text — which is why "whoami", links, and the
-     contact CTA button all read as faint in light mode. This darker
-     shade clears ~4.8:1, and improves the CTA button too since it uses
-     this as a background under light-colored text (contrast is
-     symmetric either way). */
-  --emerald: #147a54;
-  --mint: #0b3124;
+  --border: #45a481;
+  --emerald: #3ba77f;
+  --mint: #01100b;
+  /* The scanline overlay's black multiply-blend (see .scanline-overlay
+     below) darkens the backdrop by an amount proportional to its own
+     opacity regardless of how dark that backdrop already is — dark
+     mode's near-black --bg barely visibly changes, but light mode's
+     much lighter background (and --ink text sitting on it) loses a lot
+     of contrast at the same opacity. Lower here so the effect stays
+     legible against a light background. */
+  --scanline-opacity: 0.02;
 }
 
 .dark {
@@ -27,6 +35,7 @@
   --border: #2e9973;
   --emerald: #2e9973;
   --mint: #55c79a;
+  --scanline-opacity: 0.45;
 }
 
 :root,
@@ -92,6 +101,13 @@
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  /* Bumps every rem-based Tailwind text/spacing size up ~12.5% from
+     the 16px default, site-wide, without touching each component's
+     text-* classes individually. */
+  font-size: 18px;
 }
 
 html,
@@ -284,5 +300,5 @@ html.skip-boot .boot-screen {
      darkens every backdrop color the same way regardless of its own
      luminance, so text gets the effect too. */
   mix-blend-mode: multiply;
-  opacity: 0.45;
+  opacity: var(--scanline-opacity);
 }
