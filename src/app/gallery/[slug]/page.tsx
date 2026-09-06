@@ -11,6 +11,10 @@ export function generateStaticParams() {
   return ILLUSTRATIONS.map((illustration) => ({ slug: illustration.slug }));
 }
 
+// Any slug not listed above is a hard 404 (renders app/not-found.tsx)
+// rather than being rendered on demand — the illustration set is fixed.
+export const dynamicParams = false;
+
 export default async function IllustrationPage({
   params,
 }: {

@@ -3,7 +3,7 @@
 // lib/i18n/dictionaries.ts) via t.nav[key], so TopBar and
 // MobileNavBubbles both stay in sync automatically when the language
 // toggle is used.
-export type NavKey = "about" | "work" | "gallery" | "faq" | "contact";
+export type NavKey = "home" | "about" | "work" | "gallery" | "faq" | "contact";
 
 export type NavItem = {
   key: NavKey;
@@ -11,6 +11,7 @@ export type NavItem = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
+  { key: "home", href: "/" },
   { key: "about", href: "/about" },
   { key: "work", href: "/work" },
   { key: "gallery", href: "/gallery" },

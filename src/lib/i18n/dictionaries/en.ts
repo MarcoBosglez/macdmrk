@@ -2,6 +2,7 @@ import type { Dictionary } from "./types";
 
 export const en: Dictionary = {
   nav: {
+    home: "HOME",
     about: "ABOUT",
     work: "WORK",
     gallery: "GALLERY",
@@ -14,6 +15,8 @@ export const en: Dictionary = {
     light: "[ light ]",
     dark: "[ dark ]",
     loading: "[ ... ]",
+    crtEnable: "[ crt on ]",
+    crtDisable: "[ crt off ]",
   },
   hero: {
     role: "software dev & digital artist",
@@ -36,8 +39,10 @@ export const en: Dictionary = {
   },
   about: {
     photoPlaceholder: "photo.jpg",
-    bio: "Born in Mexico City, now based in Seattle, WA for my Master's.\n\nSoftware Engineer and Digital Artist pursuing my M.S. in Computer Science at DigiPen. I specialize in backend development, AI integration, full-stack web development, and digital art.",
-    skills: "nodejs · typescript · python · react · clip studio paint · affinity",
+    bio: "Born in Mexico City, now based in Seattle, WA for my Master's.\n\nSoftware Engineer and Digital Artist pursuing my M.S. in Computer Science at DigiPen, graduating fall 2027. I specialize in backend development, LLM integration, full-stack web development, and digital art.",
+    skills: "nodejs · typescript · python · react · rest apis · llm integration · sql · git · clip studio paint · affinity",
+    interests: "videogames · drawing · tacos · martial arts · combat-sports superfan",
+    quirk: "// trains martial arts, still loses sparring to the penguin",
     contactCta: "→ contact_me",
     disclaimer:
       "Every visual aspect of this portfolio—including its design, illustrations, and layout—was designed and created by me. AI tools were used exclusively to assist with software development and code generation",

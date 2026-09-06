@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
 import { ArtWindow } from "@/components/gallery/art-window";
+import { InstagramIcon } from "@/components/chrome/social-icons";
 import type { Illustration } from "@/lib/data/illustrations";
 
 // One floating lightbox window that's currently open. `id` is the
@@ -67,20 +68,32 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
     const { w, h } = windowSizeFor(illustrations.find((i) => i.slug === id));
     const z = nextZ;
     setNextZ(z + 1);
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
     setOpenWindows((prev) => {
-      const existing = prev.find((w) => w.id === id);
+      const existing = prev.find((win) => win.id === id);
       // Already open — just bring it to the front instead of opening
       // a duplicate.
-      if (existing) return prev.map((w) => (w.id === id ? { ...w, z } : w));
+      if (existing) return prev.map((win) => (win.id === id ? { ...win, z } : win));
+      // On phones a floating, draggable window doesn't fit the screen
+      // and used to spawn mostly off the right edge — open it maximized
+      // (fixed inset-0, see art-window.tsx) so it's always fully
+      // on-screen.
+      if (isMobile) {
+        return [...prev, { id, x: 0, y: 0, w, h, maximized: true, z }];
+      }
       // Stagger each newly-opened window's starting position slightly
       // so opening several in a row doesn't stack them in an identical
       // spot on top of each other.
       const offset = (prev.length % 5) * 26;
       // x/y are viewport coordinates now that ArtWindow portals to
       // document.body (see art-window.tsx) — 220/160 clears the top
-      // bar and the nav sidebar on open instead of spawning underneath
-      // them.
-      return [...prev, { id, x: 220 + offset, y: 160 + offset, w, h, maximized: false, z }];
+      // bar and the nav sidebar on open, then clamp so the window can
+      // never start off the right/bottom edge on a smaller viewport.
+      const maxX = Math.max(16, window.innerWidth - w - 16);
+      const maxY = Math.max(16, window.innerHeight - h - 16);
+      const x = Math.min(220 + offset, maxX);
+      const y = Math.min(160 + offset, maxY);
+      return [...prev, { id, x, y, w, h, maximized: false, z }];
     });
   }
 
@@ -110,8 +123,21 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   }
 
   return (
-    <div className="relative h-full overflow-y-auto p-6 md:p-8">
-      <div className="mb-1 font-mono text-[13px] text-mint">~/art/ ls -la</div>
+    <div className="relative h-full overflow-y-auto p-5 md:p-8">
+      <div className="mb-1 flex items-center justify-between gap-3">
+        <span className="font-mono text-[13px] text-mint">~/art/ ls -la</span>
+        <a
+          href="https://www.instagram.com/macdmrk/"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => playClick("nav")}
+          aria-label="Instagram — art account"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border px-2.5 py-1 font-mono text-[11px] text-muted transition-colors hover:border-emerald hover:text-emerald"
+        >
+          <InstagramIcon className="h-3.5 w-3.5" />
+          @macdmrk
+        </a>
+      </div>
       <div className="mb-4.5 font-mono text-[11px] text-muted">{t.gallery.gridHint}</div>
       {/* CSS multi-column masonry: each tile sizes to its own image's
           real aspect ratio (via width/height below) instead of a

@@ -38,7 +38,7 @@ export function ProjectDetail({ project }: { project: Project }) {
   const { playClick } = useSound();
 
   return (
-    <div className="flex max-w-[640px] flex-col gap-3 overflow-y-auto p-6 md:p-10">
+    <div className="flex w-full max-w-[640px] flex-col gap-3 p-5 md:overflow-y-auto md:p-10">
       <div className="relative flex h-[110px] items-center justify-center overflow-hidden rounded border border-dashed border-border font-mono text-xs text-muted">
         {project.image ? (
           <Image

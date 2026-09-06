@@ -12,8 +12,8 @@ export function FaqAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="h-full overflow-y-auto p-6 md:p-10">
-      <div className="mb-4.5 max-w-[720px] font-mono text-[13px] text-mint">~/ cat faq.txt</div>
+    <div className="h-full overflow-y-auto p-5 md:p-10">
+      <div className="mb-4 max-w-[720px] font-mono text-[13px] text-mint md:mb-4.5">~/ cat faq.txt</div>
       <div className="max-w-[720px]">
         {FAQS.map((faq, i) => {
           const open = openIndex === i;

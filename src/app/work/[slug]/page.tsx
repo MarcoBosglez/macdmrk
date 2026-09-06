@@ -11,6 +11,11 @@ export function generateStaticParams() {
   return PROJECTS.map((project) => ({ slug: project.slug }));
 }
 
+// Any slug not listed above is a hard 404 (renders app/not-found.tsx)
+// rather than being rendered on demand — the project list is fixed, so
+// there's no such thing as a valid unknown project URL.
+export const dynamicParams = false;
+
 export default async function WorkProjectPage({
   params,
 }: {
@@ -22,7 +27,7 @@ export default async function WorkProjectPage({
 
   return (
     <AppWindow title="work.exe">
-      <div className="flex h-full flex-col md:flex-row">
+      <div className="flex flex-col md:h-full md:flex-row">
         <ProjectList projects={PROJECTS} activeSlug={slug} />
         <ProjectDetail project={project} />
       </div>

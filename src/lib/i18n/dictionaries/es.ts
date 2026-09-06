@@ -2,6 +2,7 @@ import type { Dictionary } from "./types";
 
 export const es: Dictionary = {
   nav: {
+    home: "INICIO",
     about: "SOBRE MÍ",
     work: "TRABAJO",
     gallery: "GALERÍA",
@@ -14,6 +15,8 @@ export const es: Dictionary = {
     light: "[ claro ]",
     dark: "[ oscuro ]",
     loading: "[ ... ]",
+    crtEnable: "[ crt on ]",
+    crtDisable: "[ crt off ]",
   },
   hero: {
     role: "desarrollador de software & artista digital",
@@ -36,8 +39,10 @@ export const es: Dictionary = {
   },
   about: {
     photoPlaceholder: "photo.jpg",
-    bio: "Nací en la Ciudad de México, ahora estoy en Seattle WA por mi maestria.\n\nDesarrollador de Software y Artista Digital. Persiguiendo una Maestría en Ciencias de Computación en DigiPen. Me especializo en desarrollo backend, integración con IA, desarrollo full stack y arte digital.",
-    skills: "nodejs · typescript · python · react · clip studio paint · affinity",
+    bio: "Nací en la Ciudad de México, ahora estoy en Seattle WA por mi maestría.\n\nDesarrollador de Software y Artista Digital cursando una Maestría en Ciencias de la Computación en DigiPen, con graduación en otoño de 2027. Me especializo en desarrollo backend, integración de LLMs, desarrollo full stack y arte digital.",
+    skills: "nodejs · typescript · python · react · rest apis · llm integration · sql · git · clip studio paint · affinity",
+    interests: "videojuegos · dibujo · tacos · artes marciales · fanático de los deportes de contacto",
+    quirk: "// entreno artes marciales y aún así el pingüino me gana en el sparring",
     contactCta: "→ contacta_me",
     disclaimer:
       "Todos los aspectos visuales de este portafolio, incluyendo su diseño, ilustraciones y composición, fueron diseñados y creados por mí. Las herramientas de IA se utilizaron exclusivamente como apoyo para el desarrollo de software y la generación de código.",

@@ -40,14 +40,19 @@ export function Hero() {
           headers used elsewhere on the site. */}
       <div className="hidden flex-col items-start gap-1.5 font-mono text-[15px] md:absolute md:top-1/2 md:left-14 md:flex md:-translate-y-1/2">
         <div className="mb-1 text-xs text-mint">~/ ls nav/</div>
-        {NAV_ITEMS.map((item) => (
+        {/* "home" is filtered out here — this list already lives on the
+            home page, so linking to it would just be a self-link. */}
+        {NAV_ITEMS.filter((item) => item.href !== "/").map((item) => (
           <Link
             key={item.href}
             href={item.href}
             onClick={() => playClick("nav")}
-            className="text-muted hover:text-emerald"
+            className="text-muted"
           >
-            {item.key}/
+            {/* Inverse-video hover — matches the NavDock menu. */}
+            <span className="-mx-1 px-1 hover:bg-ink hover:text-bg">
+              {item.key}/
+            </span>
           </Link>
         ))}
       </div>

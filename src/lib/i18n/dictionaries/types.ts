@@ -21,6 +21,7 @@ export function localize(value: Localized, locale: Locale): string {
 // shell output, so they stay identical in every language on purpose.
 export type Dictionary = {
   nav: {
+    home: string;
     about: string;
     work: string;
     gallery: string;
@@ -33,6 +34,8 @@ export type Dictionary = {
     light: string;
     dark: string;
     loading: string;
+    crtEnable: string;
+    crtDisable: string;
   };
   hero: {
     role: string;
@@ -56,6 +59,8 @@ export type Dictionary = {
     photoPlaceholder: string;
     bio: string;
     skills: string;
+    interests: string;
+    quirk: string;
     contactCta: string;
     disclaimer: string;
   };

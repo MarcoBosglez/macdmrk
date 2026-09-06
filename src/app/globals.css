@@ -110,6 +110,16 @@ html {
   font-size: 18px;
 }
 
+/* On phones the 18px bump above makes text and rem-based padding read
+   oversized in the narrow window — drop back to the browser default so
+   everything scales down ~11% below the md breakpoint. Fixed px sizes
+   (the text-[10px]/[11px] mono labels) are unaffected. */
+@media (max-width: 767px) {
+  html {
+    font-size: 16px;
+  }
+}
+
 html,
 body {
   padding: 0;
@@ -301,4 +311,161 @@ html.skip-boot .boot-screen {
      luminance, so text gets the effect too. */
   mix-blend-mode: multiply;
   opacity: var(--scanline-opacity);
+}
+
+/* ─── Faux-CRT overlay ────────────────────────────────────────────────
+   Opt-in: the toggle in TopBar adds/removes `.crt` on <html>, and the
+   inline script in layout.tsx sets it before first paint from
+   localStorage (default on). This is only a stack of fixed overlay
+   layers plus a frame treatment — nothing in the DOM is geometrically
+   warped, so hit-testing, the contact form and the draggable gallery
+   windows all behave exactly as before. Tuned for the dark theme; on a
+   light backdrop the blend modes wash out (same reason
+   --scanline-opacity is near-zero in light mode), so the layers are
+   dialled right down there. */
+.crt-overlay,
+.crt-roll {
+  display: none;
+}
+
+.crt .crt-overlay {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 115; /* above .scanline-overlay (110) */
+  pointer-events: none;
+}
+
+/* Aperture-grille RGB triad + a denser scanline pass than the base
+   overlay — the "screen has texture" cue you notice up close. */
+.crt .crt-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.06) 0px,
+      rgba(0, 255, 0, 0.04) 1px,
+      rgba(0, 0, 255, 0.06) 2px,
+      rgba(0, 0, 0, 0) 3px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.2) 0px,
+      rgba(0, 0, 0, 0.2) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  mix-blend-mode: multiply;
+  opacity: var(--crt-grille-opacity, 0.55);
+}
+
+/* Barrel *lighting* (not geometry): a heavier vignette than the base
+   overlay's, plus a faint warm phosphor glow along the top edge. The
+   eye reads the darkened, rounded corners as a curved tube. */
+.crt .crt-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(125% 125% at 50% 50%, transparent 52%, rgba(0, 0, 0, 0.55) 100%),
+    radial-gradient(100% 45% at 50% 0%, rgba(85, 199, 154, 0.05), transparent 70%);
+  opacity: var(--crt-vignette-opacity, 1);
+}
+
+/* One highlight band drifting down the screen — the single strongest
+   "this is a CRT" cue. Removed under prefers-reduced-motion. */
+.crt .crt-roll {
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 24vh;
+  z-index: 116;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.035) 45%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.035) 55%,
+    transparent
+  );
+  mix-blend-mode: screen;
+  animation: crt-roll 7s linear infinite;
+}
+
+/* Subtle irregular brightness flicker on the whole frame. filter on
+   <body> (rather than opacity on <html>, which would reveal the page
+   background behind) so nothing flashes through. */
+.crt body {
+  animation: crt-flicker 6s ease-in-out infinite;
+}
+
+/* Phosphor bloom, scoped to the mono/terminal text so body copy stays
+   crisp. The palette is already a phosphor green, so this mostly just
+   softens the glyph edges. */
+.crt .font-mono {
+  text-shadow: 0 0 2px rgba(85, 199, 154, 0.22);
+}
+
+/* Curved-tube hint on the window frame (see layout.tsx). */
+.crt .crt-frame {
+  border-radius: 16px;
+  box-shadow:
+    inset 0 0 70px rgba(0, 0, 0, 0.42),
+    inset 0 0 14px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes crt-roll {
+  0% {
+    transform: translateY(-30vh);
+  }
+  100% {
+    transform: translateY(130vh);
+  }
+}
+
+@keyframes crt-flicker {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1);
+  }
+  92% {
+    filter: brightness(0.97);
+  }
+  94% {
+    filter: brightness(1.01);
+  }
+  96% {
+    filter: brightness(0.98);
+  }
+  98% {
+    filter: brightness(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt body {
+    animation: none;
+  }
+  .crt .crt-roll {
+    display: none;
+  }
+}
+
+/* Light theme: multiply/screen layers wash out on a light backdrop and
+   mostly cost contrast — keep only a whisper of the effect. */
+:root:not(.dark) .crt .crt-overlay::before {
+  opacity: 0.12;
+}
+:root:not(.dark) .crt .crt-overlay::after {
+  opacity: 0.4;
+}
+:root:not(.dark) .crt .font-mono {
+  text-shadow: none;
 }

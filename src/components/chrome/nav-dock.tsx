@@ -42,10 +42,23 @@ export function NavDock() {
             onClick={() => playClick("nav")}
             className={cn(
               "flex items-center gap-1",
-              active ? "font-bold text-emerald" : "text-muted hover:text-emerald"
+              active ? "font-bold text-emerald" : "text-muted"
             )}
           >
-            {item.key}/{active && <span className="animate-cursor-blink">▌</span>}
+            {/* Inverse-video hover: the label sits in a solid block that
+                only shows on hover — text stays readable, flipped to the
+                background color. Negative margin keeps the block's
+                padding from nudging the row. Skipped on the active item
+                (you're already on that page). */}
+            <span
+              className={cn(
+                "-mx-1 px-1",
+                !active && "hover:bg-ink hover:text-bg"
+              )}
+            >
+              {item.key}/
+            </span>
+            {active && <span className="animate-cursor-blink">▌</span>}
           </Link>
         );
       })}

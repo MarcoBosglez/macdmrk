@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Volume2, VolumeX } from "lucide-react";
+import { Moon, Scan, ScanLine, Sun, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
@@ -46,9 +46,28 @@ export function TopBar() {
 
   // Theme isn't known until after hydration (it depends on localStorage
   // / system preference), so we show a blank placeholder for one render
-  // to avoid briefly flashing the wrong icon.
+  // to avoid briefly flashing the wrong icon. The CRT state is read the
+  // same way — the class is put on <html> by the inline script in
+  // layout.tsx before React runs.
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [crtOn, setCrtOn] = useState(true);
+  useEffect(() => {
+    setMounted(true);
+    setCrtOn(document.documentElement.classList.contains("crt"));
+  }, []);
+
+  function handleCrtToggle() {
+    const next = !crtOn;
+    setCrtOn(next);
+    document.documentElement.classList.toggle("crt", next);
+    try {
+      localStorage.setItem("macdmrk-crt", next ? "1" : "0");
+    } catch {
+      // private mode / storage disabled — the class still toggles for
+      // this session, it just won't be remembered next load.
+    }
+    playClick("toggle");
+  }
 
   // Logo click reaction: swap to the open-mouth pose, hold briefly,
   // swap back — just the image, no motion effects.
@@ -91,6 +110,16 @@ export function TopBar() {
         </Link>
 
         <div className="flex gap-2 md:gap-3">
+          <ToggleButton
+            label={mounted ? (crtOn ? t.toggles.crtDisable : t.toggles.crtEnable) : t.toggles.loading}
+            onClick={handleCrtToggle}
+          >
+            {mounted ? (
+              crtOn ? <ScanLine className="h-4 w-4" /> : <Scan className="h-4 w-4" />
+            ) : (
+              <span className="block h-4 w-4" />
+            )}
+          </ToggleButton>
           <ToggleButton
             label={muted ? t.toggles.unmute : t.toggles.mute}
             onClick={() => {

@@ -63,6 +63,16 @@ export default function RootLayout({
             }
           } catch (e) {}`}
         </Script>
+        {/* Faux-CRT overlay is on by default; the TopBar toggle writes
+            "0" to opt out. Applied before first paint so it never
+            flashes on/off on load. */}
+        <Script id="crt-check" strategy="beforeInteractive">
+          {`try {
+            if (localStorage.getItem("macdmrk-crt") !== "0") {
+              document.documentElement.classList.add("crt");
+            }
+          } catch (e) {}`}
+        </Script>
         <BootScreen />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <SoundProvider>
@@ -77,8 +87,11 @@ export default function RootLayout({
                 </div>
 
                 {/* The bordered "window frame" — everything a visitor
-                    would call the actual site lives inside this box. */}
-                <div className="relative flex flex-1 flex-col overflow-hidden rounded-[10px] border border-mint">
+                    would call the actual site lives inside this box.
+                    `crt-frame` is inert unless the CRT overlay is on,
+                    when it rounds the corners and adds an inset tube
+                    vignette. */}
+                <div className="crt-frame relative flex flex-1 flex-col overflow-hidden rounded-[10px] border border-mint">
                   <TopBar />
                   <div className="flex min-h-0 flex-1 overflow-hidden">
                     <NavDock />
@@ -94,6 +107,10 @@ export default function RootLayout({
           </SoundProvider>
         </ThemeProvider>
         <ScanlineOverlay />
+        {/* Faux-CRT layers — hidden by CSS unless <html> has `.crt`
+            (see globals.css). Pure overlay, nothing warps the DOM. */}
+        <div className="crt-overlay" aria-hidden="true" />
+        <div className="crt-roll" aria-hidden="true" />
       </body>
     </html>
   );
