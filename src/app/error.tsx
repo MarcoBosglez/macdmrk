@@ -2,17 +2,12 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { AppWindow } from "@/components/chrome/app-window";
 import { useLocale } from "@/components/providers/locale-provider";
 import { useSound } from "@/components/providers/sound-provider";
 
 // Next.js renders this in place of a page whenever rendering throws
-// beneath it — a bad fetch, a null-ref, anything uncaught. It must be
-// a Client Component per Next's error-boundary convention. This only
-// catches errors below the root layout; a crash in layout.tsx itself
-// would need app/global-error.tsx instead, which is a bigger change
-// (it replaces the whole <html>, since the layout it'd normally sit
-// inside is what failed) and isn't added here.
+// beneath it. Must be a Client Component per Next's error-boundary
+// convention. Only catches errors below the root layout.
 export default function ErrorPage({
   error,
   reset,
@@ -28,32 +23,37 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <AppWindow title="error.exe">
-      <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
-        <div className="font-mono text-sm text-emerald">~/ cat error.log</div>
-        <div className="font-mono text-2xl font-bold tracking-tight text-emerald md:text-[32px]">
+    <div className="animate-fade flex h-full items-center justify-center py-1.5">
+      <div className="flex max-w-[440px] flex-col items-center gap-3 rounded-[22px] border border-line bg-glass p-8 text-center [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">
+        <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-accent">
+          ~/ cat error.log
+        </div>
+        <div
+          className="text-accent"
+          style={{ fontSize: "clamp(22px, 4vw, 32px)", fontVariationSettings: "'wght' 700", lineHeight: 1.1 }}
+        >
           {t.errorPage.title}
         </div>
-        <p className="max-w-[360px] text-sm leading-relaxed text-muted">{t.errorPage.description}</p>
-        <div className="mt-2 flex gap-5">
+        <p className="text-[13px] leading-relaxed text-dim">{t.errorPage.description}</p>
+        <div className="mt-1 flex gap-5">
           <button
             onClick={() => {
               playClick("nav");
               reset();
             }}
-            className="font-mono text-[13px] font-bold text-emerald hover:underline"
+            className="font-mono text-[13px] font-bold text-accent hover:underline"
           >
             {t.errorPage.retry}
           </button>
           <Link
             href="/"
             onClick={() => playClick("nav")}
-            className="font-mono text-[13px] font-bold text-mint hover:underline"
+            className="font-mono text-[13px] font-bold text-ink hover:underline"
           >
             {t.errorPage.cta}
           </Link>
         </div>
       </div>
-    </AppWindow>
+    </div>
   );
 }

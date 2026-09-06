@@ -2,58 +2,95 @@ import type { Dictionary } from "./types";
 
 export const es: Dictionary = {
   nav: {
-    home: "INICIO",
-    about: "SOBRE MÍ",
-    work: "TRABAJO",
-    gallery: "GALERÍA",
-    faq: "FAQ",
-    contact: "CONTACTO",
+    home: "inicio",
+    about: "sobre mí",
+    work: "trabajo",
+    gallery: "galería",
+    contact: "contacto",
+  },
+  chrome: {
+    openToWork: "disponible",
   },
   toggles: {
-    mute: "[ silenciar ]",
-    unmute: "[ activar ]",
-    light: "[ claro ]",
-    dark: "[ oscuro ]",
-    loading: "[ ... ]",
-    crtEnable: "[ crt on ]",
-    crtDisable: "[ crt off ]",
+    mute: "silenciar",
+    unmute: "activar",
+    light: "claro",
+    dark: "oscuro",
+    loading: "...",
   },
-  hero: {
+  hub: {
+    eyebrow: "tarjeta de presentación",
     role: "desarrollador de software & artista digital",
-    origin: "🇲🇽 Ciudad de México → Seattle, WA",
-    description:
-      "",
-    ctaWork: "→ ver_trabajo",
-    ctaGallery: "→ ver_galeria",
+    // BORRADOR — Marco puede ajustar.
+    bio: "Construyo el backend y luego pinto lo que ese backend renderiza. Años entre backend, integración de LLMs y full-stack — y un cuaderno de bocetos que nunca se cerró. Todo lo que hago, y dónde encontrarme, está aquí.",
+    chips: ["TypeScript", "Python", "pintura digital"],
+    // BORRADOR — registro de actividad de ejemplo; Marco puede ajustar.
+    log: [
+      "[09:14] shipped   endpoints del gateway llm",
+      "[13:02] painted   estudio de retrato",
+      "[16:40] fixed     race condition en una cola",
+      "[21:55] sketched  ciudad de noche",
+    ],
+    note: "→ todo está a un clic. pasa el cursor por cualquier cosa — nada se comporta igual dos veces.",
   },
   work: {
-    previewPlaceholder: "// vista_previa.png",
-    linkHint: "haz clic en el enlace para abrir el proyecto",
-    categoryLabel: "CATEGORÍAS",
-    stackLabel: "STACK",
-    statusLabel: "ESTADO",
+    eyebrow: "trabajo seleccionado",
+    range: "2020 — 2026",
+    whatIDid: "lo que hice",
+    outcomeLabel: "resultado",
+    linkHint: "abre el proyecto en una pestaña nueva",
+    note: "→ pasa el cursor por un título para leer la historia completa: el problema, mi parte, y qué salió.",
   },
   gallery: {
-    dragHint: "arrastra la barra de título para mover",
-    gridHint: "maximiza una pieza para verla en resolución completa, sin filtros",
+    eyebrow: "galería",
+    countJoiner: "mostradas",
+    dragHint: "arrastra la barra de título para mover · maximiza para resolución completa",
+    note: "→ tinta · gouache · digital. cada marco reacciona a su manera.",
   },
   about: {
-    photoPlaceholder: "photo.jpg",
-    bio: "Nací en la Ciudad de México, ahora estoy en Seattle WA por mi maestría.\n\nDesarrollador de Software y Artista Digital cursando una Maestría en Ciencias de la Computación en DigiPen, con graduación en otoño de 2027. Me especializo en desarrollo backend, integración de LLMs, desarrollo full stack y arte digital.",
-    skills: "nodejs · typescript · python · react · rest apis · llm integration · sql · git · clip studio paint · affinity",
+    eyebrow: "sobre mí",
+    // BORRADOR — Marco puede ajustar.
+    lead: "Software de oficio, imágenes por compulsión. La ingeniería mantiene honesto al arte; el arte mantiene interesante a la ingeniería.",
+    leadAccent: "imágenes por compulsión",
+    nowLabel: "ahora",
+    // BORRADOR
+    now: "Maestría en Ciencias de la Computación en DigiPen · tomando comisiones",
+    stackLabel: "stack",
+    stack: "TypeScript · Python · React · Node · Postgres · integración de LLMs",
+    elsewhereLabel: "en otros lados",
+    experienceLabel: "experiencia",
+    interestsLabel: "fuera de horario",
     interests: "videojuegos · dibujo · tacos · artes marciales · fanático de los deportes de contacto",
     quirk: "// entreno artes marciales y aún así el pingüino me gana en el sparring",
-    contactCta: "→ contacta_me",
+    photoPlaceholder: "[ foto mía ]",
     disclaimer:
-      "Todos los aspectos visuales de este portafolio, incluyendo su diseño, ilustraciones y composición, fueron diseñados y creados por mí. Las herramientas de IA se utilizaron exclusivamente como apoyo para el desarrollo de software y la generación de código.",
-  },
-  faq: {
-    questionPrefix: "P:",
-    answerPrefix: "R:",
+      "Todo el aspecto visual de este portafolio — su diseño, ilustraciones y composición — lo hice yo. Las herramientas de IA se usaron solo como apoyo para el desarrollo de software y la generación de código.",
+    note: "→ años de backend. cuaderno de bocetos desde siempre. dos ramas, un repo.",
   },
   contact: {
-    heading: "¿Quieres platicar?",
-    blurb: "Envíame un mensaje y hagamos contacto, o encuéntrame directamente:",
+    eyebrow: "contacto",
+    // BORRADOR — Marco puede ajustar.
+    lead: "Comisiones abiertas. Roles de ingeniería también.",
+    blurb:
+      "Cuéntame qué estás construyendo o qué quieres que dibuje. Respondo en uno o dos días.",
+    statusLabel: "estado",
+    statusValue: "disponible",
+    localTimeLabel: "hora local",
+    replyTimeLabel: "tiempo de respuesta",
+    replyTimeValue: "~24–48h",
+    elsewhereLabel: "en otros lados",
+    elsewhere: {
+      instagram: "@marcobglz — los dibujos",
+      linkedin: "marco-bosquez — la experiencia",
+      resume: "pdf — una página",
+    },
+    // BORRADOR
+    briefs: [
+      "→ contrato de backend / infra / LLM",
+      "→ ilustración o comisión de portada",
+      "→ tooling para un equipo de arte o de juegos",
+    ],
+    note: "→ entre más claro el brief, más rápida la respuesta. cuéntame la forma de lo que necesitas.",
     form: {
       heading: "~/ ./enviar_mensaje.sh",
       nameLabel: "NOMBRE",
@@ -73,12 +110,12 @@ export const es: Dictionary = {
   notFound: {
     title: "404",
     description: "Esta página no existe — el archivo fue movido, eliminado, o nunca existió.",
-    cta: "→ volver_al_inicio",
+    cta: "→ volver al inicio",
   },
   errorPage: {
     title: "algo se rompió",
     description: "Ocurrió un error inesperado. Puedes intentar de nuevo, o volver al inicio.",
-    retry: "→ intentar_de_nuevo",
-    cta: "→ volver_al_inicio",
+    retry: "→ intentar de nuevo",
+    cta: "→ volver al inicio",
   },
 };

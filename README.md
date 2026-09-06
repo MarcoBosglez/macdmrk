@@ -1,6 +1,6 @@
 # macdmrk
 
-Marco Bosquez's personal portfolio — a terminal/desktop-OS themed site split between the professional side (work, about, contact) and a gallery of illustrations, with a bilingual (English/Spanish) toggle.
+Marco Bosquez's personal portfolio — the "Glass Kinetic" direction: frosted-glass panels floating over a slow aurora field, terminal-flavoured mono meta, and cursor-reactive variable typography. Five views (hub · work · gallery · about · contact) with a bilingual (English/Spanish) toggle, synthesized UI sounds, and draggable gallery windows.
 
 ## Stack
 
@@ -8,16 +8,17 @@ Marco Bosquez's personal portfolio — a terminal/desktop-OS themed site split b
 - **Next.js 15** (App Router) + TypeScript, **React 18**
 
 **Styling**
-- **Tailwind CSS v4** — theme tokens live in `src/app/globals.css` (`@theme` block)
-- **shadcn/ui** — primitives in `src/components/ui/`, built on Radix (`@radix-ui/react-slot`) + `class-variance-authority` for variants
-- `clsx` + `tailwind-merge` — power the `cn()` class-merging helper in `src/lib/utils.ts`
-- **lucide-react** — icon set
+- **Tailwind CSS v4** — design tokens (`--bg --ink --dim --muted --accent --glass --line --panel …`) live in `src/app/globals.css`, light on `:root` and dark under `.dark`, exposed as utilities via the `@theme inline` block
+- **Archivo** (variable `wdth` + `wght`, loaded via `next/font`) for the kinetic type; **JetBrains Mono** for meta text
+- **shadcn/ui** — primitives in `src/components/ui/`, built on Radix (`@radix-ui/react-slot`) + `class-variance-authority`
+- `clsx` + `tailwind-merge` — power the `cn()` helper in `src/lib/utils.ts`
+- **lucide-react** — icon set (brand + monoline marks are inline SVG in `src/components/chrome/`)
 
 **Animation**
-- **Motion** (Framer Motion's successor) — window open/close, the gallery lightbox, mobile nav, and the boot screen
+- **Motion** (Framer Motion's successor) — gallery window open/close; the aurora drift, view cross-fade, kinetic type, blinking cursor and typewriter are plain CSS/JS, gated behind `prefers-reduced-motion`
 
 **3D**
-- **three.js** — hand-built rather than via `@react-three/fiber` (that library conflicts with Next's server rendering) — drives the hero avatar and the penguin easter egg, mounted through a small custom hook (`src/lib/three/use-three-stage.ts`)
+- **three.js** — hand-built rather than via `@react-three/fiber` (that library conflicts with Next's server rendering) — drives the penguin easter egg on the hub, mounted through a small custom hook (`src/lib/three/use-three-stage.ts`)
 
 **Sound**
 - No library — every UI sound (nav clicks, window open/close, the penguin's honk) is synthesized on the fly with the native **Web Audio API** in `src/components/providers/sound-provider.tsx`
@@ -52,30 +53,30 @@ npm run lint    # ESLint
 ```
 src/
   app/                 # one folder per route (Next.js App Router)
-    layout.tsx         # shared chrome: window frame, top bar, providers
-    page.tsx           # home page (hero)
-    work/, gallery/, about/, faq/, contact/
+    layout.tsx         # shell: aurora field + chrome bar + stage + providers
+    page.tsx           # hub (hero)
+    work/, gallery/, about/, contact/
 
   components/
-    chrome/             # top bar, bordered window frame, mobile nav, language toggle
-    providers/          # theme, sound, and locale context providers
-    hub/, work/, gallery/, about/, faq/, contact/   # per-section UI
+    chrome/             # chrome bar, aurora field, shared ViewPane, mobile nav, icons
+    providers/          # theme, sound, locale, and cursor (normalized pointer X) providers
+    hub/, work/, gallery/, about/, contact/   # per-section UI
     ui/                 # shadcn/ui primitives
 
   lib/
-    data/                # placeholder content (projects, FAQs, experience) — edit these to add real content
+    data/                # content: projects, illustrations, experience, links
     i18n/                # EN/ES dictionary + Locale type
-    three/               # 3D scene builders + the mount/render hook
+    three/               # penguin scene builder + the mount/render hook
     utils.ts
 ```
 
 ## Content
 
-Placeholder project, illustration, FAQ, and experience data lives in `src/lib/data/`. Swap in real content there — each entry is typed, so TypeScript will flag anything missing.
+Project, illustration, experience and link data lives in `src/lib/data/`. Copy still marked `DRAFT` / `BORRADOR` in the dictionaries (`src/lib/i18n/dictionaries/`) and in `projects.ts` is placeholder wording to refine. The résumé link points at `/resume.pdf` — drop that file into `public/`.
 
 ## Language
 
-The whole site is translated via `src/lib/i18n/dictionaries.ts`. Terminal-style text (`whoami`, `work.exe`, `ls -la`, fake filenames) is intentionally left untranslated — it's meant to read as literal shell output in either language. To add a string, add it to the `Dictionary` type and both the `en` and `es` objects; to add a third language, add it to the `Locale` type and `DICTIONARIES`.
+The whole site is translated via `src/lib/i18n/dictionaries/`. Terminal-style text (`~/marco`, fake filenames like `today.log` / `shipped.log` / `readme.md`) is intentionally left untranslated — it's meant to read as literal shell output in either language. To add a string, add it to the `Dictionary` type and both the `en` and `es` objects; to add a third language, add it to the `Locale` type and `DICTIONARIES`.
 
 ## Note on the design
 

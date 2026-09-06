@@ -2,58 +2,95 @@ import type { Dictionary } from "./types";
 
 export const en: Dictionary = {
   nav: {
-    home: "HOME",
-    about: "ABOUT",
-    work: "WORK",
-    gallery: "GALLERY",
-    faq: "FAQ",
-    contact: "CONTACT",
+    home: "hub",
+    about: "about",
+    work: "work",
+    gallery: "gallery",
+    contact: "contact",
+  },
+  chrome: {
+    openToWork: "open to work",
   },
   toggles: {
-    mute: "[ mute ]",
-    unmute: "[ unmute ]",
-    light: "[ light ]",
-    dark: "[ dark ]",
-    loading: "[ ... ]",
-    crtEnable: "[ crt on ]",
-    crtDisable: "[ crt off ]",
+    mute: "mute",
+    unmute: "unmute",
+    light: "light",
+    dark: "dark",
+    loading: "...",
   },
-  hero: {
+  hub: {
+    eyebrow: "presentation card",
     role: "software dev & digital artist",
-    origin: "🇲🇽 Mexico City → Seattle, WA",
-    description:
-      "",
-    ctaWork: "→ view_work",
-    ctaGallery: "→ view_gallery",
+    // DRAFT — Marco to refine.
+    bio: "I build the backend, then I paint the thing it renders. Years across backend work, LLM integration and full-stack — plus a sketchbook that never closed. Everything I make, and everywhere to find me, is right here.",
+    chips: ["TypeScript", "Python", "digital painting"],
+    // DRAFT — sample activity log; Marco to refine.
+    log: [
+      "[09:14] shipped   llm gateway endpoints",
+      "[13:02] painted   portrait study",
+      "[16:40] fixed     race condition in a queue",
+      "[21:55] sketched  city at night",
+    ],
+    note: "→ everything lives one click away. hover anything — nothing behaves the same twice.",
   },
   work: {
-    previewPlaceholder: "// preview.png",
-    linkHint: "click the link to open the project",
-    categoryLabel: "CATEGORY",
-    stackLabel: "STACK",
-    statusLabel: "STATUS",
+    eyebrow: "selected work",
+    range: "2020 — 2026",
+    whatIDid: "what i did",
+    outcomeLabel: "outcome",
+    linkHint: "open the project in a new tab",
+    note: "→ hover a title to read the whole story: the problem, my part in it, what came out.",
   },
   gallery: {
-    dragHint: "drag the title bar to move",
-    gridHint: "maximize a piece to see it at full resolution, no filters",
+    eyebrow: "gallery",
+    countJoiner: "shown",
+    dragHint: "drag the title bar to move · maximize for full resolution",
+    note: "→ ink · gouache · digital. every frame reacts its own way.",
   },
   about: {
-    photoPlaceholder: "photo.jpg",
-    bio: "Born in Mexico City, now based in Seattle, WA for my Master's.\n\nSoftware Engineer and Digital Artist pursuing my M.S. in Computer Science at DigiPen, graduating fall 2027. I specialize in backend development, LLM integration, full-stack web development, and digital art.",
-    skills: "nodejs · typescript · python · react · rest apis · llm integration · sql · git · clip studio paint · affinity",
+    eyebrow: "about",
+    // DRAFT — Marco to refine.
+    lead: "Software by trade, pictures by compulsion. The engineering keeps the art honest; the art keeps the engineering interesting.",
+    leadAccent: "pictures by compulsion",
+    nowLabel: "now",
+    // DRAFT
+    now: "M.S. Computer Science at DigiPen · taking commissions",
+    stackLabel: "stack",
+    stack: "TypeScript · Python · React · Node · Postgres · LLM integration",
+    elsewhereLabel: "elsewhere",
+    experienceLabel: "experience",
+    interestsLabel: "off the clock",
     interests: "videogames · drawing · tacos · martial arts · combat-sports superfan",
     quirk: "// trains martial arts, still loses sparring to the penguin",
-    contactCta: "→ contact_me",
+    photoPlaceholder: "[ photo of me ]",
     disclaimer:
-      "Every visual aspect of this portfolio—including its design, illustrations, and layout—was designed and created by me. AI tools were used exclusively to assist with software development and code generation",
-  },
-  faq: {
-    questionPrefix: "Q:",
-    answerPrefix: "A:",
+      "Every visual aspect of this portfolio — its design, illustrations, and layout — was made by me. AI tools were used only to assist with software development and code generation.",
+    note: "→ years of backend. sketchbook since forever. both branches, one repo.",
   },
   contact: {
-    heading: "Wanna talk?",
-    blurb: "Send me a message and let's get in touch, or find me directly:",
+    eyebrow: "contact",
+    // DRAFT — Marco to refine.
+    lead: "Commissions open. Engineering roles too.",
+    blurb:
+      "Tell me what you're building or what you want drawn. I answer within a day or two.",
+    statusLabel: "status",
+    statusValue: "open to work",
+    localTimeLabel: "local time",
+    replyTimeLabel: "reply time",
+    replyTimeValue: "~24–48h",
+    elsewhereLabel: "elsewhere",
+    elsewhere: {
+      instagram: "@marcobglz — the drawings",
+      linkedin: "marco-bosquez — the work history",
+      resume: "pdf — one page",
+    },
+    // DRAFT
+    briefs: [
+      "→ backend / infra / LLM contract",
+      "→ illustration or cover commission",
+      "→ tooling for an art or game team",
+    ],
+    note: "→ the clearer the brief, the faster the reply. tell me the shape of the thing.",
     form: {
       heading: "~/ ./send_message.sh",
       nameLabel: "NAME",
@@ -73,12 +110,12 @@ export const en: Dictionary = {
   notFound: {
     title: "404",
     description: "This page doesn't exist — the file was moved, deleted, or never here.",
-    cta: "→ back_home",
+    cta: "→ back home",
   },
   errorPage: {
     title: "something broke",
     description: "An unexpected error occurred. You can try again, or head back home.",
-    retry: "→ try_again",
-    cta: "→ back_home",
+    retry: "→ try again",
+    cta: "→ back home",
   },
 };

@@ -26,11 +26,11 @@ declare global {
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-// Sits next to ContactList (see contact-list.tsx) inside contact.exe.
-// Spam defense is layered: a Cloudflare Turnstile challenge, a
-// honeypot field real users never see, and server-side rate limiting
-// (see src/app/api/contact/route.ts) — this component only owns the
-// UI and the fetch to that route.
+// The working contact form, nested in the left panel of ContactView.
+// Spam defense is layered: a Cloudflare Turnstile challenge, a honeypot
+// field real users never see, and server-side rate limiting (see
+// src/app/api/contact/route.ts) — this component only owns the UI and
+// the fetch to that route.
 export function ContactForm() {
   const { t } = useLocale();
   const { playClick } = useSound();
@@ -101,14 +101,14 @@ export function ContactForm() {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 md:p-10">
+    <div>
       <Script
         src="https://challenges.cloudflare.com/turnstile/v0/api.js"
         strategy="afterInteractive"
         onLoad={() => setTurnstileReady(true)}
       />
-      <div className="mb-4.5 font-mono text-[13px] text-mint">{t.contact.form.heading}</div>
-      <form ref={formRef} onSubmit={handleSubmit} className="flex max-w-[420px] flex-col gap-4">
+      <div className="mb-3 font-mono text-[11px] text-accent">{t.contact.form.heading}</div>
+      <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-3.5">
         {/* Honeypot — visually hidden (not display:none, which some
             bots skip filling for exactly that reason) and out of tab
             order, so a real visitor never notices or fills it in. */}
@@ -126,7 +126,7 @@ export function ContactForm() {
             maxLength={200}
             placeholder={t.contact.form.namePlaceholder}
             onKeyDown={() => playClick("nav")}
-            className="rounded border border-border bg-transparent px-3 py-2 font-mono text-sm outline-none transition-colors focus:border-emerald"
+            className="rounded border border-line bg-transparent px-3 py-2 font-mono text-sm outline-none transition-colors focus:border-accent"
           />
         </label>
 
@@ -139,7 +139,7 @@ export function ContactForm() {
             maxLength={320}
             placeholder={t.contact.form.emailPlaceholder}
             onKeyDown={() => playClick("nav")}
-            className="rounded border border-border bg-transparent px-3 py-2 font-mono text-sm outline-none transition-colors focus:border-emerald"
+            className="rounded border border-line bg-transparent px-3 py-2 font-mono text-sm outline-none transition-colors focus:border-accent"
           />
         </label>
 
@@ -152,7 +152,7 @@ export function ContactForm() {
             rows={5}
             placeholder={t.contact.form.messagePlaceholder}
             onKeyDown={() => playClick("nav")}
-            className="resize-none rounded border border-border bg-transparent px-3 py-2 font-mono text-sm outline-none transition-colors focus:border-emerald"
+            className="resize-none rounded border border-line bg-transparent px-3 py-2 font-mono text-sm outline-none transition-colors focus:border-accent"
           />
         </label>
 
@@ -165,16 +165,16 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="self-start rounded-full bg-emerald px-4.5 py-2 font-mono text-[13px] font-bold text-bg transition-opacity disabled:opacity-60"
+          className="self-start rounded-full bg-accent px-4.5 py-2 font-mono text-[13px] font-bold text-bg transition-opacity disabled:opacity-60"
         >
           {status === "submitting" ? t.contact.form.sending : t.contact.form.send}
         </button>
 
         {status === "success" ? (
-          <p className="font-mono text-[12px] text-emerald">{t.contact.form.success}</p>
+          <p className="font-mono text-[12px] text-accent">{t.contact.form.success}</p>
         ) : null}
         {status === "error" ? (
-          <p className="font-mono text-[12px] text-red-400">{errorMessage}</p>
+          <p className="font-mono text-[12px] text-[color:var(--destructive)]">{errorMessage}</p>
         ) : null}
       </form>
     </div>

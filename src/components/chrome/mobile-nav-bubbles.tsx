@@ -60,8 +60,8 @@ export function MobileNavBubbles() {
                     className={cn(
                       "block rounded-full border px-4 py-2 font-mono text-xs font-bold whitespace-nowrap shadow-lg",
                       active
-                        ? "border-emerald bg-emerald text-bg"
-                        : "border-border bg-panel text-ink"
+                        ? "border-accent bg-accent text-bg"
+                        : "border-line bg-panel text-ink"
                     )}
                   >
                     {t.nav[item.key]}
@@ -79,7 +79,7 @@ export function MobileNavBubbles() {
         }}
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-panel text-lg text-ink shadow-lg"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-panel text-lg text-ink shadow-lg"
       >
         {open ? "✕" : "☰"}
       </button>

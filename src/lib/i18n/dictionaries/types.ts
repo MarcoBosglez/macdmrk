@@ -1,32 +1,33 @@
 // The site's two supported languages. Add a new one here (and to both
-// dictionaries below) and every component that reads from useLocale()
-// picks it up automatically — nothing else needs to change.
+// dictionaries) and every component that reads from useLocale() picks
+// it up automatically — nothing else needs to change.
 export type Locale = "en" | "es";
 
 export const LOCALES: Locale[] = ["en", "es"];
 
-// Small helper for content that lives in data files (projects, FAQs,
-// experience) rather than the dictionary above — anywhere a single
-// string needs both an English and Spanish version sitting next to
-// each other in the same object.
+// Small helper for content that lives in data files (projects,
+// experience) rather than the dictionary — anywhere a single string
+// needs both an English and Spanish version side by side.
 export type Localized = { en: string; es: string };
 
 export function localize(value: Localized, locale: Locale): string {
   return value[locale];
 }
 
-// Shape of all translatable UI copy. Deliberately does NOT include the
-// terminal "command" text (whoami, ls -la, window titles like work.exe,
-// fake filenames like photo.jpg) — those are meant to read as literal
-// shell output, so they stay identical in every language on purpose.
+// Shape of all translatable UI copy. Deliberately does NOT include text
+// meant to read as literal terminal output — the `~/marco` prompt, fake
+// filenames like `today.log` / `shipped.log` / `readme.md`, shell-style
+// eyebrows — those stay identical in every language on purpose.
 export type Dictionary = {
   nav: {
     home: string;
     about: string;
     work: string;
     gallery: string;
-    faq: string;
     contact: string;
+  };
+  chrome: {
+    openToWork: string;
   };
   toggles: {
     mute: string;
@@ -34,43 +35,70 @@ export type Dictionary = {
     light: string;
     dark: string;
     loading: string;
-    crtEnable: string;
-    crtDisable: string;
   };
-  hero: {
+  hub: {
+    eyebrow: string;
     role: string;
-    origin: string;
-    description: string;
-    ctaWork: string;
-    ctaGallery: string;
+    bio: string;
+    chips: string[];
+    // Typewriter lines for the today.log panel. Kept short — they type
+    // out one char every 26ms on mount.
+    log: string[];
+    // The "→ ..." line in the start_here.txt note strip.
+    note: string;
   };
   work: {
-    previewPlaceholder: string;
+    eyebrow: string;
+    range: string;
+    whatIDid: string;
+    outcomeLabel: string;
     linkHint: string;
-    categoryLabel: string;
-    stackLabel: string;
-    statusLabel: string;
+    note: string;
   };
   gallery: {
+    eyebrow: string;
+    // Rendered as `{shown} · {archiveTotal}` style — the component
+    // supplies the numbers, this is the middle word.
+    countJoiner: string;
     dragHint: string;
-    gridHint: string;
+    note: string;
   };
   about: {
-    photoPlaceholder: string;
-    bio: string;
-    skills: string;
+    eyebrow: string;
+    // Lead paragraph. `leadAccent` is the exact substring inside `lead`
+    // that gets the accent colour — the component splits on it.
+    lead: string;
+    leadAccent: string;
+    nowLabel: string;
+    now: string;
+    stackLabel: string;
+    stack: string;
+    elsewhereLabel: string;
+    experienceLabel: string;
+    interestsLabel: string;
     interests: string;
     quirk: string;
-    contactCta: string;
+    photoPlaceholder: string;
     disclaimer: string;
-  };
-  faq: {
-    questionPrefix: string;
-    answerPrefix: string;
+    note: string;
   };
   contact: {
-    heading: string;
+    eyebrow: string;
+    lead: string;
     blurb: string;
+    statusLabel: string;
+    statusValue: string;
+    localTimeLabel: string;
+    replyTimeLabel: string;
+    replyTimeValue: string;
+    elsewhereLabel: string;
+    elsewhere: {
+      instagram: string;
+      linkedin: string;
+      resume: string;
+    };
+    briefs: string[];
+    note: string;
     form: {
       heading: string;
       nameLabel: string;

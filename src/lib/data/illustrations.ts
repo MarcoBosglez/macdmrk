@@ -18,6 +18,10 @@ export type Illustration = {
   // and its shareable page (e.g. "graphite study, ~2hrs"). Optional —
   // pieces without one just skip that line.
   description?: string;
+  // Shown on the right of each gallery frame's caption row (ink /
+  // gouache / digital). Defaults to "digital" — override per slug in
+  // MEDIUMS below.
+  medium: string;
 };
 
 // Everything below scans public/illustrations at build/server-start
@@ -30,6 +34,12 @@ export type Illustration = {
 // commented example) to give a specific piece a blurb.
 const DESCRIPTIONS: Record<string, string> = {
   // beautifultree: "graphite study, ~2hrs",
+};
+
+// Medium per piece, keyed by the auto-generated slug. Anything not
+// listed falls back to "digital". Marco to adjust.
+const MEDIUMS: Record<string, string> = {
+  // "beautiful-tree": "ink",
 };
 
 const ILLUSTRATIONS_DIR = path.join(process.cwd(), "public", "illustrations");
@@ -93,6 +103,7 @@ function readIllustrations(): Illustration[] {
       height,
       image: `/illustrations/${encodeURIComponent(name)}`,
       description: DESCRIPTIONS[slug] ?? "",
+      medium: MEDIUMS[slug] ?? "digital",
     };
   });
 }

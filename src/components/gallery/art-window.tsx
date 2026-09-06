@@ -69,7 +69,7 @@ export function ArtWindow({
         onPointerDown={onHeaderPointerDown}
         onPointerMove={onHeaderPointerMove}
         onPointerUp={onHeaderPointerUp}
-        className={`flex shrink-0 items-center justify-between border-b border-border bg-bg px-3.5 py-2.5 select-none ${
+        className={`flex shrink-0 items-center justify-between border-b border-line bg-glass-soft px-3.5 py-2.5 select-none ${
           win.maximized ? "cursor-default" : "cursor-move"
         }`}
       >
@@ -87,7 +87,7 @@ export function ArtWindow({
             }}
             aria-label={win.maximized ? "Restore" : "Maximize"}
             title={win.maximized ? "Restore" : "Maximize"}
-            className="text-muted hover:text-emerald"
+            className="text-muted hover:text-accent"
           >
             {win.maximized ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
           </button>
@@ -97,7 +97,7 @@ export function ArtWindow({
               playClick("close");
               onClose();
             }}
-            className="font-mono text-xs text-muted transition-transform hover:scale-115 hover:text-emerald"
+            className="font-mono text-xs text-muted transition-transform hover:scale-115 hover:text-accent"
             aria-label="Close"
           >
             ✕
@@ -108,7 +108,7 @@ export function ArtWindow({
         {/* object-contain (not cover) so the whole picture stays
             visible at its real proportions — this is the "real size"
             view, cropping belongs to the grid thumbnail, not here. */}
-        <div className="relative mb-4 min-h-20 flex-1 overflow-hidden rounded bg-bg">
+        <div className="relative mb-4 min-h-20 flex-1 overflow-hidden rounded-[12px] bg-bg">
           {illustration.image ? (
             <Image
               src={illustration.image}
@@ -141,16 +141,10 @@ export function ArtWindow({
 
   // Both maximized and normal windows portal straight to document.body
   // and use fixed (viewport) positioning rather than rendering inline
-  // inside the gallery grid. A normal window used to be absolutely
-  // positioned inside the grid's own scrolling pane, which clipped it
-  // the moment a drag carried it past that pane's edges — you couldn't
-  // pull it out over the top bar or the nav. Being a body-level sibling
-  // like the maximized view already was removes that boundary entirely
-  // (see win.x/win.y's viewport-space starting offsets in art-grid.tsx,
-  // chosen to clear the top bar and nav sidebar on open). It's also why
-  // maximized windows can sit above the global scanline overlay
-  // (z-index 110) — nested inside AppWindow's own stacking context
-  // (z-10) they couldn't, no matter their own z-index.
+  // inside the gallery grid — so a drag can carry a window anywhere on
+  // screen (over the chrome bar included) without the grid's own
+  // scroll pane clipping it. win.x/win.y in art-grid.tsx are viewport
+  // coordinates chosen to clear the chrome bar on open.
   return createPortal(
     <motion.div
       initial={{ opacity: 0, scale: win.maximized ? 0.98 : 0.94 }}
@@ -159,8 +153,8 @@ export function ArtWindow({
       onPointerDownCapture={onFocus}
       className={
         win.maximized
-          ? "fixed inset-0 z-[120] flex flex-col overflow-hidden border border-border bg-panel"
-          : "fixed flex flex-col overflow-hidden rounded-lg border border-border bg-panel shadow-2xl"
+          ? "fixed inset-0 z-[120] flex flex-col overflow-hidden border border-line bg-panel [backdrop-filter:blur(22px)_saturate(1.2)]"
+          : "fixed flex flex-col overflow-hidden rounded-[18px] border border-line bg-panel [backdrop-filter:blur(22px)_saturate(1.2)] [box-shadow:var(--shadow)]"
       }
       style={
         win.maximized
