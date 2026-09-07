@@ -330,6 +330,18 @@ html.mb-skip-startup .startup-veil {
   display: none !important;
 }
 
+/* Floaty shapes (chrome/floaty-field.tsx) — JS owns the transform, so
+   grab feedback is just colour + cursor. */
+.floaty--held {
+  cursor: grabbing !important;
+  color: var(--accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .floaty-field {
+    display: none !important;
+  }
+}
+
 /* No-JS fallback: the component can't unmount the veil, so never show
    it. (JS-off visitors just land straight on the hub.) */
 html.no-js .startup-veil {

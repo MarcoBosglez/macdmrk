@@ -12,6 +12,7 @@ import { ChromeBar } from "@/components/chrome/chrome-bar";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
 import { SpotifyPlayer } from "@/components/chrome/spotify-player";
+import { FloatyField } from "@/components/chrome/floaty-field";
 
 // Archivo is loaded as a VARIABLE font (both wdth 62..125 and wght
 // 100..900 axes) — the kinetic type effect animates
@@ -73,6 +74,7 @@ export default function RootLayout({
               <CursorProvider>
                 <div className="relative flex h-dvh w-screen flex-col overflow-hidden">
                   <AuroraField />
+                  <FloatyField />
                   <ChromeBar />
                   <main className="relative z-[2] min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-4 pb-5 md:overflow-hidden md:px-[26px] md:pb-[22px] md:pt-1.5">
                     {children}

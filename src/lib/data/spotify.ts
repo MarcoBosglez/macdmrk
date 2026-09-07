@@ -1,15 +1,6 @@
-// Marco's public "favourites" playlist, embedded via Spotify's own
-// iframe (no API keys, updates itself whenever the playlist changes).
-//
-// To wire it up: make a PUBLIC playlist on Spotify, hit Share → Copy
-// link, and paste just the id here — the part after /playlist/ and
-// before the "?". e.g.
-//   https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M
-//                                     ^^^^^^^^^^^^^^^^^^^^^^ this
-// A single track works too — set TYPE to "track" and use a track id.
-// While this is empty the About page falls back to the plain SONGS
-// list and the chrome-bar player button is hidden.
-export const SPOTIFY_ID = "";
+// Marco's public "favourites" playlist
+
+export const SPOTIFY_ID = "37i9dQZF1Epow51SXCzR80";
 export const SPOTIFY_TYPE: "playlist" | "track" | "album" | "artist" = "playlist";
 
 export function spotifyEmbedSrc(compact = false): string | null {
