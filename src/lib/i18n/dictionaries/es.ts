@@ -44,6 +44,7 @@ export const es: Dictionary = {
   gallery: {
     eyebrow: "galería",
     countJoiner: "mostradas",
+    filterAll: "todo",
     dragHint: "arrastra la barra de título para mover · maximiza para resolución completa",
     note: "→ tinta · gouache · digital. cada marco reacciona a su manera.",
   },

@@ -60,6 +60,8 @@ export type Dictionary = {
     // Rendered as `{shown} · {archiveTotal}` style — the component
     // supplies the numbers, this is the middle word.
     countJoiner: string;
+    // Label for the "show everything" chip in the medium filter row.
+    filterAll: string;
     dragHint: string;
     note: string;
   };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
@@ -30,7 +30,8 @@ const CHROME_W = 40;
 const CHROME_H = 151;
 
 // "No two hovers alike" — each frame picks a transform from this cycle
-// by its index in the grid.
+// by its stable index in the full illustration list, so a piece keeps
+// the same personality no matter how the grid is filtered.
 const ART_HOVERS = [
   "translateY(-7px)",
   "rotate(2.6deg)",
@@ -54,6 +55,39 @@ function windowSizeFor(illustration: Illustration | undefined) {
   return { w: Math.round(imageW + CHROME_W), h: Math.round(imageH + CHROME_H) };
 }
 
+// Two columns below md, four above. A media-query listener rather than a
+// CSS `columns` masonry: the frames' hover transforms (rotate / scale /
+// slide) get clipped at a real multicolumn boundary, but a plain flex
+// column of blocks lets them lift freely.
+function useColumnCount() {
+  const [cols, setCols] = useState(2);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const apply = () => setCols(mq.matches ? 4 : 2);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+  return cols;
+}
+
+// Greedy shortest-column packing, using each image's real aspect ratio
+// as its relative height so columns end up roughly level.
+function packColumns<T extends { width: number; height: number }>(
+  items: T[],
+  cols: number
+): T[][] {
+  const columns: T[][] = Array.from({ length: cols }, () => []);
+  const heights = new Array(cols).fill(0);
+  for (const item of items) {
+    let shortest = 0;
+    for (let c = 1; c < cols; c++) if (heights[c] < heights[shortest]) shortest = c;
+    columns[shortest].push(item);
+    heights[shortest] += item.height / item.width;
+  }
+  return columns;
+}
+
 function ArtFrame({
   illustration,
   index,
@@ -69,11 +103,14 @@ function ArtFrame({
       onClick={onOpen}
       onMouseEnter={() => setOn(true)}
       onMouseLeave={() => setOn(false)}
-      className="mb-3.5 block w-full break-inside-avoid rounded-[18px] border bg-glass p-2 text-left [backdrop-filter:blur(18px)]"
+      className="relative block w-full rounded-[18px] border bg-glass p-2 text-left [backdrop-filter:blur(18px)]"
       style={{
         borderColor: on ? "var(--line-hot)" : "var(--line)",
         transform: on ? ART_HOVERS[index % ART_HOVERS.length] : "none",
         boxShadow: on ? "0 16px 34px rgba(0,0,0,.26)" : "none",
+        // Lift above neighbouring frames while transformed so a rotate
+        // or scale never appears to be sliced by the next one.
+        zIndex: on ? 10 : 1,
         transition:
           "transform .24s cubic-bezier(.2,.8,.3,1), border-color .18s ease, box-shadow .22s ease",
       }}
@@ -102,6 +139,28 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   const { t } = useLocale();
   const [openWindows, setOpenWindows] = useState<OpenWindow[]>([]);
   const [nextZ, setNextZ] = useState(20);
+  const [medium, setMedium] = useState<string>("all");
+  const cols = useColumnCount();
+
+  // Distinct mediums present, most-common first. The filter row only
+  // shows once more than one medium is actually in use.
+  const mediums = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const ill of illustrations) counts.set(ill.medium, (counts.get(ill.medium) ?? 0) + 1);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([m]) => m);
+  }, [illustrations]);
+
+  const shown = useMemo(
+    () => (medium === "all" ? illustrations : illustrations.filter((i) => i.medium === medium)),
+    [illustrations, medium]
+  );
+
+  const columns = useMemo(() => packColumns(shown, cols), [shown, cols]);
+  // Stable per-piece index for the hover-transform cycle.
+  const indexOf = useMemo(() => {
+    const m = new Map(illustrations.map((ill, i) => [ill.slug, i]));
+    return (slug: string) => m.get(slug) ?? 0;
+  }, [illustrations]);
 
   function openWindow(id: string) {
     playClick("open");
@@ -145,13 +204,13 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   return (
     <ViewPane center={false} note={{ file: "mediums.txt", line: t.gallery.note }}>
       <div className="flex w-full max-w-[1040px] flex-1 flex-col gap-3 md:min-h-0">
-        <div className="flex shrink-0 items-center justify-between gap-3">
+        <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2">
           <div className="flex items-baseline gap-3">
             <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
               {t.gallery.eyebrow}
             </span>
             <span className="font-mono text-[11px] text-muted">
-              {illustrations.length} {t.gallery.countJoiner}
+              {shown.length} {t.gallery.countJoiner}
             </span>
           </div>
           <a
@@ -167,15 +226,48 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
           </a>
         </div>
 
+        {mediums.length > 1 ? (
+          <div className="flex shrink-0 flex-wrap gap-1.5">
+            {["all", ...mediums].map((m) => {
+              const active = m === medium;
+              return (
+                <button
+                  key={m}
+                  onClick={() => {
+                    playClick("nav");
+                    setMedium(m);
+                  }}
+                  aria-pressed={active}
+                  className="rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors"
+                  style={{
+                    background: active ? "var(--accent)" : "transparent",
+                    color: active ? "var(--bg)" : "var(--dim)",
+                    borderColor: active ? "var(--accent)" : "var(--line)",
+                  }}
+                >
+                  {m === "all" ? t.gallery.filterAll : m}
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
+
         <div className="min-h-0 flex-1 md:overflow-y-auto">
-          <div className="columns-2 gap-3.5 md:columns-4">
-            {illustrations.map((ill, i) => (
-              <ArtFrame
-                key={ill.slug}
-                illustration={ill}
-                index={i}
-                onOpen={() => openWindow(ill.slug)}
-              />
+          {/* key on the filter so the fade replays when it changes; the
+              px padding gives the hover transforms room so nothing is
+              clipped by the scroll container's edge. */}
+          <div key={medium} className="animate-fade flex gap-3.5 px-3 pb-4">
+            {columns.map((col, ci) => (
+              <div key={ci} className="flex min-w-0 flex-1 flex-col gap-3.5">
+                {col.map((ill) => (
+                  <ArtFrame
+                    key={ill.slug}
+                    illustration={ill}
+                    index={indexOf(ill.slug)}
+                    onOpen={() => openWindow(ill.slug)}
+                  />
+                ))}
+              </div>
             ))}
           </div>
         </div>

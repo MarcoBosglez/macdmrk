@@ -44,6 +44,7 @@ export const en: Dictionary = {
   gallery: {
     eyebrow: "gallery",
     countJoiner: "shown",
+    filterAll: "all",
     dragHint: "drag the title bar to move · maximize for full resolution",
     note: "→ ink · gouache · digital. every frame reacts its own way.",
   },
