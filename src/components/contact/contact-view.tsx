@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { useLocale } from "@/components/providers/locale-provider";
 import { useSound } from "@/components/providers/sound-provider";
 import { ViewPane } from "@/components/chrome/view-pane";
-import { ContactForm } from "@/components/contact/contact-form";
-import { IgIcon, InIcon, DocIcon } from "@/components/chrome/link-icons";
+import { IgIcon, InIcon, DocIcon, MailIcon } from "@/components/chrome/link-icons";
 import { LINKS } from "@/lib/data/links";
 
 function useClock() {
@@ -23,8 +22,8 @@ function useClock() {
 function Meta({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-muted">{label}</span>
-      <span className={`font-mono text-[11px] ${accent ? "text-accent" : "text-ink"}`}>{value}</span>
+      <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted">{label}</span>
+      <span className={`font-mono text-[12px] ${accent ? "text-accent" : "text-ink"}`}>{value}</span>
     </div>
   );
 }
@@ -64,7 +63,7 @@ function ElsewhereRow({
         <span className="text-[14px] text-ink" style={{ fontVariationSettings: "'wght' 700" }}>
           {name}
         </span>
-        <span className="font-mono text-[10px] text-muted">{descriptor}</span>
+        <span className="font-mono text-[11px] text-muted">{descriptor}</span>
       </span>
     </a>
   );
@@ -72,14 +71,15 @@ function ElsewhereRow({
 
 export function ContactView() {
   const { t } = useLocale();
+  const { playClick } = useSound();
   const clock = useClock();
 
   return (
     <ViewPane note={{ file: "briefs.txt", line: t.contact.note }}>
       <div className="grid w-full max-w-[1000px] items-stretch gap-3.5 md:grid-cols-2">
-        {/* Left — intro + working form + meta row */}
+        {/* Left — intro + mailto button + meta row */}
         <div className="flex flex-col gap-4 rounded-[22px] border border-line bg-glass p-6 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">
-          <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-accent">
+          <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
             {t.contact.eyebrow}
           </span>
           <p
@@ -95,7 +95,15 @@ export function ContactView() {
           </p>
           <p className="text-[13px] leading-relaxed text-dim">{t.contact.blurb}</p>
 
-          <ContactForm />
+          <a
+            href={`mailto:${LINKS.email}`}
+            onClick={() => playClick("open")}
+            style={{ background: "var(--accent)", color: "var(--bg)" }}
+            className="inline-flex items-center gap-2.5 self-start rounded-[14px] px-4 py-2.5 text-[14px] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:[box-shadow:0_12px_26px_rgba(0,0,0,.3)]"
+          >
+            <MailIcon className="h-4 w-4 shrink-0" />
+            <span style={{ fontVariationSettings: "'wght' 700" }}>{LINKS.email}</span>
+          </a>
 
           <div className="mt-auto flex flex-wrap gap-x-6 gap-y-3 border-t border-line-soft pt-4">
             <Meta label={t.contact.statusLabel} value={t.contact.statusValue} accent />
@@ -107,7 +115,7 @@ export function ContactView() {
         {/* Right — elsewhere rows + good_briefs.txt */}
         <div className="flex flex-col gap-3.5">
           <div className="flex flex-col gap-2 rounded-[22px] border border-line bg-glass p-4 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">
-            <span className="px-0.5 font-mono text-[9px] tracking-[0.14em] uppercase text-muted">
+            <span className="px-0.5 font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
               {t.contact.elsewhereLabel}
             </span>
             <ElsewhereRow
@@ -134,8 +142,8 @@ export function ContactView() {
           </div>
 
           <div className="flex flex-1 flex-col gap-2 overflow-hidden rounded-[22px] border border-line bg-panel px-4 py-3.5 [backdrop-filter:blur(22px)] [box-shadow:var(--shadow)]">
-            <span className="font-mono text-[9px] text-muted">good_briefs.txt</span>
-            <div className="font-mono text-[11px] leading-[1.8] text-dim">
+            <span className="font-mono text-[10px] text-muted">good_briefs.txt</span>
+            <div className="font-mono text-[12px] leading-[1.8] text-dim">
               {t.contact.briefs.map((line) => (
                 <div key={line}>{line}</div>
               ))}

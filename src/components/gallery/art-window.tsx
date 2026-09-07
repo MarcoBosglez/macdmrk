@@ -134,7 +134,7 @@ export function ArtWindow({
             {illustration.description}
           </p>
         ) : null}
-        <div className="shrink-0 font-mono text-[11px] text-muted">{t.gallery.dragHint}</div>
+        <div className="shrink-0 font-mono text-[12px] text-muted">{t.gallery.dragHint}</div>
       </div>
     </>
   );

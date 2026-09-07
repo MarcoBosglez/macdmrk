@@ -90,8 +90,8 @@ function ArtFrame({
         />
       </div>
       <div className="flex justify-between gap-2 px-1 pt-1.5">
-        <span className="truncate font-mono text-[9px] text-ink">{illustration.caption}</span>
-        <span className="shrink-0 font-mono text-[9px] text-muted">{illustration.medium}</span>
+        <span className="truncate font-mono text-[10px] text-ink">{illustration.caption}</span>
+        <span className="shrink-0 font-mono text-[10px] text-muted">{illustration.medium}</span>
       </div>
     </button>
   );
@@ -147,10 +147,10 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
       <div className="flex w-full max-w-[1040px] flex-1 flex-col gap-3 md:min-h-0">
         <div className="flex shrink-0 items-center justify-between gap-3">
           <div className="flex items-baseline gap-3">
-            <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-accent">
+            <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
               {t.gallery.eyebrow}
             </span>
-            <span className="font-mono text-[10px] text-muted">
+            <span className="font-mono text-[11px] text-muted">
               {illustrations.length} {t.gallery.countJoiner}
             </span>
           </div>
@@ -160,7 +160,7 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
             rel="noopener noreferrer"
             onClick={() => playClick("nav")}
             aria-label="Instagram — art account"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line px-2.5 py-1 font-mono text-[10px] text-muted transition-colors hover:border-line-hot hover:text-accent"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line px-2.5 py-1 font-mono text-[11px] text-muted transition-colors hover:border-line-hot hover:text-accent"
           >
             <IgIcon className="h-3.5 w-3.5" />
             @macdmrk

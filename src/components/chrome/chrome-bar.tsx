@@ -66,8 +66,8 @@ export function ChromeBar() {
         <Image
           src={mouthOpen ? "/logo-open.svg" : "/logo.svg"}
           alt=""
-          width={20}
-          height={20}
+          width={26}
+          height={26}
           unoptimized
           priority
         />
@@ -121,10 +121,10 @@ export function ChromeBar() {
       {/* Right — status + controls */}
       <div className={CAPSULE}>
         <span className="animate-pulse-dot h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-        <span className="hidden font-mono text-[10px] whitespace-nowrap text-accent sm:inline">
+        <span className="hidden font-mono text-[11px] whitespace-nowrap text-accent sm:inline">
           {t.chrome.openToWork}
         </span>
-        <span className="font-mono text-[10px] whitespace-nowrap text-muted tabular-nums">
+        <span className="font-mono text-[11px] whitespace-nowrap text-muted tabular-nums">
           {mounted ? clock : "--:--"}
         </span>
 
@@ -165,7 +165,7 @@ export function ChromeBar() {
             setLocale(locale === "en" ? "es" : "en");
           }}
           aria-label={`Switch language to ${locale === "en" ? "Español" : "English"}`}
-          className="h-6 rounded-[20px] border border-line px-2 font-mono text-[10px] font-bold text-ink transition-colors hover:text-accent"
+          className="h-6 rounded-[20px] border border-line px-2 font-mono text-[11px] font-bold text-ink transition-colors hover:text-accent"
         >
           {locale === "en" ? "ES" : "EN"}
         </button>

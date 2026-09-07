@@ -54,7 +54,7 @@ function LinkTile({ href, external, Icon, label, value, hoverStyle, hoverValueSt
     >
       <span className="flex items-center gap-2 text-accent">
         <Icon className="h-[15px] w-[15px]" />
-        <span className="font-mono text-[9px] tracking-[0.14em] uppercase">{label}</span>
+        <span className="font-mono text-[10px] tracking-[0.14em] uppercase">{label}</span>
       </span>
       <span
         className="min-w-0 break-words"
@@ -94,9 +94,9 @@ function TodayLog({ lines }: { lines: string[] }) {
       <div className="flex shrink-0 items-center gap-1.5">
         <span className="h-2 w-2 rounded-full bg-line-hot" />
         <span className="h-2 w-2 rounded-full bg-line" />
-        <span className="ml-1.5 font-mono text-[9px] text-muted">today.log</span>
+        <span className="ml-1.5 font-mono text-[10px] text-muted">today.log</span>
       </div>
-      <div className="font-mono text-[11px] leading-[1.75] whitespace-pre-wrap text-dim">
+      <div className="font-mono text-[12px] leading-[1.75] whitespace-pre-wrap text-dim">
         {typed}
         <span className="animate-blink text-accent">▌</span>
       </div>
@@ -113,7 +113,7 @@ export function Hero() {
         <div className="grid w-full max-w-[1040px] items-stretch gap-3.5 md:grid-cols-2">
           {/* Left — presentation card */}
           <div className={`flex flex-col gap-3.5 p-6 ${PANEL_GLASS}`}>
-            <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-accent">
+            <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
               {t.hub.eyebrow}
             </span>
             <div>
@@ -126,7 +126,7 @@ export function Hero() {
               {t.hub.chips.map((chip) => (
                 <span
                   key={chip}
-                  className="rounded-full border border-line px-2.5 py-1.5 font-mono text-[10px] text-dim transition-[transform,background] duration-200 hover:-translate-y-0.5 hover:bg-wash"
+                  className="rounded-full border border-line px-2.5 py-1.5 font-mono text-[11px] text-dim transition-[transform,background] duration-200 hover:-translate-y-0.5 hover:bg-wash"
                 >
                   {chip}
                 </span>

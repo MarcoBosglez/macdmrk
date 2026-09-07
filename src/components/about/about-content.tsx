@@ -22,7 +22,7 @@ const SOCIAL_LINKS = [
 function FooterCol({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-muted">{label}</span>
+      <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted">{label}</span>
       {children}
     </div>
   );
@@ -37,7 +37,7 @@ export function AboutContent() {
   return (
     <ViewPane note={{ file: "readme.md", line: t.about.note }}>
       <div className="flex w-full max-w-[940px] flex-col gap-5 overflow-y-auto rounded-[22px] border border-line bg-glass p-6 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)] md:max-h-full">
-        <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-accent">
+        <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
           {t.about.eyebrow}
         </span>
 
@@ -68,10 +68,10 @@ export function AboutContent() {
 
         <div className="grid gap-5 border-t border-line-soft pt-4 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
           <FooterCol label={t.about.nowLabel}>
-            <span className="font-mono text-[11px] leading-relaxed text-ink">{t.about.now}</span>
+            <span className="font-mono text-[12px] leading-relaxed text-ink">{t.about.now}</span>
           </FooterCol>
           <FooterCol label={t.about.stackLabel}>
-            <span className="font-mono text-[11px] leading-relaxed text-ink">{t.about.stack}</span>
+            <span className="font-mono text-[12px] leading-relaxed text-ink">{t.about.stack}</span>
           </FooterCol>
           <FooterCol label={t.about.elsewhereLabel}>
             {SOCIAL_LINKS.map((link) => (
@@ -81,7 +81,7 @@ export function AboutContent() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playClick("nav")}
-                className="flex items-center gap-2 font-mono text-[11px] text-ink transition-[letter-spacing] duration-200 hover:tracking-[0.06em] hover:text-accent"
+                className="flex items-center gap-2 font-mono text-[12px] text-ink transition-[letter-spacing] duration-200 hover:tracking-[0.06em] hover:text-accent"
               >
                 <link.Icon className="h-3.5 w-3.5 shrink-0 text-accent" />
                 {link.label}
@@ -91,7 +91,7 @@ export function AboutContent() {
         </div>
 
         <div className="flex flex-col gap-1 border-t border-line-soft pt-4">
-          <span className="mb-1 font-mono text-[9px] tracking-[0.14em] uppercase text-muted">
+          <span className="mb-1 font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
             {t.about.experienceLabel}
           </span>
           {EXPERIENCE.map((entry) => (
@@ -100,16 +100,16 @@ export function AboutContent() {
         </div>
 
         <div className="flex flex-col gap-1 border-t border-line-soft pt-4">
-          <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-muted">
+          <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
             {t.about.interestsLabel}
           </span>
-          <span className="font-mono text-[11px] leading-relaxed text-dim">{t.about.interests}</span>
-          <span className="font-mono text-[11px] text-accent">{t.about.quirk}</span>
+          <span className="font-mono text-[12px] leading-relaxed text-dim">{t.about.interests}</span>
+          <span className="font-mono text-[12px] text-accent">{t.about.quirk}</span>
         </div>
 
         <div className="flex items-start gap-2.5 rounded-[14px] border border-dashed border-line px-3 py-2.5">
           <BotOff className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" aria-hidden="true" />
-          <p className="font-mono text-[10px] leading-relaxed text-muted">{t.about.disclaimer}</p>
+          <p className="font-mono text-[11px] leading-relaxed text-muted">{t.about.disclaimer}</p>
         </div>
       </div>
     </ViewPane>
@@ -123,7 +123,7 @@ function ExperienceRow({ entry, locale }: { entry: ExperienceEntry; locale: Loca
   const detail = entry.detail ? localize(entry.detail, locale) : null;
 
   return (
-    <div className="py-1 font-mono text-[11px]">
+    <div className="py-1 font-mono text-[12px]">
       <div
         className={`flex flex-wrap items-baseline gap-x-3 gap-y-0.5 ${
           detail ? "cursor-pointer select-none" : ""
@@ -151,7 +151,7 @@ function ExperienceRow({ entry, locale }: { entry: ExperienceEntry; locale: Loca
         {detail && <span className="text-muted">{open ? "[−]" : "[+]"}</span>}
       </div>
       {detail && open && (
-        <p className="mt-1 mb-1 max-w-[560px] border-l border-line pl-3 text-[10px] leading-relaxed text-dim md:ml-[104px]">
+        <p className="mt-1 mb-1 max-w-[560px] border-l border-line pl-3 text-[11px] leading-relaxed text-dim md:ml-[104px]">
           {detail}
         </p>
       )}

@@ -59,10 +59,10 @@ function TitleRow({
         className="flex flex-wrap items-baseline gap-2.5"
         style={{ opacity: on ? 1 : 0.55, transition: "opacity .2s ease" }}
       >
-        <span className="font-mono text-[9px] tracking-[0.1em] uppercase text-accent">
+        <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-accent">
           {localize(project.category, locale).toLowerCase()}
         </span>
-        <span className="font-mono text-[9px] text-muted">{project.years}</span>
+        <span className="font-mono text-[10px] text-muted">{project.years}</span>
       </span>
     </Link>
   );
@@ -75,10 +75,10 @@ function Detail({ project }: { project: Project }) {
   return (
     <div className="flex min-h-0 flex-col gap-3 overflow-y-auto rounded-[24px] border border-line bg-panel px-5 py-5 [backdrop-filter:blur(22px)] [box-shadow:var(--shadow)]">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-accent">
+        <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-accent">
           {localize(project.role, locale)}
         </span>
-        <span className="font-mono text-[9px] text-muted">
+        <span className="font-mono text-[10px] text-muted">
           {project.years} · {localize(project.team, locale)}
         </span>
       </div>
@@ -113,11 +113,11 @@ function Detail({ project }: { project: Project }) {
       <p className="text-[13px] leading-relaxed text-dim">{localize(project.problem, locale)}</p>
 
       <div className="flex flex-col gap-1.5">
-        <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-muted">
+        <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
           {t.work.whatIDid}
         </span>
         {project.did[locale].map((line) => (
-          <span key={line} className="font-mono text-[11px] leading-relaxed text-ink">
+          <span key={line} className="font-mono text-[12px] leading-relaxed text-ink">
             → {line}
           </span>
         ))}
@@ -127,7 +127,7 @@ function Detail({ project }: { project: Project }) {
         {project.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-full border border-line px-2.5 py-1 font-mono text-[9px] text-dim transition-colors hover:bg-wash"
+            className="rounded-full border border-line px-2.5 py-1 font-mono text-[10px] text-dim transition-colors hover:bg-wash"
           >
             {tag}
           </span>
@@ -135,10 +135,10 @@ function Detail({ project }: { project: Project }) {
       </div>
 
       <div className="mt-auto flex items-baseline gap-2 border-t border-line-soft pt-3">
-        <span className="shrink-0 font-mono text-[9px] tracking-[0.14em] uppercase text-muted">
+        <span className="shrink-0 font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
           {t.work.outcomeLabel}
         </span>
-        <span className="font-mono text-[11px] leading-snug text-accent">
+        <span className="font-mono text-[12px] leading-snug text-accent">
           {localize(project.outcome, locale)}
         </span>
       </div>
@@ -164,11 +164,11 @@ export function WorkView({
     <ViewPane center={false} note={{ file: "shipped.log", line: t.work.note }}>
       <div className="flex w-full max-w-[1040px] flex-1 flex-col gap-2.5 md:min-h-0">
         <div className="flex shrink-0 items-center gap-3">
-          <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-accent">
+          <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
             {t.work.eyebrow}
           </span>
           <span className="h-px flex-1 bg-line-soft" />
-          <span className="font-mono text-[10px] text-muted">{t.work.range}</span>
+          <span className="font-mono text-[11px] text-muted">{t.work.range}</span>
         </div>
 
         <div className="grid flex-1 gap-3.5 md:min-h-0 md:[grid-template-columns:minmax(0,1fr)_minmax(0,1.05fr)]">

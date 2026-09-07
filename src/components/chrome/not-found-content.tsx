@@ -11,7 +11,7 @@ export function NotFoundContent() {
   return (
     <div className="animate-fade flex h-full items-center justify-center py-1.5">
       <div className="flex max-w-[440px] flex-col items-center gap-3 rounded-[22px] border border-line bg-glass p-8 text-center [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">
-        <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-accent">
+        <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
           ~/ cat 404.txt
         </div>
         <div

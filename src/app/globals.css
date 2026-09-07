@@ -248,11 +248,102 @@ a {
   animation: penguin-bob 1.8s ease-in-out infinite;
 }
 
+/* ─── Startup animation ─────────────────────────────────────────────
+   A once-per-tab intro (see chrome/startup-animation.tsx): the name
+   assembles letter by letter — each glyph snaps from wide+heavy to its
+   rest width/weight, an accent wave washing across via the staggered
+   animation-delay — then the whole veil fades to the hub. ~2.6s total.
+   Hidden with no JS, on repeat visits (pre-paint class from layout.tsx)
+   and under reduced motion. */
+.startup-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  animation: startup-veil-out 2.6s ease forwards;
+}
+
+.startup-veil__name {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.9;
+  animation: startup-name-in 0.85s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+.startup-veil__row {
+  display: flex;
+}
+
+.startup-veil__row span {
+  font-family: var(--font-sans);
+  font-size: clamp(40px, 8vw, 92px);
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  font-variation-settings: "wdth" 100, "wght" 600;
+  animation: startup-letter 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@keyframes startup-letter {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+    font-variation-settings: "wdth" 125, "wght" 900;
+    color: var(--accent);
+  }
+  55% {
+    opacity: 1;
+    color: var(--accent);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    font-variation-settings: "wdth" 100, "wght" 600;
+    color: var(--ink);
+  }
+}
+
+@keyframes startup-name-in {
+  from {
+    opacity: 0.5;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes startup-veil-out {
+  0%,
+  78% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+html.mb-skip-startup .startup-veil {
+  display: none !important;
+}
+
+/* No-JS fallback: the component can't unmount the veil, so never show
+   it. (JS-off visitors just land straight on the hub.) */
+html.no-js .startup-veil {
+  display: none !important;
+}
+
 /* ─── Reduced motion ────────────────────────────────────────────────
    Gate the aurora drift, blinking cursor, status pulse, the view-enter
    slide and the penguin bob. Per-element transform hovers are set
    inline in components and also checked there. */
 @media (prefers-reduced-motion: reduce) {
+  .startup-veil {
+    display: none !important;
+  }
   .animate-blink,
   .animate-pulse-dot,
   .animate-fade,

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -9,6 +10,7 @@ import { CursorProvider } from "@/components/providers/cursor-provider";
 import { AuroraField } from "@/components/chrome/aurora-field";
 import { ChromeBar } from "@/components/chrome/chrome-bar";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
+import { StartupAnimation } from "@/components/chrome/startup-animation";
 
 // Archivo is loaded as a VARIABLE font (both wdth 62..125 and wght
 // 100..900 axes) — the kinetic type effect animates
@@ -49,9 +51,21 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${archivo.variable} ${jetBrainsMono.variable}`}
+      className={`no-js ${archivo.variable} ${jetBrainsMono.variable}`}
     >
       <body>
+        {/* Runs before paint: drop the no-js guard, and if the startup
+            intro already played this tab session, hide it via CSS now so
+            repeat navigations never flash it (the component also checks,
+            this just wins the race). */}
+        <Script id="startup-check" strategy="beforeInteractive">
+          {`document.documentElement.classList.remove("no-js");
+            try {
+              if (sessionStorage.getItem("mb-booted")) {
+                document.documentElement.classList.add("mb-skip-startup");
+              }
+            } catch (e) {}`}
+        </Script>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <SoundProvider>
             <LocaleProvider>
@@ -68,6 +82,7 @@ export default function RootLayout({
             </LocaleProvider>
           </SoundProvider>
         </ThemeProvider>
+        <StartupAnimation />
       </body>
     </html>
   );

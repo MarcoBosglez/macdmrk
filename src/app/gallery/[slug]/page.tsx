@@ -25,7 +25,7 @@ export default async function IllustrationPage({
     <div className="animate-fade flex h-full items-center justify-center py-1.5">
       <div className="flex h-full max-h-[820px] w-full max-w-[900px] flex-col overflow-hidden rounded-[22px] border border-line bg-panel [backdrop-filter:blur(22px)_saturate(1.2)] [box-shadow:var(--shadow)]">
         <div className="flex shrink-0 items-center justify-between border-b border-line px-5 py-3">
-          <span className="font-mono text-[11px] text-muted">
+          <span className="font-mono text-[12px] text-muted">
             {illustration.caption} · {illustration.medium}
           </span>
           <Link

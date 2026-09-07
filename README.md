@@ -72,7 +72,7 @@ src/
 
 ## Content
 
-Project, illustration, experience and link data lives in `src/lib/data/`. Copy still marked `DRAFT` / `BORRADOR` in the dictionaries (`src/lib/i18n/dictionaries/`) and in `projects.ts` is placeholder wording to refine. The résumé link points at `/resume.pdf` — drop that file into `public/`.
+Project, illustration, experience and link data lives in `src/lib/data/`.
 
 ## Language
 
