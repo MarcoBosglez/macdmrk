@@ -11,6 +11,7 @@ import { AuroraField } from "@/components/chrome/aurora-field";
 import { ChromeBar } from "@/components/chrome/chrome-bar";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
+import { SpotifyPlayer } from "@/components/chrome/spotify-player";
 
 // Archivo is loaded as a VARIABLE font (both wdth 62..125 and wght
 // 100..900 axes) — the kinetic type effect animates
@@ -77,6 +78,7 @@ export default function RootLayout({
                     {children}
                   </main>
                   <MobileNavBubbles />
+                  <SpotifyPlayer />
                 </div>
               </CursorProvider>
             </LocaleProvider>

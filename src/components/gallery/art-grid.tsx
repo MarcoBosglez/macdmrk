@@ -253,10 +253,11 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
         ) : null}
 
         <div className="min-h-0 flex-1 md:overflow-y-auto">
-          {/* key on the filter so the fade replays when it changes; the
-              px padding gives the hover transforms room so nothing is
-              clipped by the scroll container's edge. */}
-          <div key={medium} className="animate-fade flex gap-3.5 px-3 pb-4">
+          {/* key on the filter so the fade replays when it changes. The
+              padding on every side gives the hover transforms room — a
+              lifted or scaled frame at any edge (the top row especially)
+              would otherwise be clipped by the scroll container. */}
+          <div key={medium} className="animate-fade flex gap-3.5 px-4 pt-5 pb-5">
             {columns.map((col, ci) => (
               <div key={ci} className="flex min-w-0 flex-1 flex-col gap-3.5">
                 {col.map((ill) => (

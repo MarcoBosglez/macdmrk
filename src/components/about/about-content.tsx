@@ -8,6 +8,7 @@ import { useLocale } from "@/components/providers/locale-provider";
 import { localize, type Locale } from "@/lib/i18n/dictionaries";
 import { EXPERIENCE, type ExperienceEntry } from "@/lib/data/experience";
 import { SONGS } from "@/lib/data/songs";
+import { spotifyEmbedSrc } from "@/lib/data/spotify";
 import { ViewPane } from "@/components/chrome/view-pane";
 import { GithubIcon, InstagramIcon, LinkedinIcon } from "@/components/chrome/social-icons";
 import { LINKS } from "@/lib/data/links";
@@ -129,33 +130,7 @@ export function AboutContent() {
         </Section>
 
         <Section label={t.about.listeningLabel}>
-          <div className="flex flex-col gap-1">
-            {SONGS.map((song, i) => {
-              const text = `${song.artist} — ${song.title}`;
-              const row = (
-                <span className="flex items-center gap-2 font-mono text-[12px] leading-relaxed">
-                  <Music className="h-3 w-3 shrink-0 text-accent" aria-hidden="true" />
-                  <span className="text-ink">{text}</span>
-                </span>
-              );
-              return song.url ? (
-                <a
-                  key={i}
-                  href={song.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => playClick("nav")}
-                  className="inline-flex w-fit transition-transform duration-200 hover:translate-x-1 hover:text-accent [&_span]:hover:text-accent"
-                >
-                  {row}
-                </a>
-              ) : (
-                <div key={i} className="text-dim [&_span]:text-dim">
-                  {row}
-                </div>
-              );
-            })}
-          </div>
+          <ListeningBlock />
         </Section>
 
         <Section label={t.about.interestsLabel}>
@@ -169,6 +144,60 @@ export function AboutContent() {
         </div>
       </div>
     </ViewPane>
+  );
+}
+
+// The "on repeat" block: an embedded Spotify playlist once one is
+// configured (src/lib/data/spotify.ts), otherwise the hand-written
+// SONGS list.
+function ListeningBlock() {
+  const { playClick } = useSound();
+  const src = spotifyEmbedSrc();
+
+  if (src) {
+    return (
+      <div className="max-w-[420px] overflow-hidden rounded-[14px] border border-line">
+        <iframe
+          title="Spotify — favourites"
+          src={src}
+          width="100%"
+          height={352}
+          loading="lazy"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          className="block border-0"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-1">
+      {SONGS.map((song, i) => {
+        const text = `${song.artist} — ${song.title}`;
+        const row = (
+          <span className="flex items-center gap-2 font-mono text-[12px] leading-relaxed">
+            <Music className="h-3 w-3 shrink-0 text-accent" aria-hidden="true" />
+            <span className="text-ink">{text}</span>
+          </span>
+        );
+        return song.url ? (
+          <a
+            key={i}
+            href={song.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => playClick("nav")}
+            className="inline-flex w-fit transition-transform duration-200 hover:translate-x-1 hover:text-accent [&_span]:hover:text-accent"
+          >
+            {row}
+          </a>
+        ) : (
+          <div key={i} className="text-dim [&_span]:text-dim">
+            {row}
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
