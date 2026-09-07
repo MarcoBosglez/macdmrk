@@ -21,6 +21,7 @@ export const en: Dictionary = {
   hub: {
     eyebrow: "presentation card",
     role: "software dev & digital artist",
+    location: "based in Seattle, WA · from Mexico City",
     // DRAFT — Marco to refine.
     bio: "I build the backend, then I paint the thing it renders. Years across backend work, LLM integration and full-stack — plus a sketchbook that never closed. Everything I make, and everywhere to find me, is right here.",
     chips: ["TypeScript", "Python", "digital painting"],
@@ -60,6 +61,7 @@ export const en: Dictionary = {
     stack: "TypeScript · Python · React · Node · Postgres · LLM integration",
     elsewhereLabel: "elsewhere",
     experienceLabel: "experience",
+    listeningLabel: "on repeat",
     interestsLabel: "off the clock",
     interests: "videogames · drawing · tacos · martial arts · combat-sports superfan",
     quirk: "// trains martial arts, still loses sparring to the penguin",

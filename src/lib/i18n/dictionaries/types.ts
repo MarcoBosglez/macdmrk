@@ -39,6 +39,8 @@ export type Dictionary = {
   hub: {
     eyebrow: string;
     role: string;
+    // One-line "where I am / where I'm from", mono meta under the role.
+    location: string;
     bio: string;
     chips: string[];
     // Typewriter lines for the today.log panel. Kept short — they type
@@ -77,6 +79,7 @@ export type Dictionary = {
     stack: string;
     elsewhereLabel: string;
     experienceLabel: string;
+    listeningLabel: string;
     interestsLabel: string;
     interests: string;
     quirk: string;

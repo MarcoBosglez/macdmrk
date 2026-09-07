@@ -21,6 +21,7 @@ export const es: Dictionary = {
   hub: {
     eyebrow: "tarjeta de presentación",
     role: "desarrollador de software & artista digital",
+    location: "en Seattle, WA · originario de la Ciudad de México",
     // BORRADOR — Marco puede ajustar.
     bio: "Construyo el backend y luego pinto lo que ese backend renderiza. Años entre backend, integración de LLMs y full-stack — y un cuaderno de bocetos que nunca se cerró. Todo lo que hago, y dónde encontrarme, está aquí.",
     chips: ["TypeScript", "Python", "pintura digital"],
@@ -60,6 +61,7 @@ export const es: Dictionary = {
     stack: "TypeScript · Python · React · Node · Postgres · integración de LLMs",
     elsewhereLabel: "en otros lados",
     experienceLabel: "experiencia",
+    listeningLabel: "en repetición",
     interestsLabel: "fuera de horario",
     interests: "videojuegos · dibujo · tacos · artes marciales · fanático de los deportes de contacto",
     quirk: "// entreno artes marciales y aún así el pingüino me gana en el sparring",

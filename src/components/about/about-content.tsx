@@ -2,22 +2,51 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { BotOff } from "lucide-react";
+import { BotOff, Music } from "lucide-react";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
 import { localize, type Locale } from "@/lib/i18n/dictionaries";
 import { EXPERIENCE, type ExperienceEntry } from "@/lib/data/experience";
+import { SONGS } from "@/lib/data/songs";
 import { ViewPane } from "@/components/chrome/view-pane";
 import { GithubIcon, InstagramIcon, LinkedinIcon } from "@/components/chrome/social-icons";
 import { LINKS } from "@/lib/data/links";
 
 const PHOTO_SRC = "/about/profilepic.jpeg";
 
+// Each social link gets its own hover motion (the site's "no two hovers
+// alike" rule): Instagram lifts, LinkedIn slides, GitHub tilts.
 const SOCIAL_LINKS = [
-  { label: "Instagram — @marcobglz", href: LINKS.instagram, Icon: InstagramIcon },
-  { label: "LinkedIn — marco-bosquez", href: LINKS.linkedin, Icon: LinkedinIcon },
-  { label: "GitHub — MarcoBosglez", href: LINKS.github, Icon: GithubIcon },
+  {
+    label: "Instagram — @marcobglz",
+    href: LINKS.instagram,
+    Icon: InstagramIcon,
+    hover: "hover:-translate-y-0.5 hover:scale-[1.03]",
+  },
+  {
+    label: "LinkedIn — marco-bosquez",
+    href: LINKS.linkedin,
+    Icon: LinkedinIcon,
+    hover: "hover:translate-x-1.5",
+  },
+  {
+    label: "GitHub — MarcoBosglez",
+    href: LINKS.github,
+    Icon: GithubIcon,
+    hover: "hover:-rotate-3",
+  },
 ];
+
+function Section({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-1 border-t border-line-soft pt-4">
+      <span className="mb-1 font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
+        {label}
+      </span>
+      {children}
+    </div>
+  );
+}
 
 function FooterCol({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -37,9 +66,12 @@ export function AboutContent() {
   return (
     <ViewPane note={{ file: "readme.md", line: t.about.note }}>
       <div className="flex w-full max-w-[940px] flex-col gap-5 overflow-y-auto rounded-[22px] border border-line bg-glass p-6 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)] md:max-h-full">
-        <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
-          {t.about.eyebrow}
-        </span>
+        <div className="flex flex-col gap-1">
+          <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
+            {t.about.eyebrow}
+          </span>
+          <span className="font-mono text-[11px] text-muted">{t.hub.location}</span>
+        </div>
 
         <div className="flex flex-wrap items-start gap-5">
           <div className="relative h-[186px] w-[150px] shrink-0 overflow-hidden rounded-[16px] border border-line transition-transform duration-200 hover:[transform:rotate(-2deg)_scale(1.02)]">
@@ -81,7 +113,7 @@ export function AboutContent() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playClick("nav")}
-                className="flex items-center gap-2 font-mono text-[12px] text-ink transition-[letter-spacing] duration-200 hover:tracking-[0.06em] hover:text-accent"
+                className={`flex items-center gap-2 font-mono text-[12px] text-ink transition-transform duration-200 hover:text-accent ${link.hover}`}
               >
                 <link.Icon className="h-3.5 w-3.5 shrink-0 text-accent" />
                 {link.label}
@@ -90,22 +122,46 @@ export function AboutContent() {
           </FooterCol>
         </div>
 
-        <div className="flex flex-col gap-1 border-t border-line-soft pt-4">
-          <span className="mb-1 font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
-            {t.about.experienceLabel}
-          </span>
+        <Section label={t.about.experienceLabel}>
           {EXPERIENCE.map((entry) => (
             <ExperienceRow key={entry.company} entry={entry} locale={locale} />
           ))}
-        </div>
+        </Section>
 
-        <div className="flex flex-col gap-1 border-t border-line-soft pt-4">
-          <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted">
-            {t.about.interestsLabel}
-          </span>
+        <Section label={t.about.listeningLabel}>
+          <div className="flex flex-col gap-1">
+            {SONGS.map((song, i) => {
+              const text = `${song.artist} — ${song.title}`;
+              const row = (
+                <span className="flex items-center gap-2 font-mono text-[12px] leading-relaxed">
+                  <Music className="h-3 w-3 shrink-0 text-accent" aria-hidden="true" />
+                  <span className="text-ink">{text}</span>
+                </span>
+              );
+              return song.url ? (
+                <a
+                  key={i}
+                  href={song.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playClick("nav")}
+                  className="inline-flex w-fit transition-transform duration-200 hover:translate-x-1 hover:text-accent [&_span]:hover:text-accent"
+                >
+                  {row}
+                </a>
+              ) : (
+                <div key={i} className="text-dim [&_span]:text-dim">
+                  {row}
+                </div>
+              );
+            })}
+          </div>
+        </Section>
+
+        <Section label={t.about.interestsLabel}>
           <span className="font-mono text-[12px] leading-relaxed text-dim">{t.about.interests}</span>
           <span className="font-mono text-[12px] text-accent">{t.about.quirk}</span>
-        </div>
+        </Section>
 
         <div className="flex items-start gap-2.5 rounded-[14px] border border-dashed border-line px-3 py-2.5">
           <BotOff className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" aria-hidden="true" />

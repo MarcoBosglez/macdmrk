@@ -219,7 +219,7 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
             rel="noopener noreferrer"
             onClick={() => playClick("nav")}
             aria-label="Instagram — art account"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line px-2.5 py-1 font-mono text-[11px] text-muted transition-colors hover:border-line-hot hover:text-accent"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line px-2.5 py-1 font-mono text-[11px] text-muted transition-[transform,color,border-color] duration-200 hover:-translate-y-0.5 hover:border-line-hot hover:text-accent"
           >
             <IgIcon className="h-3.5 w-3.5" />
             @macdmrk

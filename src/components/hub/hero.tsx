@@ -119,6 +119,7 @@ export function Hero() {
             <div>
               <KineticName />
               <div className="mt-2.5 font-mono text-xs text-muted">{t.hub.role}</div>
+              <div className="mt-1 font-mono text-[11px] text-muted">{t.hub.location}</div>
             </div>
             <div className="h-px bg-line-soft" />
             <p className="text-[13px] leading-relaxed text-dim">{t.hub.bio}</p>
