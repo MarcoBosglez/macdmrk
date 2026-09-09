@@ -104,21 +104,6 @@ export type Dictionary = {
     };
     briefs: string[];
     note: string;
-    form: {
-      heading: string;
-      nameLabel: string;
-      namePlaceholder: string;
-      emailLabel: string;
-      emailPlaceholder: string;
-      messageLabel: string;
-      messagePlaceholder: string;
-      send: string;
-      sending: string;
-      success: string;
-      genericError: string;
-      captchaRequired: string;
-      captchaLoading: string;
-    };
   };
   notFound: {
     title: string;

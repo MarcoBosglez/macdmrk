@@ -36,15 +36,6 @@ const DESCRIPTIONS: Record<string, string> = {
   // beautifultree: "graphite study, ~2hrs",
 };
 
-// Medium per piece, keyed by the auto-generated slug (the filename,
-// lower-cased, non-alphanumerics -> "-"). This is the value the gallery
-// filters on and shows in each frame's caption — set it to whatever
-// labels you want ("ink", "digital", "gouache", "watercolour", ...);
-// the filter chips build themselves from the distinct values here.
-// Anything left out falls back to "digital".
-//
-// NOTE: him.png and him_.png both slugify to "him" — rename one of them
-// (e.g. him_.png -> him_alt.png) so they get separate entries.
 const MEDIUMS: Record<string, string> = {
   "angel-painting": "painting",
   "august-practice": "painting",
@@ -52,12 +43,16 @@ const MEDIUMS: Record<string, string> = {
   grace: "portrait",
   "long-haired": "portrait",
   portrait: "portrait",
-  him: "portrait",
-  hole: "portrait",
+  him: "oc",
+  hole: "concept",
   "july-practice": "painting",
-  magic: "illustration",
+  magic: "concept",
   "portrait-girl": "portrait",
   tomato: "painting",
+  "angel-born-in-hell": "concept",
+  middlefinger: "portrait",
+  "roses": "concept",
+  soldier: "portrait",
 };
 
 const ILLUSTRATIONS_DIR = path.join(process.cwd(), "public", "illustrations");

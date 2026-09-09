@@ -72,7 +72,7 @@ export function ChromeBar() {
           priority
         />
         <span className="font-mono text-xs font-bold tracking-[0.02em] text-ink">
-          ~marco.
+          ~\marco.
           <span className="animate-blink text-accent">▌</span>
         </span>
       </Link>

@@ -8,8 +8,8 @@ export type Song = {
 };
 
 export const SONGS: Song[] = [
-  { artist: "—", title: "add a favourite" },
-  { artist: "—", title: "add a favourite" },
-  { artist: "—", title: "add a favourite" },
-  { artist: "—", title: "add a favourite" },
+  { artist: "— Steve Lacy", title: "Sunshine" },
+  { artist: "— Her's", title: "What Once Was" },
+  { artist: "— Bad Bunny", title: "EL CLúB" },
+  { artist: "— Malcolm Todd", title: "Roommates" },
 ];

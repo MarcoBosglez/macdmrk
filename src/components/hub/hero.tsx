@@ -1,17 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import { useLocale } from "@/components/providers/locale-provider";
 import { ViewPane } from "@/components/chrome/view-pane";
 import { KineticName } from "@/components/hub/kinetic-name";
 import { IgIcon, InIcon, MailIcon, DocIcon } from "@/components/chrome/link-icons";
 import { LINKS, LINK_VALUES } from "@/lib/data/links";
-
-const HeroPenguinStage = dynamic(
-  () => import("@/components/hub/hero-penguin-stage").then((m) => m.HeroPenguinStage),
-  { ssr: false }
-);
 
 const PANEL_GLASS =
   "rounded-[22px] border border-line bg-glass [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]";
@@ -104,8 +98,7 @@ export function Hero() {
   const { t } = useLocale();
 
   return (
-    <>
-      <ViewPane note={{ file: "start_here.txt", line: t.hub.note }}>
+    <ViewPane note={{ file: "start_here.txt", line: t.hub.note }}>
         <div className="grid w-full max-w-[1040px] items-stretch gap-3.5 md:grid-cols-2">
           {/* Left — presentation card */}
           <div className={`flex flex-col gap-3.5 p-6 ${PANEL_GLASS}`}>
@@ -114,11 +107,13 @@ export function Hero() {
             </span>
             <div>
               <KineticName />
-              <div className="mt-2.5 font-mono text-xs text-muted">{t.hub.role}</div>
-              <div className="mt-1 font-mono text-[11px] text-muted">{t.hub.location}</div>
+              <div className="mt-3 font-mono text-[15px] text-dim">{t.hub.role}</div>
+              <div className="mt-1.5 font-mono text-[13px] text-muted">{t.hub.location}</div>
             </div>
             <div className="h-px bg-line-soft" />
-            <p className="text-[13px] leading-relaxed text-dim">{t.hub.bio}</p>
+            {t.hub.bio ? (
+              <p className="text-[13px] leading-relaxed text-dim">{t.hub.bio}</p>
+            ) : null}
             <div className="mt-auto flex flex-wrap gap-2">
               {t.hub.chips.map((chip) => (
                 <span
@@ -179,12 +174,6 @@ export function Hero() {
             <TodayLog lines={t.hub.log} />
           </div>
         </div>
-      </ViewPane>
-
-      {/* Easter egg — its own little mascot in the corner of the stage. */}
-      <div className="animate-penguin-bob absolute right-2 bottom-20 z-[3] h-14 w-14 md:right-5 md:bottom-4 md:h-[104px] md:w-[104px]">
-        <HeroPenguinStage />
-      </div>
-    </>
+    </ViewPane>
   );
 }
