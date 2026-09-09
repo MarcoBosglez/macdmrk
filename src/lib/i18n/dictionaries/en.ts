@@ -81,7 +81,7 @@ export const en: Dictionary = {
     elsewhere: {
       instagram: "@marcobglz",
       linkedin: "marco-bosquez",
-      resume: "pdf — current version",
+      resume: "current version",
     },
     // DRAFT
     briefs: [
