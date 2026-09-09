@@ -19,18 +19,15 @@ export const en: Dictionary = {
     loading: "...",
   },
   hub: {
-    eyebrow: "presentation card",
-    role: "software dev & digital artist",
-    location: "based in Seattle, WA · from Mexico City",
-    // DRAFT — Marco to refine.
-    bio: "I build the backend, then I paint the thing it renders. Years across backend work, LLM integration and full-stack — plus a sketchbook that never closed. Everything I make, and everywhere to find me, is right here.",
-    chips: ["TypeScript", "Python", "digital painting"],
-    // DRAFT — sample activity log; Marco to refine.
+    eyebrow: "who am i",
+    role: "Software Engineer & Digital Illustrator",
+    location: "Based in Seattle, WA · from Mexico City <3",
+    bio: "I'm a versatile Software Engineer specializing in full-stack development, handling everything from database architecture, backend services, to frontend user interfaces. Currently pursing my M.S. in Computer Science at Digipen Institute of Technology!",
+    chips: ["TypeScript", "Python", "Clip Studio Paint"],
     log: [
       "[09:14] shipped   llm gateway endpoints",
-      "[13:02] painted   portrait study",
-      "[16:40] fixed     race condition in a queue",
-      "[21:55] sketched  city at night",
+      "[16:40] spotted   thrift store",
+      "[21:55] sketched  portrait study",
     ],
     note: "→ everything lives one click away. hover anything — nothing behaves the same twice.",
   },

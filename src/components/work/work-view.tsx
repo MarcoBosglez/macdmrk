@@ -172,7 +172,7 @@ export function WorkView({
         </div>
 
         <div className="grid flex-1 gap-3.5 md:min-h-0 md:[grid-template-columns:minmax(0,1fr)_minmax(0,1.05fr)]">
-          <div className="flex flex-col justify-center rounded-[24px] border border-line bg-glass px-5 py-3 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">
+          <div className="flex flex-col justify-end rounded-[24px] border border-line bg-glass px-5 pt-3 pb-5 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">
             {projects.map((project) => (
               <TitleRow
                 key={project.slug}

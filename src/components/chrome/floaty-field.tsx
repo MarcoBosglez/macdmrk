@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useMotion } from "@/components/providers/motion-provider";
 
 // A layer of little shapes that tumble in 3D and drift around the whole
 // viewport, BEHIND the glass panels (z-1) — solid in the margins,
@@ -91,9 +92,10 @@ export function FloatyField() {
   const bodies = useRef<Body[]>(SHAPES.map(blankBody));
   const rafRef = useRef<number | null>(null);
   const cursor = useRef({ x: -999, y: -999, px: -999, py: -999 });
+  const { motionOn } = useMotion();
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!motionOn) return;
     if (!window.matchMedia("(min-width: 768px)").matches) return;
 
     let W = window.innerWidth;
@@ -239,7 +241,7 @@ export function FloatyField() {
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, []);
+  }, [motionOn]);
 
   return (
     <div

@@ -22,9 +22,11 @@ export function StartupAnimation() {
     } catch {
       // sessionStorage can throw in locked-down contexts — treat as first visit.
     }
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // `data-motion` is resolved before paint by the script in layout.tsx
+    // (OS setting + the user's saved override).
+    const motionOff = document.documentElement.dataset.motion === "off";
 
-    if (alreadyBooted || reduceMotion) {
+    if (alreadyBooted || motionOff) {
       setDone(true);
       return;
     }

@@ -6,6 +6,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SoundProvider } from "@/components/providers/sound-provider";
 import { LocaleProvider } from "@/components/providers/locale-provider";
+import { MotionProvider } from "@/components/providers/motion-provider";
 import { CursorProvider } from "@/components/providers/cursor-provider";
 import { AuroraField } from "@/components/chrome/aurora-field";
 import { ChromeBar } from "@/components/chrome/chrome-bar";
@@ -63,6 +64,9 @@ export default function RootLayout({
         <Script id="startup-check" strategy="beforeInteractive">
           {`document.documentElement.classList.remove("no-js");
             try {
+              var m = localStorage.getItem("mb-motion");
+              var r = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+              document.documentElement.dataset.motion = (m === null ? !r : m === "1") ? "on" : "off";
               if (sessionStorage.getItem("mb-booted")) {
                 document.documentElement.classList.add("mb-skip-startup");
               }
@@ -71,6 +75,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <SoundProvider>
             <LocaleProvider>
+              <MotionProvider>
               <CursorProvider>
                 <div className="relative flex h-dvh w-screen flex-col overflow-hidden">
                   <AuroraField />
@@ -83,6 +88,7 @@ export default function RootLayout({
                   <SpotifyPlayer />
                 </div>
               </CursorProvider>
+              </MotionProvider>
             </LocaleProvider>
           </SoundProvider>
         </ThemeProvider>

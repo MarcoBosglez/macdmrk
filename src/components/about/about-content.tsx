@@ -8,7 +8,6 @@ import { useLocale } from "@/components/providers/locale-provider";
 import { localize, type Locale } from "@/lib/i18n/dictionaries";
 import { EXPERIENCE, type ExperienceEntry } from "@/lib/data/experience";
 import { SONGS } from "@/lib/data/songs";
-import { spotifyEmbedSrc } from "@/lib/data/spotify";
 import { ViewPane } from "@/components/chrome/view-pane";
 import { GithubIcon, InstagramIcon, LinkedinIcon } from "@/components/chrome/social-icons";
 import { LINKS } from "@/lib/data/links";
@@ -107,19 +106,22 @@ export function AboutContent() {
             <span className="font-mono text-[12px] leading-relaxed text-ink">{t.about.stack}</span>
           </FooterCol>
           <FooterCol label={t.about.elsewhereLabel}>
-            {SOCIAL_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => playClick("nav")}
-                className={`flex items-center gap-2 font-mono text-[12px] text-ink transition-transform duration-200 hover:text-accent ${link.hover}`}
-              >
-                <link.Icon className="h-3.5 w-3.5 shrink-0 text-accent" />
-                {link.label}
-              </a>
-            ))}
+            <div className="flex gap-2">
+              {SOCIAL_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playClick("nav")}
+                  aria-label={link.label}
+                  title={link.label}
+                  className={`rounded-full border border-line p-2 text-muted transition-transform duration-200 hover:border-line-hot hover:text-accent ${link.hover}`}
+                >
+                  <link.Icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
           </FooterCol>
         </div>
 
@@ -147,39 +149,26 @@ export function AboutContent() {
   );
 }
 
-// The "on repeat" block: an embedded Spotify playlist once one is
-// configured (src/lib/data/spotify.ts), otherwise the hand-written
-// SONGS list.
+// The "on repeat" block: a 2-wide grid of favourite tracks from
+// src/lib/data/songs.ts. The live Spotify player lives up in the
+// chrome bar (chrome/spotify-player.tsx), not here.
 function ListeningBlock() {
   const { playClick } = useSound();
-  const src = spotifyEmbedSrc();
-
-  if (src) {
-    return (
-      <div className="max-w-[420px] overflow-hidden rounded-[14px] border border-line">
-        <iframe
-          title="Spotify — favourites"
-          src={src}
-          width="100%"
-          height={352}
-          loading="lazy"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          className="block border-0"
-        />
-      </div>
-    );
-  }
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="grid gap-2 sm:grid-cols-2">
       {SONGS.map((song, i) => {
-        const text = `${song.artist} — ${song.title}`;
-        const row = (
-          <span className="flex items-center gap-2 font-mono text-[12px] leading-relaxed">
-            <Music className="h-3 w-3 shrink-0 text-accent" aria-hidden="true" />
-            <span className="text-ink">{text}</span>
-          </span>
+        const inner = (
+          <>
+            <Music className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" aria-hidden="true" />
+            <span className="flex min-w-0 flex-col">
+              <span className="truncate text-ink">{song.title}</span>
+              <span className="truncate text-muted">{song.artist}</span>
+            </span>
+          </>
         );
+        const base =
+          "flex items-start gap-2 rounded-[12px] border border-line-soft bg-glass-soft px-3 py-2.5 font-mono text-[11px] leading-relaxed";
         return song.url ? (
           <a
             key={i}
@@ -187,13 +176,13 @@ function ListeningBlock() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => playClick("nav")}
-            className="inline-flex w-fit transition-transform duration-200 hover:translate-x-1 hover:text-accent [&_span]:hover:text-accent"
+            className={`${base} transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-line-hot`}
           >
-            {row}
+            {inner}
           </a>
         ) : (
-          <div key={i} className="text-dim [&_span]:text-dim">
-            {row}
+          <div key={i} className={base}>
+            {inner}
           </div>
         );
       })}
