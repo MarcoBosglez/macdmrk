@@ -46,21 +46,18 @@ const DESCRIPTIONS: Record<string, string> = {
 // NOTE: him.png and him_.png both slugify to "him" — rename one of them
 // (e.g. him_.png -> him_alt.png) so they get separate entries.
 const MEDIUMS: Record<string, string> = {
-  "angel-painting": "digital",
-  "august-practice": "digital",
-  "beautiful-tree": "digital",
-  // grace / long-haired / portrait tagged "ink" as a guess from the
-  // thumbnails (black line work) — just so the filter has something to
-  // filter. Correct these and tag the rest.
-  grace: "ink",
-  "long-haired": "ink",
-  portrait: "ink",
-  him: "digital",
-  hole: "digital",
-  "july-practice": "digital",
-  magic: "digital",
-  "portrait-girl": "digital",
-  tomato: "digital",
+  "angel-painting": "painting",
+  "august-practice": "painting",
+  "beautiful-tree": "painting",
+  grace: "portrait",
+  "long-haired": "portrait",
+  portrait: "portrait",
+  him: "portrait",
+  hole: "portrait",
+  "july-practice": "painting",
+  magic: "illustration",
+  "portrait-girl": "portrait",
+  tomato: "painting",
 };
 
 const ILLUSTRATIONS_DIR = path.join(process.cwd(), "public", "illustrations");

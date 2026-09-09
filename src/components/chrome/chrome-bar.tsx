@@ -4,11 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Moon, Sparkles, Sun, Volume2, VolumeX } from "lucide-react";
+import { Moon, Sun, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
-import { useMotion } from "@/components/providers/motion-provider";
 import { NAV_ITEMS } from "@/lib/data/nav";
 
 // How long the logo's "open mouth" honk pose (public/logo-open.svg)
@@ -26,7 +25,6 @@ export function ChromeBar() {
   const { muted, toggleMute, playClick } = useSound();
   const { resolvedTheme, setTheme } = useTheme();
   const { locale, setLocale, t } = useLocale();
-  const { motionOn, toggle: toggleMotion } = useMotion();
 
   // Theme / clock both depend on client-only state, so render neutral
   // until mounted to avoid a hydration mismatch.
@@ -74,7 +72,7 @@ export function ChromeBar() {
           priority
         />
         <span className="font-mono text-xs font-bold tracking-[0.02em] text-ink">
-          ~.
+          ~marco.
           <span className="animate-blink text-accent">▌</span>
         </span>
       </Link>
@@ -159,20 +157,6 @@ export function ChromeBar() {
           className="flex h-6 items-center justify-center rounded-[20px] border border-line px-2 text-muted transition-colors hover:text-accent"
         >
           {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
-        </button>
-
-        <button
-          onClick={() => {
-            playClick("toggle");
-            toggleMotion();
-          }}
-          aria-label={motionOn ? "Turn motion off" : "Turn motion on"}
-          aria-pressed={mounted ? motionOn : undefined}
-          title={motionOn ? "motion on" : "motion off"}
-          className="flex h-6 items-center justify-center rounded-[20px] border border-line px-2 transition-colors hover:text-accent"
-          style={{ color: mounted && motionOn ? "var(--accent)" : "var(--muted)" }}
-        >
-          <Sparkles className="h-3.5 w-3.5" />
         </button>
 
         <button

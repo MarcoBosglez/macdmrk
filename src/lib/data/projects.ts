@@ -18,7 +18,6 @@ export type Project = {
   // languages. Everything else is prose, so it's Localized.
   years: string;
   role: Localized;
-  team: Localized;
   // One-line statement of the problem the project set out to solve.
   problem: Localized;
   // Exactly three "→" bullets — keep that shape.
@@ -27,8 +26,6 @@ export type Project = {
   outcome: Localized;
 };
 
-// NOTE: role / team / problem / did / outcome below are DRAFTS derived
-// from each project's existing description — Marco should refine them.
 export const PROJECTS: Project[] = [
   {
     slug: "web-portfolio",
@@ -46,10 +43,9 @@ export const PROJECTS: Project[] = [
     url: "https://github.com/MarcoBosglez/macdmrk",
     years: "2024 — now",
     role: { en: "designer + developer", es: "diseñador + desarrollador" },
-    team: { en: "solo", es: "en solitario" },
     problem: {
-      en: "A résumé says I write software; it can't show that I also draw. I needed one place that carries both without picking a side.",
-      es: "Un CV dice que escribo software; no puede mostrar que también dibujo. Necesitaba un lugar que cargue ambas cosas sin elegir un lado.",
+      en: "My own personal website.",
+      es: "Mi sitio web personal",
     },
     did: {
       en: [
@@ -85,7 +81,6 @@ export const PROJECTS: Project[] = [
     url: "https://github.com/MarcoBosglez/banner-interactivo",
     years: "2021",
     role: { en: "design + front-end", es: "diseño + front-end" },
-    team: { en: "with the ONErpm team", es: "con el equipo de ONErpm" },
     problem: {
       en: "Release campaigns needed promo banners that looked sharp and could be re-skinned fast for each new artist.",
       es: "Las campañas de lanzamiento necesitaban banners promocionales que se vieran bien y se pudieran re-adaptar rápido para cada artista.",
@@ -125,7 +120,6 @@ export const PROJECTS: Project[] = [
     url: "https://www.linkedin.com/feed/update/urn:li:activity:6943381454940753920/",
     years: "2022",
     role: { en: "full-stack developer", es: "desarrollador full-stack" },
-    team: { en: "team of 4", es: "equipo de 4" },
     problem: {
       en: "The call center had no reliable way to capture and review agent–customer calls for audits and training.",
       es: "El call center no tenía forma confiable de capturar y revisar las llamadas agente–cliente para auditorías y capacitación.",
@@ -165,7 +159,6 @@ export const PROJECTS: Project[] = [
     url: "https://rcs.cic.ipn.mx/2023_152_12/Development%20of%20a%20Front-End%20with%20Dynamic%20Searches%20for%20Chatbot%20Retraining%20Using%20ReactJS.pdf",
     years: "2023",
     role: { en: "researcher + developer", es: "investigador + desarrollador" },
-    team: { en: "university team", es: "equipo universitario" },
     problem: {
       en: "We wanted to know how well a model could pick out negative sentiment in short, messy mental-health tweets.",
       es: "Queríamos saber qué tan bien un modelo podía detectar sentimiento negativo en tuits cortos y desordenados sobre salud mental.",

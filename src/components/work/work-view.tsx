@@ -78,9 +78,7 @@ function Detail({ project }: { project: Project }) {
         <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-accent">
           {localize(project.role, locale)}
         </span>
-        <span className="font-mono text-[10px] text-muted">
-          {project.years} · {localize(project.team, locale)}
-        </span>
+        <span className="font-mono text-[10px] text-muted">{project.years}</span>
       </div>
 
       <div className="flex items-center gap-2.5">

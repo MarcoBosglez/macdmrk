@@ -73,10 +73,6 @@ function TodayLog({ lines }: { lines: string[] }) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setTyped(full);
-      return;
-    }
     let i = 0;
     const step = () => {
       i++;

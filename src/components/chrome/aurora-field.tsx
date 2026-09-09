@@ -1,8 +1,6 @@
 // The slow aurora field behind everything: three big blurred blobs,
 // each drifting on its own long ease-in-out loop, plus a faint 56px
 // grid. Pure decoration — fixed, behind the stage, no pointer events.
-// The float animations are gated by prefers-reduced-motion in
-// globals.css (via the [data-aurora-blob] hook).
 export function AuroraField() {
   return (
     <div

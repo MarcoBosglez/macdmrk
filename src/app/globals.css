@@ -253,8 +253,8 @@ a {
    assembles letter by letter — each glyph snaps from wide+heavy to its
    rest width/weight, an accent wave washing across via the staggered
    animation-delay — then the whole veil fades to the hub. ~2.6s total.
-   Hidden with no JS, on repeat visits (pre-paint class from layout.tsx)
-   and under reduced motion. */
+   Hidden with no JS and on repeat visits this tab session (the
+   mb-skip-startup pre-paint class from layout.tsx). */
 .startup-veil {
   position: fixed;
   inset: 0;
@@ -341,48 +341,4 @@ html.mb-skip-startup .startup-veil {
    it. (JS-off visitors just land straight on the hub.) */
 html.no-js .startup-veil {
   display: none !important;
-}
-
-/* ─── Motion off ────────────────────────────────────────────────────
-   <html data-motion> is resolved before paint (layout.tsx script) from
-   the OS `prefers-reduced-motion` setting and the chrome-bar override,
-   and kept in sync by MotionProvider. "off" kills the aurora drift,
-   blinking cursor, status pulse, view-enter slide, penguin bob, the
-   startup intro and the floaty shapes. `:root:not([data-motion])` is
-   the no-JS case: honour the OS setting directly. Per-element transform
-   hovers are set inline in components, which also read useMotion(). */
-:root[data-motion="off"] .startup-veil,
-:root[data-motion="off"] .floaty-field {
-  display: none !important;
-}
-:root[data-motion="off"] .animate-blink,
-:root[data-motion="off"] .animate-pulse-dot,
-:root[data-motion="off"] .animate-fade,
-:root[data-motion="off"] .animate-penguin-bob,
-:root[data-motion="off"] [data-aurora-blob] {
-  animation: none !important;
-}
-:root[data-motion="off"] *,
-:root[data-motion="off"] *::before,
-:root[data-motion="off"] *::after {
-  transition-duration: 0.01ms !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root:not([data-motion]) .startup-veil,
-  :root:not([data-motion]) .floaty-field {
-    display: none !important;
-  }
-  :root:not([data-motion]) .animate-blink,
-  :root:not([data-motion]) .animate-pulse-dot,
-  :root:not([data-motion]) .animate-fade,
-  :root:not([data-motion]) .animate-penguin-bob,
-  :root:not([data-motion]) [data-aurora-blob] {
-    animation: none !important;
-  }
-  :root:not([data-motion]) *,
-  :root:not([data-motion]) *::before,
-  :root:not([data-motion]) *::after {
-    transition-duration: 0.01ms !important;
-  }
 }
