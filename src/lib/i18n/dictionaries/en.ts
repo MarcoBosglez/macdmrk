@@ -30,7 +30,7 @@ export const en: Dictionary = {
   "[16:40] spotted a thrift store on the way home",
   "[21:55] sketched some portraits",
     ],
-    note: "→ hover anything! i made this site to be interactive and fun to use",
+    note: "→ new design! hover anything. i made this site to be interactive and fun to use",
   },
   work: {
     eyebrow: "selected work",
@@ -59,8 +59,8 @@ export const en: Dictionary = {
     experienceLabel: "experience",
     listeningLabel: "on repeat",
     interestsLabel: "off the clock",
-    interests: "videogames · drawing · combat-sports superfan",
-    quirk: "// trains muay thai, still loses to the penguin",
+    interests: "videogames · drawing · mixed martial arts",
+    quirk: "// my favorite color is green if you can't tell",
     photoPlaceholder: "[ photo of me ]",
     disclaimer:
       "AI usage only to assist to code generation.",
