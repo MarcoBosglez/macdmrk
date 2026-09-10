@@ -14,10 +14,10 @@ export function localize(value: Localized, locale: Locale): string {
   return value[locale];
 }
 
-// Shape of all translatable UI copy. Deliberately does NOT include text
-// meant to read as literal terminal output — the `~/marco` prompt, fake
-// filenames like `today.log` / `shipped.log` / `readme.md`, shell-style
-// eyebrows — those stay identical in every language on purpose.
+// Shape of all translatable UI copy. Text meant to read as literal
+// terminal output — the prompt, fake filenames like `today.log` /
+// `readme.md` — is intentionally not in here; it stays the same in
+// every language.
 export type Dictionary = {
   nav: {
     home: string;
@@ -28,13 +28,6 @@ export type Dictionary = {
   };
   chrome: {
     openToWork: string;
-  };
-  toggles: {
-    mute: string;
-    unmute: string;
-    light: string;
-    dark: string;
-    loading: string;
   };
   hub: {
     eyebrow: string;
@@ -83,7 +76,6 @@ export type Dictionary = {
     interestsLabel: string;
     interests: string;
     quirk: string;
-    photoPlaceholder: string;
     disclaimer: string;
     note: string;
   };

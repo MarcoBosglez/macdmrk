@@ -9,16 +9,9 @@ import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
 import { NAV_ITEMS } from "@/lib/data/nav";
 
-// On small screens the desktop pill nav (see TopBar) gets too cramped
-// to use comfortably, so mobile gets its own nav entirely: a single
-// round button fixed at the bottom-left corner that pops open a stack
-// of "bubble" links directly above it. Hidden above the md breakpoint,
-// where TopBar's own nav takes over instead.
-//
-// This uses AnimatePresence for the open/close animation, which is
-// safe here (unlike the page-transition bug fixed earlier) because
-// "open" is plain local component state, not something layered on
-// top of Next.js's own page routing.
+// The mobile nav: a single round button fixed at the bottom-left that
+// pops open a stack of "bubble" links above it. Hidden at md and up,
+// where the ChromeBar pill nav takes over.
 export function MobileNavBubbles() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();

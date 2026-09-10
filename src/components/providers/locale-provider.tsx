@@ -14,10 +14,8 @@ type LocaleContextValue = {
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  // Always start on "en" so server and client render the same HTML on
-  // first paint. Once mounted, we swap in whatever the visitor picked
-  // last time (if anything) — same trick top-bar.tsx uses for the theme
-  // toggle, just applied to language instead of dark/light.
+  // Start on "en" so server and client first paint match, then swap in
+  // the visitor's saved choice on mount.
   const [locale, setLocaleState] = useState<Locale>("en");
 
   useEffect(() => {

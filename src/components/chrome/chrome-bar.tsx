@@ -19,7 +19,7 @@ const CAPSULE =
 
 // The one bar on top of every view: identity capsule (left), the nav
 // pill group (centre, desktop only), and a status/controls capsule
-// (right). Replaces the old TopBar + NavDock + LocaleToggle.
+// (right — clock, theme, mute, language).
 export function ChromeBar() {
   const pathname = usePathname();
   const { muted, toggleMute, playClick } = useSound();

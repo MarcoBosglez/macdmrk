@@ -11,13 +11,6 @@ export const es: Dictionary = {
   chrome: {
     openToWork: "disponible",
   },
-  toggles: {
-    mute: "silenciar",
-    unmute: "activar",
-    light: "claro",
-    dark: "oscuro",
-    loading: "...",
-  },
   hub: {
     eyebrow: "quién soy",
     role: "Ingeniero de Software & Ilustrador Digital",
@@ -25,12 +18,12 @@ export const es: Dictionary = {
     bio: "",
     chips: ["Gestión en la Nube", "Desarrollo Web", "Ilustración", "Arte"],
     log: [
-      "[09:14] hice mi tarea de IA",
+      "[09:14] estudié para la clase de IA",
       "[11:30] hice commit de 47 archivos",
       "[16:40] vi una thrift store camino a casa",
       "[21:55] dibujé algunos retratos",
     ],
-    note: "→ ¡pasa el cursor por todo! hice este sitio para que sea interactivo y divertido",
+    note: "→ nuevo diseño! el sitio es interactivo, pasa el cursor por todas partes",
   },
   work: {
     eyebrow: "trabajo seleccionado",
@@ -44,12 +37,12 @@ export const es: Dictionary = {
     eyebrow: "galería",
     countJoiner: "mostradas",
     filterAll: "todo",
-    dragHint: "arrastra la barra de título para mover · maximiza para resolución completa",
-    note: "→ ¡todo mi arte digital! filtra entre estilos",
+    dragHint: "arrastra la barra de título para mover · maximiza para ver en resolución completa",
+    note: "→ ¡todo mi arte digital! filtra por estilo",
   },
   about: {
     eyebrow: "sobre mí",
-    lead: "¡Hola! Soy Ingeniero de Software y Artista Digital por afición. Actualmente curso mi Maestría en Ciencias de la Computación en el Digipen Institute of Technology.",
+    lead: "¡Hola! Soy Ingeniero de Software y Artista Digital. Actualmente estoy haciendo mi Maestría en Ciencias de la Computación en Digipen Institute of Technology.",
     leadAccent: "Maestría en Ciencias de la Computación",
     nowLabel: "ahora",
     now: "Maestría en Ciencias de la Computación en DigiPen",
@@ -59,10 +52,9 @@ export const es: Dictionary = {
     experienceLabel: "experiencia",
     listeningLabel: "en repetición",
     interestsLabel: "fuera de horario",
-    interests: "videojuegos · dibujo · fan de los deportes de contacto",
-    quirk: "// entrena muay thai y aún así pierde contra el pingüino",
-    photoPlaceholder: "[ foto mía ]",
-    disclaimer: "Uso de IA solo como apoyo para la generación de código.",
+    interests: "videojuegos · dibujo · artes marciales mixtas",
+    quirk: "// mi color favorito es el verde, por si no se nota",
+    disclaimer: "La IA se usó solo como apoyo para la generación de código.",
     note: "→ ¡mi experiencia y mis redes!",
   },
   contact: {
@@ -77,9 +69,9 @@ export const es: Dictionary = {
     replyTimeValue: "~24–48h",
     elsewhereLabel: "en otros lados",
     elsewhere: {
-      instagram: "@marcobglz — los dibujos",
-      linkedin: "marco-bosquez — la experiencia",
-      resume: "pdf — una página",
+      instagram: "@marcobglz",
+      linkedin: "marco-bosquez",
+      resume: "versión actual",
     },
     briefs: [
       "→ backend / infra / LLM",
@@ -90,7 +82,7 @@ export const es: Dictionary = {
   },
   notFound: {
     title: "404",
-    description: "Esta página no existe — el archivo fue movido, eliminado, o nunca existió.",
+    description: "Esta página no existe — el archivo se movió, se eliminó, o nunca estuvo aquí.",
     cta: "→ volver al inicio",
   },
   errorPage: {

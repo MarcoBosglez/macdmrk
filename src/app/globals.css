@@ -50,30 +50,6 @@
   --blob-c: rgba(127, 255, 166, 0.13);
 }
 
-:root,
-.dark {
-  --radius: 0.75rem;
-  --destructive: #e5484d;
-
-  /* shadcn/ui semantic aliases, mapped onto our own tokens so any
-     primitive pulled in later (e.g. ui/button.tsx) matches the site. */
-  --background: var(--bg);
-  --foreground: var(--ink);
-  --card: var(--panel);
-  --card-foreground: var(--ink);
-  --popover: var(--panel);
-  --popover-foreground: var(--ink);
-  --primary: var(--accent);
-  --primary-foreground: var(--bg);
-  --secondary: var(--glass);
-  --secondary-foreground: var(--ink);
-  --muted-foreground: var(--muted);
-  --accent-foreground: var(--bg);
-  --destructive-foreground: var(--bg);
-  --input: var(--line);
-  --ring: var(--accent);
-}
-
 @theme inline {
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", monospace;
@@ -90,28 +66,6 @@
   --color-line-hot: var(--line-hot);
   --color-wash: var(--wash);
   --color-panel: var(--panel);
-
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 6px);
 }
 
 * {
@@ -218,23 +172,6 @@ a {
   }
 }
 
-/* The penguin easter egg on the hub keeps its little idle bob. */
-@keyframes penguin-bob {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(-3deg);
-  }
-  25% {
-    transform: translate(-3px, -6px) rotate(2deg);
-  }
-  50% {
-    transform: translate(0, -2px) rotate(-2deg);
-  }
-  75% {
-    transform: translate(3px, -6px) rotate(3deg);
-  }
-}
-
 .animate-blink {
   animation: blink 1.1s step-end infinite;
 }
@@ -243,9 +180,6 @@ a {
 }
 .animate-fade {
   animation: fade 0.3s ease-out;
-}
-.animate-penguin-bob {
-  animation: penguin-bob 1.8s ease-in-out infinite;
 }
 
 /* ─── Startup animation ─────────────────────────────────────────────

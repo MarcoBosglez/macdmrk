@@ -18,23 +18,17 @@ export type Illustration = {
   // and its shareable page (e.g. "graphite study, ~2hrs"). Optional —
   // pieces without one just skip that line.
   description?: string;
-  // Shown on the right of each gallery frame's caption row (ink /
-  // gouache / digital). Defaults to "digital" — override per slug in
-  // MEDIUMS below.
+  // Shown on the right of each gallery frame's caption row; also what
+  // the medium filter chips are built from. Defaults to "digital".
   medium: string;
 };
 
-// Everything below scans public/illustrations at build/server-start
-// time instead of hand-listing every file — drop an image in that
-// folder and it shows up here automatically (slug, caption, real
-// pixel dimensions, all derived from the file itself), no edits
-// needed. The only thing that still can't come from the file itself
-// is a description, so that's the one piece of hand-authored data
-// left — add an entry below keyed by the auto-generated slug (see the
-// commented example) to give a specific piece a blurb.
-const DESCRIPTIONS: Record<string, string> = {
-  // beautifultree: "graphite study, ~2hrs",
-};
+// The gallery scans public/illustrations at build time — drop an image
+// in that folder and it appears (slug, caption and real pixel size all
+// derived from the file). The two maps below are the only hand-authored
+// bits, keyed by the auto-generated slug: an optional one-line blurb,
+// and the medium label.
+const DESCRIPTIONS: Record<string, string> = {};
 
 const MEDIUMS: Record<string, string> = {
   "angel-painting": "painting",

@@ -11,13 +11,6 @@ export const en: Dictionary = {
   chrome: {
     openToWork: "open to work",
   },
-  toggles: {
-    mute: "mute",
-    unmute: "unmute",
-    light: "light",
-    dark: "dark",
-    loading: "...",
-  },
   hub: {
     eyebrow: "who am i",
     role: "Software Engineer & Digital Illustrator",
@@ -25,10 +18,10 @@ export const en: Dictionary = {
     bio: "",
     chips: ["Cloud Management", "Web Development", "Illustration", "Art"],
     log: [
-  "[09:14] studied AI coursework",
-  "[11:30] committed 47 files",
-  "[16:40] spotted a thrift store on the way home",
-  "[21:55] sketched some portraits",
+      "[09:14] studied AI coursework",
+      "[11:30] committed 47 files",
+      "[16:40] spotted a thrift store on the way home",
+      "[21:55] sketched some portraits",
     ],
     note: "→ new design! hover anything. i made this site to be interactive and fun to use",
   },
@@ -61,14 +54,11 @@ export const en: Dictionary = {
     interestsLabel: "off the clock",
     interests: "videogames · drawing · mixed martial arts",
     quirk: "// my favorite color is green if you can't tell",
-    photoPlaceholder: "[ photo of me ]",
-    disclaimer:
-      "AI usage only to assist to code generation.",
+    disclaimer: "AI usage only to assist to code generation.",
     note: "→ my experience & socials!",
   },
   contact: {
     eyebrow: "contact",
-    // DRAFT — Marco to refine.
     lead: "Contact Me",
     blurb:
       "Tell me what you're building or what you want drawn. I answer within a day or two.",
@@ -83,7 +73,6 @@ export const en: Dictionary = {
       linkedin: "marco-bosquez",
       resume: "current version",
     },
-    // DRAFT
     briefs: [
       "→ backend / infra / LLM",
       "→ illustration or cover commission",

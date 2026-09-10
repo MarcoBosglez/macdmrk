@@ -2,50 +2,35 @@ import type { Localized } from "@/lib/i18n/dictionaries";
 
 export type Project = {
   slug: string;
-  num: string;
   tags: string[];
   title: Localized;
   category: Localized;
-  desc: Localized;
-  status: Localized;
-  statusTone?: "green" | "blue" | "red";
-  image?: string;
-  focus?: string;
-  url?: string;
-
-  // ── Fields the "glass kinetic" work view needs ────────────────────
-  // years is a bare range string ("2024 — now"), identical in both
-  // languages. Everything else is prose, so it's Localized.
+  // years is a bare range string ("2024 — now"), the same in both
+  // languages; everything else is prose, so Localized.
   years: string;
   role: Localized;
   // One-line statement of the problem the project set out to solve.
   problem: Localized;
-  // Exactly three "→" bullets — keep that shape.
+  // The three "→" bullets in the detail panel.
   did: { en: string[]; es: string[] };
   // Short result line, shown in accent mono.
   outcome: Localized;
+  // External link (repo / post / paper); omit to hide the icon.
+  url?: string;
 };
 
 export const PROJECTS: Project[] = [
   {
     slug: "web-portfolio",
-    num: "01",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Three.js"],
     title: { en: "Web Portfolio", es: "Portafolio Web" },
     category: { en: "Web Portfolio", es: "Portafolio Web" },
-    desc: {
-      en: "An interactive personal platform built to show both my Computer Science background and my digital art in one place.",
-      es: "Una plataforma personal interactiva, hecha para mostrar mi carrera de Ciencias de la Computación y mi arte digital en un mismo lugar.",
-    },
-    status: { en: "active development", es: "desarrollo activo" },
-    statusTone: "blue",
-    focus: "top",
     url: "https://github.com/MarcoBosglez/macdmrk",
     years: "2024 — now",
     role: { en: "designer + developer", es: "diseñador + desarrollador" },
     problem: {
-      en: "My own personal website.",
-      es: "Mi sitio web personal",
+       en: "An interactive personal platform built to show both my Computer Science background and my digital art in one place.",
+      es: "Una plataforma personal interactiva, hecha para mostrar mi carrera de Ciencias de la Computación y mi arte digital en un mismo lugar.",
     },
     did: {
       en: [
@@ -66,24 +51,18 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "spotify-banner",
-    num: "02",
     tags: ["HTML", "CSS", "JavaScript", "GitHub"],
     title: {
       en: "Spotify Banner for ONErpm",
       es: "Spotify Banner para ONErpm",
     },
     category: { en: "Banner Design", es: "Diseño de Banners" },
-    desc: {
-      en: "High-visibility Spotify promotional banners for music distribution campaigns, with custom scripts and HTML/CSS layouts for the release assets.",
-      es: "Banners promocionales de Spotify de alta visibilidad para campañas de distribución musical, con scripts a medida y maquetación HTML/CSS para los assets de lanzamiento.",
-    },
-    status: { en: "shipped", es: "publicado" },
     url: "https://github.com/MarcoBosglez/banner-interactivo",
     years: "2021",
     role: { en: "design + front-end", es: "diseño + front-end" },
     problem: {
-      en: "Release campaigns needed promo banners that looked sharp and could be re-skinned fast for each new artist.",
-      es: "Las campañas de lanzamiento necesitaban banners promocionales que se vieran bien y se pudieran re-adaptar rápido para cada artista.",
+      en: "High-visibility Spotify promotional banners for music distribution campaigns, with custom scripts and HTML/CSS layouts for the release assets.",
+      es: "Banners promocionales de Spotify de alta visibilidad para campañas de distribución musical, con scripts a medida y maquetación HTML/CSS para los assets de lanzamiento.",
     },
     did: {
       en: [
@@ -104,25 +83,18 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "aws-rsh",
-    num: "03",
     tags: ["Java", "Spring", "Docker", "React"],
     title: {
       en: "Amazon Recorder System Helper",
       es: "Amazon Recorder System Helper",
     },
     category: { en: "AWS Tooling", es: "Herramientas AWS" },
-    desc: {
-      en: "A full-stack extension for Amazon Connect that recorded call-center interactions between agents and customers, for audit, training and performance metrics.",
-      es: "Una extensión full-stack para Amazon Connect que grababa las interacciones de un call center entre agentes y clientes, para auditoría, capacitación y métricas de desempeño.",
-    },
-    status: { en: "shipped", es: "publicado" },
-    focus: "top",
     url: "https://www.linkedin.com/feed/update/urn:li:activity:6943381454940753920/",
     years: "2022",
     role: { en: "full-stack developer", es: "desarrollador full-stack" },
     problem: {
-      en: "The call center had no reliable way to capture and review agent–customer calls for audits and training.",
-      es: "El call center no tenía forma confiable de capturar y revisar las llamadas agente–cliente para auditorías y capacitación.",
+      en: "A full-stack extension for Amazon Connect that recorded call-center interactions between agents and customers, for audit, training and performance metrics.",
+      es: "Una extensión full-stack para Amazon Connect que grababa las interacciones de un call center entre agentes y clientes, para auditoría, capacitación y métricas de desempeño.",
     },
     did: {
       en: [
@@ -143,25 +115,18 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "sentiment-analysis",
-    num: "04",
     tags: ["Machine Learning", "Python", "NLTK", "NLP"],
     title: {
       en: "ML Sentiment Analysis",
       es: "Análisis de Sentimiento con ML",
     },
     category: { en: "ML Paper", es: "Artículo de ML" },
-    desc: {
-      en: "An NLP study on mental-health tweets: multiclass and multi-label classification of 625 hand-labeled tweets to measure the accuracy of a negative-sentiment model.",
-      es: "Un estudio de PLN sobre tuits de salud mental: clasificación multiclase y multietiqueta de 625 tuits etiquetados a mano para medir la precisión de un modelo de sentimiento negativo.",
-    },
-    status: { en: "published", es: "publicado" },
-    focus: "top",
     url: "https://rcs.cic.ipn.mx/2023_152_12/Development%20of%20a%20Front-End%20with%20Dynamic%20Searches%20for%20Chatbot%20Retraining%20Using%20ReactJS.pdf",
     years: "2023",
     role: { en: "researcher + developer", es: "investigador + desarrollador" },
     problem: {
-      en: "We wanted to know how well a model could pick out negative sentiment in short, messy mental-health tweets.",
-      es: "Queríamos saber qué tan bien un modelo podía detectar sentimiento negativo en tuits cortos y desordenados sobre salud mental.",
+      en: "An NLP study on mental-health tweets: multiclass and multi-label classification of 625 hand-labeled tweets to measure the accuracy of a negative-sentiment model.",
+      es: "Un estudio de PLN sobre tuits de salud mental: clasificación multiclase y multietiqueta de 625 tuits etiquetados a mano para medir la precisión de un modelo de sentimiento negativo.",
     },
     did: {
       en: [

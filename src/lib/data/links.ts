@@ -1,7 +1,6 @@
-// The canonical off-site links, in one place so the hub tiles, the
-// about "elsewhere" column and the contact rows never drift apart.
-// The résumé PDF is expected at /public/resume.pdf — Marco to add it;
-// the link is live now and will 404 until the file lands.
+// The off-site links, in one place so the hub tiles, the about
+// "elsewhere" column and the contact rows stay in sync. The résumé
+// points at /public/resume.pdf.
 export const LINKS = {
   instagram: "https://www.instagram.com/marcobglz/",
   instagramArt: "https://www.instagram.com/macdmrk/",
