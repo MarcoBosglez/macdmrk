@@ -3,9 +3,7 @@ import type { Localized } from "@/lib/i18n/dictionaries";
 export type ExperienceEntry = {
   period: Localized;
   role: Localized;
-  company: string; // proper noun — identical in every language
-  // Optional longer description. When present, the About page renders
-  // the row as an expandable "[+]" toggle instead of a plain line.
+  company: string;
   detail?: Localized;
 };
 

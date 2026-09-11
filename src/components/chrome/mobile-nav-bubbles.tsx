@@ -23,15 +23,12 @@ export function MobileNavBubbles() {
     setOpen(false);
   }
 
-  // Reversed so the first nav item ends up nearest the button (bottom
-  // of the popup stack) and the last one ends up furthest away (top).
+  // Reversed so the first nav item sits nearest the button.
   const itemsNearestFirst = [...NAV_ITEMS].reverse();
 
   return (
-    // This wrapper is only ever as big as the button itself — the
-    // popup list below is positioned absolutely, so it doesn't add to
-    // the wrapper's size. That's what keeps the button fixed in place
-    // instead of drifting as the list opens and closes.
+    // Wrapper stays button-sized (the popup list is absolute) so the
+    // button doesn't shift as the list opens/closes.
     <div className="fixed bottom-6 left-6 z-30 md:hidden">
       <div className="pointer-events-none absolute bottom-full left-0 mb-2.5 flex flex-col items-start gap-2.5">
         <AnimatePresence>

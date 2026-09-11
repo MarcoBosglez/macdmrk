@@ -1,7 +1,4 @@
-// Barrel: every component imports from "@/lib/i18n/dictionaries" (this
-// file) rather than reaching into en.ts/es.ts directly, so adding a
-// third language only means adding its file here and to LOCALES/
-// DICTIONARIES below — no call site needs to change.
+// The single entry point for i18n — components import from here.
 export type { Locale, Localized, Dictionary } from "./types";
 export { LOCALES, localize } from "./types";
 

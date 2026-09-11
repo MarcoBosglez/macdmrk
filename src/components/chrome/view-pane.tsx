@@ -1,16 +1,10 @@
 "use client";
 
-// The shared frame every route renders into: a column that cross-fades
-// in on mount, with the content area on top and the dashed "note strip"
-// pinned at the bottom. `note` is the mono filename + the "→ ..." line
-// spec'd per view in the handoff.
-//
-// On desktop the column is exactly the stage height and the content
-// area scrolls inside itself if a view overflows; on mobile the whole
-// <main> scrolls instead, so the column is free to grow. When
-// `center`, the content sits in the vertical middle while it fits and
-// falls back to top-aligned + scrolling once it doesn't (the `my-auto`
-// trick — `justify-center` would clip the overflowing top instead).
+// The frame every route renders into: a fade-in column with the view
+// content on top and the dashed "note strip" pinned below. `center`
+// vertically centres the content while it fits, then falls back to
+// top-aligned + scroll (the `my-auto` trick — `justify-center` would
+// clip the overflowing top).
 export function ViewPane({
   note,
   center = true,

@@ -276,3 +276,39 @@ html.mb-skip-startup .startup-veil {
 html.no-js .startup-veil {
   display: none !important;
 }
+
+/* ─── Hub: pingu chat + social bar ──────────────────────────────────
+   pingu-dot   — the three thinking-bubble dots (staggered via inline
+                 animation-delay in pingu-chat.tsx)
+   .pingu-scroll — thin scrollbar for the chat's message list
+   .hub-motion — feature-scoped reduced-motion opt-out: these hub
+                 elements skip their hover transform only, everything
+                 else on the site still always animates. */
+@keyframes pingu-dot {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.pingu-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.pingu-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.pingu-scroll::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-motion:hover {
+    transform: none !important;
+  }
+}

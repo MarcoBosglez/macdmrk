@@ -11,13 +11,11 @@ import { AuroraField } from "@/components/chrome/aurora-field";
 import { ChromeBar } from "@/components/chrome/chrome-bar";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
-import { SpotifyPlayer } from "@/components/chrome/spotify-player";
 import { FloatyField } from "@/components/chrome/floaty-field";
 
-// Archivo is loaded as a VARIABLE font (both wdth 62..125 and wght
-// 100..900 axes) — the kinetic type effect animates
-// `font-variation-settings`, not size, so those axes have to be live.
-// JetBrains Mono carries the terminal / meta text.
+// Archivo as a variable font (wdth + wght axes live) — the kinetic type
+// animates font-variation-settings, not size. JetBrains Mono is the
+// terminal / meta face.
 const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
@@ -80,7 +78,6 @@ export default function RootLayout({
                     {children}
                   </main>
                   <MobileNavBubbles />
-                  <SpotifyPlayer />
                 </div>
               </CursorProvider>
             </LocaleProvider>

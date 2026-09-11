@@ -2,8 +2,6 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 
-// Every distinct kind of interaction gets its own synthesized tone —
-// see SOUND_VARIANTS below for what each one actually sounds like.
 export type SoundVariant =
   | "nav"
   | "toggle"
@@ -27,53 +25,28 @@ type SoundContextValue = {
 
 const SoundContext = createContext<SoundContextValue | null>(null);
 
-// Oscillator settings for the plain single-ramp variants. frequency
-// always moves from `start` to `end` (exponential ramp), and volume
-// always decays from `gain` to silence over `duration` seconds — only
-// those numbers and the waveform shape (`type`) differ between
-// variants. `nav`, `honk`, `pageOpen`, and `hover` aren't here — they
-// use their own dedicated functions below instead of a plain
-// single-ramp tone.
+// Single-ramp oscillator tones: frequency sweeps start→end while the
+// volume decays from `gain` to silence over `duration` seconds. The
+// short phrase on each is roughly what it sounds like. (nav / honk /
+// pageOpen / hover are richer and have their own functions below.)
 const SOUND_VARIANTS: Record<
   Exclude<SoundVariant, "nav" | "honk" | "pageOpen" | "hover">,
   { type: OscillatorType; start: number; end: number; duration: number; gain: number }
 > = {
-  // Generic binary-state flip (FAQ accordion, mobile menu): a short,
-  // neutral tick that rises slightly. Mute and theme now have their
-  // own more specific variants below instead of using this one.
-  toggle: { type: "triangle", start: 650, end: 900, duration: 0.06, gain: 0.05 },
-  // Opening a gallery window: a rising "pop".
-  open: { type: "sine", start: 420, end: 880, duration: 0.1, gain: 0.06 },
-  // Closing a window: a falling "thud" — the inverse of `open`.
-  close: { type: "sine", start: 780, end: 260, duration: 0.1, gain: 0.06 },
-  // Maximizing a window: same rising shape as `open` but wider and on
-  // a sawtooth (brighter, buzzier) so it reads as "expanding" rather
-  // than "appearing" — distinct from open even though both climb.
-  maximize: { type: "sawtooth", start: 500, end: 1300, duration: 0.13, gain: 0.05 },
-  // Restoring/minimizing: the sawtooth counterpart to `close` — falls
-  // instead of rising, pairing with `maximize` the way open/close pair.
-  minimize: { type: "sawtooth", start: 950, end: 380, duration: 0.12, gain: 0.045 },
-  // Muting: a short downward sweep — sound "powering off".
-  mute: { type: "sine", start: 520, end: 160, duration: 0.09, gain: 0.05 },
-  // Unmuting: the exact mirror of `mute`, sweeping back up — sound
-  // "powering on". This one bypasses the mute gate in playClick below,
-  // since otherwise the confirmation that audio is back would itself
-  // be the one sound that never plays.
-  unmute: { type: "sine", start: 220, end: 640, duration: 0.09, gain: 0.055 },
-  // Switching to light mode: brighter and rising, like daylight.
-  themeLight: { type: "triangle", start: 380, end: 840, duration: 0.12, gain: 0.05 },
-  // Switching to dark mode: lower and falling — the inverse of themeLight.
-  themeDark: { type: "triangle", start: 700, end: 300, duration: 0.12, gain: 0.045 },
+  toggle: { type: "triangle", start: 650, end: 900, duration: 0.06, gain: 0.05 }, // neutral tick
+  open: { type: "sine", start: 420, end: 880, duration: 0.1, gain: 0.06 }, // rising pop
+  close: { type: "sine", start: 780, end: 260, duration: 0.1, gain: 0.06 }, // falling thud
+  maximize: { type: "sawtooth", start: 500, end: 1300, duration: 0.13, gain: 0.05 }, // buzzy expand
+  minimize: { type: "sawtooth", start: 950, end: 380, duration: 0.12, gain: 0.045 }, // buzzy collapse
+  mute: { type: "sine", start: 520, end: 160, duration: 0.09, gain: 0.05 }, // power down
+  unmute: { type: "sine", start: 220, end: 640, duration: 0.09, gain: 0.055 }, // power up
+  themeLight: { type: "triangle", start: 380, end: 840, duration: 0.12, gain: 0.05 }, // bright rise
+  themeDark: { type: "triangle", start: 700, end: 300, duration: 0.12, gain: 0.045 }, // dim fall
 };
 
-// nav's click — a mechanical "typewriter key" sound (think CS2's menu
-// clicks), not a tone. A single oscillator can't produce that
-// percussive character, so this layers two things instead:
-//  1. A short burst of noise pushed through a bandpass filter, which
-//     is what makes noise read as a pitched "tick" instead of static.
-//     That's the sharp "clack" of the key striking.
-//  2. A very brief low square-wave blip fired a few ms later — the
-//     dull "thock" of the mechanism bottoming out right after the clack.
+// A mechanical keyboard "clack": a filtered noise burst (the key
+// striking) plus a brief low square-wave blip a few ms later (the
+// mechanism bottoming out). Used for nav clicks.
 function playTypewriterClick(ctx: AudioContext) {
   const now = ctx.currentTime;
 
@@ -111,9 +84,7 @@ function playTypewriterClick(ctx: AudioContext) {
   osc.stop(now + thockDelay + 0.03);
 }
 
-// The penguin easter egg's click sound — a cartoonish "honk": a square
-// wave that swoops up and then back down in pitch, rather than the
-// single-direction ramp the tone-based variants use.
+// Cartoon "honk": a square wave that swoops up in pitch then back down.
 function playPenguinHonk(ctx: AudioContext) {
   const now = ctx.currentTime;
   const osc = ctx.createOscillator();
@@ -131,11 +102,8 @@ function playPenguinHonk(ctx: AudioContext) {
   osc.stop(now + 0.24);
 }
 
-// Opening a whole new page (a project, from the work list) — two quick
-// rising sine blips in a row, like a page turning, rather than the
-// single-tone ramp the other "open"-ish variants use. Meant to feel
-// bigger than the plain `nav` typewriter click, since it's marking a
-// full page navigation rather than a same-page link.
+// Two quick rising sine blips in a row, like a page turning — marks a
+// full-page navigation (opening a project from the work list).
 function playPageOpen(ctx: AudioContext) {
   const now = ctx.currentTime;
   [
@@ -157,11 +125,9 @@ function playPageOpen(ctx: AudioContext) {
   });
 }
 
-// Hovering over any interactable element — a thin, papery "flip" like
-// a mechanical split-flap/flip-clock display, not a "click" character.
-// Structurally similar to playTypewriterClick (noise burst + a brief
-// settle blip) but with a higher, narrower bandpass for a thinner,
-// more plasticky flap, and a much quieter/quicker settle.
+// A thin, papery "flip" (split-flap display) for hovering anything —
+// same shape as playTypewriterClick but higher, narrower and much
+// quieter.
 function playFlipClick(ctx: AudioContext) {
   const now = ctx.currentTime;
 
@@ -199,55 +165,30 @@ function playFlipClick(ctx: AudioContext) {
   osc.stop(now + settleDelay + 0.02);
 }
 
-// Site-wide "does the UI make click sounds" state, plus the function
-// that actually makes the sound. This lives at the top of the app
-// (see layout.tsx) so any button anywhere — nav pills, window close
-// buttons, FAQ items — can call playClick(variant) and have it respect
-// whatever the mute toggle is currently set to.
+// Site-wide mute state + playClick(). Mounted at the app root so any
+// button anywhere can make a sound; everything is synthesized, so there
+// are no audio files to load.
 export function SoundProvider({ children }: { children: React.ReactNode }) {
   const [muted, setMuted] = useState(false);
 
-  // playClick is wrapped in useCallback so it has a stable identity,
-  // but it still needs to see the LATEST muted value every time it's
-  // called — a plain closure over `muted` would freeze on whatever
-  // value existed when the callback was created. mutedRef sidesteps
-  // that: we keep it in sync with state on every render, and read the
-  // ref (not the state) inside the callback.
+  // playClick keeps a stable identity (useCallback) but must read the
+  // live `muted` value on every call — hence the ref kept in sync.
   const audioCtxRef = useRef<AudioContext | null>(null);
   const mutedRef = useRef(muted);
   mutedRef.current = muted;
 
   const playClick = useCallback((variant: SoundVariant = "nav") => {
-    // `unmute` is the one variant that must always be audible — it IS
-    // the confirmation that muted is about to become false, so gating
-    // it on the (still-true) current muted state would make it the one
-    // sound that can never actually play.
+    // `unmute` must play even while still muted — it's the "sound is
+    // back on" confirmation.
     if (variant !== "unmute" && mutedRef.current) return;
     try {
-      // Synthesized rather than an audio file, so there's nothing to
-      // load and no asset to manage.
       const ctx = audioCtxRef.current ?? new AudioContext();
       audioCtxRef.current = ctx;
 
-      if (variant === "nav") {
-        playTypewriterClick(ctx);
-        return;
-      }
-
-      if (variant === "honk") {
-        playPenguinHonk(ctx);
-        return;
-      }
-
-      if (variant === "pageOpen") {
-        playPageOpen(ctx);
-        return;
-      }
-
-      if (variant === "hover") {
-        playFlipClick(ctx);
-        return;
-      }
+      if (variant === "nav") return playTypewriterClick(ctx);
+      if (variant === "honk") return playPenguinHonk(ctx);
+      if (variant === "pageOpen") return playPageOpen(ctx);
+      if (variant === "hover") return playFlipClick(ctx);
 
       const { type, start, end, duration, gain: peakGain } = SOUND_VARIANTS[variant];
       const osc = ctx.createOscillator();
@@ -262,20 +203,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
       osc.start();
       osc.stop(ctx.currentTime + duration);
     } catch {
-      // Web Audio can be blocked (autoplay policy, unsupported browser) — silently no-op.
+      // Web Audio can be blocked (autoplay policy / unsupported) — no-op.
     }
   }, []);
 
   const toggleMute = useCallback(() => setMuted((m) => !m), []);
 
-  // A single delegated listener covers every interactable element on
-  // the site (links, buttons) instead of wiring an onMouseEnter to each
-  // one individually. `lastHovered` tracks the current interactive
-  // ancestor so moving the pointer between child elements inside the
-  // same button/link doesn't refire it — pointerover bubbles on every
-  // such crossing. Restricted to real mouse input (pointerType) since
-  // touch devices fire pointerover right alongside their click, which
-  // would double up with that element's own click sound.
+  // One delegated listener plays the hover sound for every link/button
+  // on the page. `lastHovered` stops it refiring as the pointer moves
+  // between a button's children; mouse only, since touch fires
+  // pointerover alongside the tap.
   useEffect(() => {
     let lastHovered: Element | null = null;
     function handlePointerOver(e: PointerEvent) {

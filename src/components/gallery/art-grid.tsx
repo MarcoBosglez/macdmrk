@@ -10,8 +10,8 @@ import { IgIcon } from "@/components/chrome/link-icons";
 import { LINKS } from "@/lib/data/links";
 import type { Illustration } from "@/lib/data/illustrations";
 
-// One floating lightbox window currently open. `id` is the slug; `z` is
-// the stacking order — most-recently-touched window gets the highest.
+// One open lightbox window. `id` is the slug; `z` is its stacking
+// order (the last-touched window gets the highest).
 export type OpenWindow = {
   id: string;
   x: number;
@@ -29,9 +29,7 @@ const MIN_IMAGE_H = 200;
 const CHROME_W = 40;
 const CHROME_H = 151;
 
-// "No two hovers alike" — each frame picks a transform from this cycle
-// by its stable index in the full illustration list, so a piece keeps
-// the same personality no matter how the grid is filtered.
+// Per-frame hover transform, picked by the frame's index — no two alike.
 const ART_HOVERS = [
   "translateY(-7px)",
   "rotate(2.6deg)",
@@ -41,6 +39,8 @@ const ART_HOVERS = [
   "translateY(-4px) scale(1.04)",
 ];
 
+// Window size that fits the image's aspect ratio, clamped to sane
+// bounds, plus room for the header + padding.
 function windowSizeFor(illustration: Illustration | undefined) {
   if (!illustration) return { w: 420, h: 340 };
   const ratio = illustration.width / illustration.height;
@@ -55,10 +55,9 @@ function windowSizeFor(illustration: Illustration | undefined) {
   return { w: Math.round(imageW + CHROME_W), h: Math.round(imageH + CHROME_H) };
 }
 
-// Two columns below md, four above. A media-query listener rather than a
-// CSS `columns` masonry: the frames' hover transforms (rotate / scale /
-// slide) get clipped at a real multicolumn boundary, but a plain flex
-// column of blocks lets them lift freely.
+// 2 columns below md, 4 above. We pack into flex columns by hand (see
+// packColumns) rather than CSS `columns` so a frame's hover transform
+// isn't clipped at a column boundary.
 function useColumnCount() {
   const [cols, setCols] = useState(2);
   useEffect(() => {
@@ -71,8 +70,8 @@ function useColumnCount() {
   return cols;
 }
 
-// Greedy shortest-column packing, using each image's real aspect ratio
-// as its relative height so columns end up roughly level.
+// Greedy masonry: drop each image into whichever column is currently
+// shortest (height estimated from its aspect ratio).
 function packColumns<T extends { width: number; height: number }>(
   items: T[],
   cols: number
@@ -108,9 +107,8 @@ function ArtFrame({
         borderColor: on ? "var(--line-hot)" : "var(--line)",
         transform: on ? ART_HOVERS[index % ART_HOVERS.length] : "none",
         boxShadow: on ? "0 16px 34px rgba(0,0,0,.26)" : "none",
-        // Lift above neighbouring frames while transformed so a rotate
-        // or scale never appears to be sliced by the next one.
-        zIndex: on ? 10 : 1,
+        zIndex: on ? 10 : 1, // sit above neighbours while transformed
+
         transition:
           "transform .24s cubic-bezier(.2,.8,.3,1), border-color .18s ease, box-shadow .22s ease",
       }}
@@ -142,8 +140,8 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   const [medium, setMedium] = useState<string>("all");
   const cols = useColumnCount();
 
-  // Distinct mediums present, most-common first. The filter row only
-  // shows once more than one medium is actually in use.
+  // Distinct mediums, most common first — the filter row hides itself
+  // when there's only one.
   const mediums = useMemo(() => {
     const counts = new Map<string, number>();
     for (const ill of illustrations) counts.set(ill.medium, (counts.get(ill.medium) ?? 0) + 1);
@@ -162,6 +160,9 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
     return (slug: string) => m.get(slug) ?? 0;
   }, [illustrations]);
 
+  // Open a piece's window (or re-focus it if already open). On mobile it
+  // opens maximized; on desktop it's staggered from a base position and
+  // clamped inside the viewport.
   function openWindow(id: string) {
     playClick("open");
     const { w, h } = windowSizeFor(illustrations.find((i) => i.slug === id));
@@ -253,10 +254,9 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
         ) : null}
 
         <div className="min-h-0 flex-1 md:overflow-y-auto">
-          {/* key on the filter so the fade replays when it changes. The
-              padding on every side gives the hover transforms room — a
-              lifted or scaled frame at any edge (the top row especially)
-              would otherwise be clipped by the scroll container. */}
+          {/* key={medium}: replay the fade on filter change. The all-round
+              padding keeps an edge frame's hover transform from being
+              clipped by the scroll container. */}
           <div key={medium} className="animate-fade flex gap-3.5 px-4 pt-5 pb-5">
             {columns.map((col, ci) => (
               <div key={ci} className="flex min-w-0 flex-1 flex-col gap-3.5">

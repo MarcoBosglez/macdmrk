@@ -2,13 +2,10 @@
 
 import { useEffect, useRef } from "react";
 
-// A layer of little shapes that tumble in 3D and drift around the whole
-// viewport, BEHIND the glass panels (z-1) — solid in the margins,
-// ghosted through the frosted blur over the cards. Move the cursor near
-// one and it scatters away, faster the faster you swipe. Pure rAF
-// physics in 2D screen space; the 3D is CSS transforms. The layer is
-// entirely pointer-transparent, so it never interferes with the UI.
-// Desktop only (below md the panels fill the screen).
+// Little shapes that tumble in 3D and drift around the viewport behind
+// the glass panels (z-1); the cursor scatters them by proximity. Hand-
+// rolled rAF physics in 2D screen space, 3D is CSS transforms. The
+// layer is pointer-transparent and desktop-only.
 
 const COUNT = 6;
 const FRICTION = 0.985; // how fast a shove decays
@@ -98,6 +95,7 @@ export function FloatyField() {
     let W = window.innerWidth;
     let H = window.innerHeight;
 
+    // Randomise every shape's size, position, velocity and spin.
     for (const b of bodies.current) {
       b.r = 26 + Math.random() * 16;
       b.x = b.r + Math.random() * (W - 2 * b.r);
@@ -140,6 +138,8 @@ export function FloatyField() {
       for (let i = 0; i < list.length; i++) {
         const b = list[i];
 
+        // Cursor shove: push away from the pointer, harder the closer
+        // and the faster it's moving.
         if (cur.x > -900) {
           const dx = b.x - cur.x;
           const dy = b.y - cur.y;
@@ -153,15 +153,16 @@ export function FloatyField() {
           }
         }
 
+        // Friction, but never let a shape fully stop.
         b.vx = clamp(b.vx * FRICTION, -MAX_SPEED, MAX_SPEED);
         b.vy = clamp(b.vy * FRICTION, -MAX_SPEED, MAX_SPEED);
-        // never sit still — renormalise to a gentle drift when slow
         const sp = Math.hypot(b.vx, b.vy);
         if (sp < MIN_DRIFT) {
           const a = sp > 0.001 ? Math.atan2(b.vy, b.vx) : Math.random() * Math.PI * 2;
           b.vx = Math.cos(a) * MIN_DRIFT;
           b.vy = Math.sin(a) * MIN_DRIFT;
         }
+        // Move, then bounce off the viewport edges.
         b.x += b.vx * dt;
         b.y += b.vy * dt;
 
@@ -180,12 +181,14 @@ export function FloatyField() {
           b.vy = -Math.abs(b.vy) * WALL_DAMP;
         }
 
+        // Spin eases back toward a slow idle tumble after a hit.
         b.vrx += (0.3 * Math.sign(b.vrx || 1) - b.vrx) * 0.01;
         b.vry += (0.36 * Math.sign(b.vry || 1) - b.vry) * 0.01;
         b.rx += b.vrx * dt;
         b.ry += b.vry * dt;
         b.rz += b.vrz * dt;
 
+        // Elastic collisions with the other shapes.
         for (let j = i + 1; j < list.length; j++) {
           const o = list[j];
           const dx = o.x - b.x;
@@ -210,6 +213,7 @@ export function FloatyField() {
           }
         }
 
+        // Write straight to the DOM — no React re-render per frame.
         if (b.pos) b.pos.style.transform = `translate3d(${b.x - b.r}px, ${b.y - b.r}px, 0)`;
         if (b.spin)
           b.spin.style.transform = `rotateX(${b.rx}deg) rotateY(${b.ry}deg) rotateZ(${b.rz}deg)`;
@@ -221,6 +225,7 @@ export function FloatyField() {
     };
     rafRef.current = requestAnimationFrame(step);
 
+    // Pause the loop while the tab is hidden.
     const onVisibility = () => {
       if (document.hidden) {
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -247,6 +252,8 @@ export function FloatyField() {
       style={{ perspective: "1000px" }}
     >
       {SHAPES.map((shape, i) => (
+        // `pos` is moved by the loop; `spin` is rotated. Two copies of
+        // the shape offset in Z give it a bit of 3D thickness.
         <div
           key={i}
           ref={(el) => {

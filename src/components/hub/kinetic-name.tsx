@@ -2,12 +2,10 @@
 
 import { useCursorX } from "@/components/providers/cursor-provider";
 
-// The hub's cursor-reactive name. Each row is one <span> per letter;
-// every letter measures how close the pointer's normalized X is to its
-// own position along the row and warps its variable-font width/weight
-// (and lifts slightly, and flips to accent) by that amount. Nothing
-// here animates size — only `font-variation-settings` + transform, so
-// it stays cheap on every pointer frame.
+// The hub's cursor-reactive name: one <span> per letter, each warping
+// its variable-font width/weight (and lifting, and flipping to accent)
+// based on how near the cursor is. Only font-variation-settings +
+// transform change, so it's cheap every frame.
 const AMP = 0.85; // "playful" — 0.5 calm, 1.25 wild
 
 function KineticRow({ word, offset }: { word: string; offset: number }) {
@@ -17,6 +15,8 @@ function KineticRow({ word, offset }: { word: string; offset: number }) {
   return (
     <div className="flex flex-nowrap select-none" style={{ lineHeight: 0.9 }}>
       {word.split("").map((ch, i) => {
+        // `near` (0–1) = how close the cursor is to this letter's spot
+        // along the row; drives the width/weight/lift below.
         const pos = n === 1 ? 0.5 : (i + offset) / (n - 1 + offset * 2);
         const d = Math.min(1, Math.abs(pos - mx) * 2.2);
         const near = 1 - d;

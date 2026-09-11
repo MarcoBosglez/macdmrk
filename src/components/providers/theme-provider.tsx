@@ -3,11 +3,8 @@
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ComponentProps } from "react";
 
-// Thin re-export of next-themes' provider. It exists as our own
-// component (rather than importing next-themes directly in
-// layout.tsx) purely so every "provider" the app uses lives under the
-// same components/providers/ folder and follows the same import
-// pattern as SoundProvider and LocaleProvider.
+// Thin wrapper around next-themes' provider, so every provider the app
+// uses lives together under components/providers/.
 export function ThemeProvider({
   children,
   ...props

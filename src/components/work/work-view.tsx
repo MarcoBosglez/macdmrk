@@ -10,9 +10,6 @@ import { localize } from "@/lib/i18n/dictionaries";
 import { ViewPane } from "@/components/chrome/view-pane";
 import type { Project } from "@/lib/data/projects";
 
-// One row of the left "title list". The title warps its variable-font
-// width/weight when the row is the active/hovered one — driven by that
-// boolean, not the cursor (the hub name is the cursor-reactive one).
 function TitleRow({
   project,
   on,
@@ -47,8 +44,10 @@ function TitleRow({
           letterSpacing: "-0.03em",
           lineHeight: 1,
           color: on ? "var(--accent)" : "var(--ink)",
+          // Same width axis on hover — only weight/color shift, so the
+          // title's rendered width (and the block around it) stays put.
           fontVariationSettings: on
-            ? "'wdth' 116, 'wght' 820"
+            ? "'wdth' 84, 'wght' 820"
             : "'wdth' 84, 'wght' 450",
           transition: "font-variation-settings .26s ease, color .2s ease",
         }}
@@ -73,7 +72,7 @@ function Detail({ project }: { project: Project }) {
   const { playClick } = useSound();
 
   return (
-    <div className="flex min-h-0 flex-col gap-3 overflow-y-auto rounded-[24px] border border-line bg-panel px-5 py-5 [backdrop-filter:blur(22px)] [box-shadow:var(--shadow)]">
+    <div className="flex h-[420px] flex-col gap-3 overflow-y-auto rounded-[24px] border border-line bg-panel px-5 py-5 [backdrop-filter:blur(22px)] [box-shadow:var(--shadow)]">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-accent">
           {localize(project.role, locale)}
@@ -144,6 +143,9 @@ function Detail({ project }: { project: Project }) {
   );
 }
 
+// Title list + detail panel. Hovering a title previews it; clicking
+// routes to /work/<slug>, which becomes the `activeSlug` shown when
+// nothing is hovered.
 export function WorkView({
   projects,
   activeSlug,
@@ -159,9 +161,9 @@ export function WorkView({
   const shown = projects.find((p) => p.slug === shownSlug) ?? projects[0];
 
   return (
-    <ViewPane center={false} note={{ file: "shipped.log", line: t.work.note }}>
-      <div className="flex w-full max-w-[1040px] flex-1 flex-col gap-2.5 md:min-h-0">
-        <div className="flex shrink-0 items-center gap-3">
+    <ViewPane note={{ file: "shipped.log", line: t.work.note }}>
+      <div className="flex w-full max-w-[1040px] flex-col gap-2.5">
+        <div className="flex items-center gap-3">
           <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
             {t.work.eyebrow}
           </span>
@@ -169,8 +171,8 @@ export function WorkView({
           <span className="font-mono text-[11px] text-muted">{t.work.range}</span>
         </div>
 
-        <div className="grid flex-1 gap-3.5 md:min-h-0 md:[grid-template-columns:minmax(0,1fr)_minmax(0,1.05fr)]">
-          <div className="flex flex-col justify-end rounded-[24px] border border-line bg-glass px-5 pt-3 pb-5 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">
+        <div className="grid gap-3.5 md:[grid-template-columns:minmax(0,1fr)_minmax(0,1.05fr)]">
+          <div className="flex h-[420px] flex-col justify-end overflow-y-auto rounded-[24px] border border-line bg-glass px-5 pt-3 pb-5 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">
             {projects.map((project) => (
               <TitleRow
                 key={project.slug}

@@ -2,11 +2,9 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
-// One normalized pointer X (0 at the left edge of the viewport, 1 at
-// the right), rAF-throttled so it updates at most once per frame. The
-// hub's kinetic name is the main consumer — each letter reads this to
-// decide how far to warp its width/weight. Cheap to keep global: it
-// only ever holds a single number.
+// Normalized pointer X (0 = left edge, 1 = right), throttled to one
+// update per animation frame. The hub's kinetic name reads it to warp
+// each letter toward the cursor.
 const CursorContext = createContext<number>(0.5);
 
 export function CursorProvider({ children }: { children: React.ReactNode }) {

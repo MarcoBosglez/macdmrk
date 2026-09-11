@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ILLUSTRATIONS } from "@/lib/data/illustrations";
 
-// Each illustration also gets its own real, shareable URL, even though
-// the main /gallery page shows every piece as a floating window. This
-// is what a shared link (or a crawler) lands on.
+// Each illustration also gets a real, shareable URL — what a shared
+// link or a crawler lands on (the /gallery grid opens pieces in a
+// floating window instead).
 export function generateStaticParams() {
   return ILLUSTRATIONS.map((illustration) => ({ slug: illustration.slug }));
 }

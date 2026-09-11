@@ -5,17 +5,11 @@ export type Project = {
   tags: string[];
   title: Localized;
   category: Localized;
-  // years is a bare range string ("2024 — now"), the same in both
-  // languages; everything else is prose, so Localized.
   years: string;
   role: Localized;
-  // One-line statement of the problem the project set out to solve.
   problem: Localized;
-  // The three "→" bullets in the detail panel.
   did: { en: string[]; es: string[] };
-  // Short result line, shown in accent mono.
   outcome: Localized;
-  // External link (repo / post / paper); omit to hide the icon.
   url?: string;
 };
 
