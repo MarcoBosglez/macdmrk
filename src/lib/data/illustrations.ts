@@ -73,8 +73,17 @@ function readIllustrations(): Illustration[] {
     // Newest first
     .sort((a, b) => b.mtimeMs - a.mtimeMs);
 
+  const seenSlugs = new Map<string, number>();
+
   return files.map(({ name, filePath }) => {
-    const slug = slugify(name.replace(/\.[^.]+$/, ""));
+    const baseSlug = slugify(name.replace(/\.[^.]+$/, ""));
+    const seenCount = seenSlugs.get(baseSlug) ?? 0;
+    seenSlugs.set(baseSlug, seenCount + 1);
+    // Two source filenames can slugify to the same string (e.g. "him.png"
+    // and "him_.png" both become "him") — slug doubles as the id used to
+    // look up/open a specific illustration, so a collision would make one
+    // of them unreachable. Suffix repeats to keep every slug unique.
+    const slug = seenCount === 0 ? baseSlug : `${baseSlug}-${seenCount + 1}`;
 
     let width = 1000;
     let height = 1000;

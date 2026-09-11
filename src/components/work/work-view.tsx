@@ -72,7 +72,7 @@ function Detail({ project }: { project: Project }) {
   const { playClick } = useSound();
 
   return (
-    <div className="flex h-[420px] flex-col gap-3 overflow-y-auto rounded-[24px] border border-line bg-panel px-5 py-5 [backdrop-filter:blur(22px)] [box-shadow:var(--shadow)]">
+    <div className="flex flex-col gap-3 rounded-[24px] border border-line bg-panel px-5 py-5 [backdrop-filter:blur(22px)] [box-shadow:var(--shadow)] md:h-[420px] md:overflow-y-auto">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-accent">
           {localize(project.role, locale)}
@@ -172,7 +172,7 @@ export function WorkView({
         </div>
 
         <div className="grid gap-3.5 md:[grid-template-columns:minmax(0,1fr)_minmax(0,1.05fr)]">
-          <div className="flex h-[420px] flex-col justify-end overflow-y-auto rounded-[24px] border border-line bg-glass px-5 pt-3 pb-5 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">
+          <div className="flex flex-col justify-end rounded-[24px] border border-line bg-glass px-5 pt-3 pb-5 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)] md:h-[420px] md:overflow-y-auto">
             {projects.map((project) => (
               <TitleRow
                 key={project.slug}

@@ -74,7 +74,7 @@ export default function RootLayout({
                   <AuroraField />
                   <FloatyField />
                   <ChromeBar />
-                  <main className="relative z-[2] min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-4 pb-5 md:overflow-hidden md:px-[26px] md:pb-[22px] md:pt-1.5">
+                  <main className="relative z-[2] min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-4 pb-24 md:overflow-hidden md:px-[26px] md:pb-[22px] md:pt-1.5">
                     {children}
                   </main>
                   <MobileNavBubbles />

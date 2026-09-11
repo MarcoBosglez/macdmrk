@@ -54,7 +54,7 @@ function MoreInContact() {
       onMouseLeave={() => setOn(false)}
       onFocus={() => setOn(true)}
       onBlur={() => setOn(false)}
-      className={`hub-motion flex h-12 min-w-0 flex-1 items-center justify-center gap-1.5 border border-line px-3 ${GLASS_BTN}`}
+      className={`hub-motion flex h-12 min-w-0 items-center justify-center gap-1.5 border border-line px-3 md:flex-1 ${GLASS_BTN}`}
       style={{
         background: on ? "var(--wash)" : undefined,
         transform: on ? "translateY(-4px)" : undefined,
@@ -74,7 +74,7 @@ function MoreInContact() {
 
 export function SocialBar() {
   return (
-    <div className="flex items-stretch gap-2">
+    <div className="flex flex-wrap items-stretch justify-center gap-2 md:justify-start md:flex-nowrap">
       <SocialButton href={LINKS.instagram} external title="Instagram — @marcobglz" Icon={IgIcon} />
       <SocialButton href={LINKS.linkedin} external title="LinkedIn — marco-bosquez" Icon={InIcon} />
       <SocialButton href={`mailto:${LINKS.email}`} title="Email" Icon={MailIcon} />

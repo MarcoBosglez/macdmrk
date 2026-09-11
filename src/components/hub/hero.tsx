@@ -22,12 +22,26 @@ export function Hero() {
   useLayoutEffect(() => {
     const el = leftRef.current;
     if (!el || typeof ResizeObserver === "undefined") return;
+    const mq = window.matchMedia("(min-width: 768px)");
     const ro = new ResizeObserver((entries) => {
+      if (!mq.matches) return;
       const h = entries[0]?.contentRect.height;
       if (h) setChatHeight(Math.round(h));
     });
+    function syncForBreakpoint() {
+      if (mq.matches) {
+        setChatHeight(Math.round(el!.getBoundingClientRect().height));
+      } else {
+        setChatHeight(null);
+      }
+    }
+    syncForBreakpoint();
+    mq.addEventListener("change", syncForBreakpoint);
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => {
+      mq.removeEventListener("change", syncForBreakpoint);
+      ro.disconnect();
+    };
   }, []);
 
   return (
@@ -50,7 +64,9 @@ export function Hero() {
                   <div className="mt-1.5 font-mono text-[13px] text-muted">{t.hub.location}</div>
                 </div>
               </div>
-              <QrCode />
+              <div className="hidden md:block">
+                <QrCode />
+              </div>
             </div>
             <div className="h-px" style={{ background: "var(--line-hot)", opacity: 0.7 }} />
             {t.hub.bio ? <p className="text-[13px] leading-relaxed text-dim">{t.hub.bio}</p> : null}
@@ -66,6 +82,9 @@ export function Hero() {
             </div>
           </div>
           <SocialBar />
+          <div className="flex justify-center md:hidden">
+            <QrCode />
+          </div>
         </div>
 
         {/* Right — ask_marco.sh */}
