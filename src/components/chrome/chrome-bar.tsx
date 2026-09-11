@@ -15,7 +15,7 @@ import { NAV_ITEMS } from "@/lib/data/nav";
 const HONK_POSE_MS = 480;
 
 const CAPSULE =
-  "flex items-center gap-2.5 rounded-[14px] border border-line bg-glass px-3.5 py-2 [backdrop-filter:blur(16px)_saturate(1.3)]";
+  "flex items-center gap-1.5 rounded-[14px] border border-line bg-glass px-2.5 py-1.5 [backdrop-filter:blur(16px)_saturate(1.3)] sm:gap-2.5 sm:px-3.5 sm:py-2";
 
 // The one bar on top of every view: identity capsule (left), the nav
 // pill group (centre, desktop only), and a status/controls capsule
@@ -55,7 +55,7 @@ export function ChromeBar() {
   }
 
   return (
-    <div className="relative z-[5] flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-[26px] md:py-4">
+    <div className="relative z-[5] flex shrink-0 flex-nowrap items-center justify-between gap-2 px-3 py-2.5 sm:flex-wrap sm:gap-3 sm:px-4 sm:py-3 md:px-[26px] md:py-4">
       {/* Left — identity */}
       <Link
         href="/"
@@ -70,8 +70,9 @@ export function ChromeBar() {
           height={26}
           unoptimized
           priority
+          className="h-5 w-5 sm:h-[26px] sm:w-[26px]"
         />
-        <span className="font-mono text-xs font-bold tracking-[0.02em] text-ink">
+        <span className="font-mono text-[11px] font-bold tracking-[0.02em] whitespace-nowrap text-ink sm:text-xs">
           ~\marco.
           <span className="animate-blink text-accent">▌</span>
         </span>
@@ -135,7 +136,7 @@ export function ChromeBar() {
             setTheme(next);
           }}
           aria-label="Toggle theme"
-          className="flex h-6 items-center justify-center rounded-[20px] border border-line px-2 text-muted transition-colors hover:text-accent"
+          className="flex h-5 items-center justify-center rounded-[20px] border border-line px-1.5 text-muted transition-colors hover:text-accent sm:h-6 sm:px-2"
         >
           {mounted ? (
             resolvedTheme === "dark" ? (
@@ -154,7 +155,7 @@ export function ChromeBar() {
             toggleMute();
           }}
           aria-label={muted ? "Unmute" : "Mute"}
-          className="flex h-6 items-center justify-center rounded-[20px] border border-line px-2 text-muted transition-colors hover:text-accent"
+          className="flex h-5 items-center justify-center rounded-[20px] border border-line px-1.5 text-muted transition-colors hover:text-accent sm:h-6 sm:px-2"
         >
           {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
         </button>
@@ -165,7 +166,7 @@ export function ChromeBar() {
             setLocale(locale === "en" ? "es" : "en");
           }}
           aria-label={`Switch language to ${locale === "en" ? "Español" : "English"}`}
-          className="h-6 rounded-[20px] border border-line px-2 font-mono text-[11px] font-bold text-ink transition-colors hover:text-accent"
+          className="h-5 rounded-[20px] border border-line px-1.5 font-mono text-[11px] font-bold text-ink transition-colors hover:text-accent sm:h-6 sm:px-2"
         >
           {locale === "en" ? "ES" : "EN"}
         </button>
