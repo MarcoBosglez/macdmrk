@@ -1,6 +1,6 @@
 # macdmrk
 
-Marco Bosquez's personal portfolio — the "Glass Kinetic" direction: frosted-glass panels floating over a slow aurora field, terminal-flavoured mono meta, and cursor-reactive variable typography. Five views (hub · work · gallery · about · contact) with a bilingual (English/Spanish) toggle, synthesized UI sounds, and draggable gallery windows.
+Marco Bosquez's personal portfolio. Five views (hub · work · gallery · about · contact) with a bilingual (English/Spanish) toggle, synthesized UI sounds, and draggable gallery windows.
 
 ## Stack
 
