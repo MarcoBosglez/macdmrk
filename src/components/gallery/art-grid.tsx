@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
+import { ViewPane } from "@/components/chrome/view-pane";
 import { ArtWindow } from "@/components/gallery/art-window";
+import { IgIcon } from "@/components/chrome/link-icons";
+import { LINKS } from "@/lib/data/links";
 import type { Illustration } from "@/lib/data/illustrations";
 
-// One floating lightbox window that's currently open. `id` is the
-// illustration's slug. `z` is its stacking order — whichever window
-// was clicked/dragged most recently gets the highest `z` so it visibly
-// sits on top of the others, the same way real OS windows work.
+// One open lightbox window. `id` is the slug; `z` is its stacking
+// order (the last-touched window gets the highest).
 export type OpenWindow = {
   id: string;
   x: number;
@@ -21,19 +22,25 @@ export type OpenWindow = {
   z: number;
 };
 
-// Non-maximized windows are sized from the illustration's own aspect
-// ratio instead of one fixed box for every piece, so a tall portrait
-// doesn't open into a mostly-empty landscape window (or vice versa).
-// MAX/MIN bound the image area itself; CHROME_W/H then add back the
-// header bar, content padding, and caption/hint text around it so the
-// whole window — not just the image — ends up that size.
 const MAX_IMAGE_W = 560;
 const MAX_IMAGE_H = 420;
 const MIN_IMAGE_W = 260;
 const MIN_IMAGE_H = 200;
-const CHROME_W = 40; // p-5 left + right padding around the image
-const CHROME_H = 151; // header bar + p-5 top/bottom + caption/hint text
+const CHROME_W = 40;
+const CHROME_H = 151;
 
+// Per-frame hover transform, picked by the frame's index — no two alike.
+const ART_HOVERS = [
+  "translateY(-7px)",
+  "rotate(2.6deg)",
+  "scale(1.07)",
+  "translateX(9px)",
+  "rotate(-2.6deg) scale(1.03)",
+  "translateY(-4px) scale(1.04)",
+];
+
+// Window size that fits the image's aspect ratio, clamped to sane
+// bounds, plus room for the header + padding.
 function windowSizeFor(illustration: Illustration | undefined) {
   if (!illustration) return { w: 420, h: 340 };
   const ratio = illustration.width / illustration.height;
@@ -48,46 +55,134 @@ function windowSizeFor(illustration: Illustration | undefined) {
   return { w: Math.round(imageW + CHROME_W), h: Math.round(imageH + CHROME_H) };
 }
 
-// The gallery grid plus a tiny in-memory "window manager" for the
-// floating lightbox windows that open on top of it. Multiple pieces
-// can be open (and dragged around) at once, which is why this is
-// plain component state rather than routing — a URL can only point at
-// one thing at a time, but this view intentionally allows several.
+// 2 columns below md, 4 above. We pack into flex columns by hand (see
+// packColumns) rather than CSS `columns` so a frame's hover transform
+// isn't clipped at a column boundary.
+function useColumnCount() {
+  const [cols, setCols] = useState(2);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const apply = () => setCols(mq.matches ? 4 : 2);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+  return cols;
+}
+
+// Greedy masonry: drop each image into whichever column is currently
+// shortest (height estimated from its aspect ratio).
+function packColumns<T extends { width: number; height: number }>(
+  items: T[],
+  cols: number
+): T[][] {
+  const columns: T[][] = Array.from({ length: cols }, () => []);
+  const heights = new Array(cols).fill(0);
+  for (const item of items) {
+    let shortest = 0;
+    for (let c = 1; c < cols; c++) if (heights[c] < heights[shortest]) shortest = c;
+    columns[shortest].push(item);
+    heights[shortest] += item.height / item.width;
+  }
+  return columns;
+}
+
+function ArtFrame({
+  illustration,
+  index,
+  onOpen,
+}: {
+  illustration: Illustration;
+  index: number;
+  onOpen: () => void;
+}) {
+  const [on, setOn] = useState(false);
+  return (
+    <button
+      onClick={onOpen}
+      onMouseEnter={() => setOn(true)}
+      onMouseLeave={() => setOn(false)}
+      className="relative block w-full rounded-[18px] border bg-glass p-2 text-left [backdrop-filter:blur(18px)]"
+      style={{
+        borderColor: on ? "var(--line-hot)" : "var(--line)",
+        transform: on ? ART_HOVERS[index % ART_HOVERS.length] : "none",
+        boxShadow: on ? "0 16px 34px rgba(0,0,0,.26)" : "none",
+        zIndex: on ? 10 : 1, // sit above neighbours while transformed
+
+        transition:
+          "transform .24s cubic-bezier(.2,.8,.3,1), border-color .18s ease, box-shadow .22s ease",
+      }}
+    >
+      <div className="overflow-hidden rounded-[12px]">
+        <Image
+          src={illustration.image!}
+          alt={illustration.caption}
+          width={illustration.width}
+          height={illustration.height}
+          sizes="(max-width: 768px) 45vw, 22vw"
+          className="block h-auto w-full"
+          style={{ filter: on ? "saturate(1.35)" : "none", transition: "filter .22s ease" }}
+        />
+      </div>
+      <div className="flex justify-between gap-2 px-1 pt-1.5">
+        <span className="truncate font-mono text-[10px] text-ink">{illustration.caption}</span>
+        <span className="shrink-0 font-mono text-[10px] text-muted">{illustration.medium}</span>
+      </div>
+    </button>
+  );
+}
+
 export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   const { playClick } = useSound();
   const { t } = useLocale();
   const [openWindows, setOpenWindows] = useState<OpenWindow[]>([]);
-  // Monotonically increasing counter used purely for z-index — every
-  // time a window is opened or focused it claims the next number, so
-  // it's guaranteed to render above every window opened before it.
   const [nextZ, setNextZ] = useState(20);
+  const [medium, setMedium] = useState<string>("all");
+  const cols = useColumnCount();
 
+  // Distinct mediums, most common first — the filter row hides itself
+  // when there's only one.
+  const mediums = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const ill of illustrations) counts.set(ill.medium, (counts.get(ill.medium) ?? 0) + 1);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([m]) => m);
+  }, [illustrations]);
+
+  const shown = useMemo(
+    () => (medium === "all" ? illustrations : illustrations.filter((i) => i.medium === medium)),
+    [illustrations, medium]
+  );
+
+  const columns = useMemo(() => packColumns(shown, cols), [shown, cols]);
+  // Stable per-piece index for the hover-transform cycle.
+  const indexOf = useMemo(() => {
+    const m = new Map(illustrations.map((ill, i) => [ill.slug, i]));
+    return (slug: string) => m.get(slug) ?? 0;
+  }, [illustrations]);
+
+  // Open a piece's window (or re-focus it if already open). On mobile it
+  // opens maximized; on desktop it's staggered from a base position and
+  // clamped inside the viewport.
   function openWindow(id: string) {
     playClick("open");
     const { w, h } = windowSizeFor(illustrations.find((i) => i.slug === id));
     const z = nextZ;
     setNextZ(z + 1);
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
     setOpenWindows((prev) => {
-      const existing = prev.find((w) => w.id === id);
-      // Already open — just bring it to the front instead of opening
-      // a duplicate.
-      if (existing) return prev.map((w) => (w.id === id ? { ...w, z } : w));
-      // Stagger each newly-opened window's starting position slightly
-      // so opening several in a row doesn't stack them in an identical
-      // spot on top of each other.
+      const existing = prev.find((win) => win.id === id);
+      if (existing) return prev.map((win) => (win.id === id ? { ...win, z } : win));
+      if (isMobile) return [...prev, { id, x: 0, y: 0, w, h, maximized: true, z }];
       const offset = (prev.length % 5) * 26;
-      // x/y are viewport coordinates now that ArtWindow portals to
-      // document.body (see art-window.tsx) — 220/160 clears the top
-      // bar and the nav sidebar on open instead of spawning underneath
-      // them.
-      return [...prev, { id, x: 220 + offset, y: 160 + offset, w, h, maximized: false, z }];
+      const maxX = Math.max(16, window.innerWidth - w - 16);
+      const maxY = Math.max(16, window.innerHeight - h - 16);
+      const x = Math.min(220 + offset, maxX);
+      const y = Math.min(140 + offset, maxY);
+      return [...prev, { id, x, y, w, h, maximized: false, z }];
     });
   }
 
   function closeWindow(id: string) {
-    // The sound plays at the call site (ArtWindow's close button)
-    // instead of here, since that's the only place that ever calls
-    // this — playing it here too would fire it twice per click.
     setOpenWindows((prev) => prev.filter((w) => w.id !== id));
   }
 
@@ -102,48 +197,81 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   }
 
   function toggleMaximize(id: string) {
-    // Same as closeWindow above: the sound plays at the call site
-    // (ArtWindow's maximize button), which is the only caller, and it
-    // needs win.maximized to know whether to play `maximize` or
-    // `minimize` — this function doesn't have that context.
-    setOpenWindows((prev) => prev.map((w) => (w.id === id ? { ...w, maximized: !w.maximized } : w)));
+    setOpenWindows((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, maximized: !w.maximized } : w))
+    );
   }
 
   return (
-    <div className="relative h-full overflow-y-auto p-6 md:p-8">
-      <div className="mb-1 font-mono text-[13px] text-mint">~/art/ ls -la</div>
-      <div className="mb-4.5 font-mono text-[11px] text-muted">{t.gallery.gridHint}</div>
-      {/* CSS multi-column masonry: each tile sizes to its own image's
-          real aspect ratio (via width/height below) instead of a
-          fixed, hand-picked height, so nothing gets cropped. */}
-      <div className="columns-3 gap-3 md:columns-6 md:gap-3.5">
-        {illustrations.map((ill) => (
-          <button
-            key={ill.slug}
-            onClick={() => openWindow(ill.slug)}
-            style={{
-              background: ill.image
-                ? undefined
-                : `repeating-linear-gradient(135deg, oklch(60% 0.1 ${ill.hue} / 0.18) 0px, oklch(60% 0.1 ${ill.hue} / 0.18) 12px, var(--panel) 12px, var(--panel) 24px)`,
-              aspectRatio: ill.image ? undefined : `${ill.width} / ${ill.height}`,
-            }}
-            className="relative mb-3 block w-full break-inside-avoid overflow-hidden rounded p-1.5 text-left transition-transform hover:-translate-y-0.5 md:mb-3.5"
-          >
-            {ill.image ? (
-              <Image
-                src={ill.image}
-                alt={ill.caption}
-                width={ill.width}
-                height={ill.height}
-                sizes="(max-width: 768px) 33vw, 16vw"
-                className="block h-auto w-full rounded"
-              />
-            ) : null}
-            <span className="absolute bottom-1.5 left-1.5 z-10 max-w-[calc(100%-0.75rem)] truncate rounded-sm bg-bg px-1.5 py-0.5 font-mono text-[10px]">
-              {ill.caption}
+    <ViewPane center={false} note={{ file: "mediums.txt", line: t.gallery.note }}>
+      <div className="flex w-full max-w-[1040px] flex-1 flex-col gap-3 md:min-h-0">
+        <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          <div className="flex items-baseline gap-3">
+            <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
+              {t.gallery.eyebrow}
             </span>
-          </button>
-        ))}
+            <span className="font-mono text-[11px] text-muted">
+              {shown.length} {t.gallery.countJoiner}
+            </span>
+          </div>
+          <a
+            href={LINKS.instagramArt}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => playClick("nav")}
+            aria-label="Instagram — art account"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line px-2.5 py-1 font-mono text-[11px] text-muted transition-[transform,color,border-color] duration-200 hover:-translate-y-0.5 hover:border-line-hot hover:text-accent"
+          >
+            <IgIcon className="h-3.5 w-3.5" />
+            @macdmrk
+          </a>
+        </div>
+
+        {mediums.length > 1 ? (
+          <div className="flex shrink-0 flex-wrap gap-1.5">
+            {["all", ...mediums].map((m) => {
+              const active = m === medium;
+              return (
+                <button
+                  key={m}
+                  onClick={() => {
+                    playClick("nav");
+                    setMedium(m);
+                  }}
+                  aria-pressed={active}
+                  className="rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors"
+                  style={{
+                    background: active ? "var(--accent)" : "transparent",
+                    color: active ? "var(--bg)" : "var(--dim)",
+                    borderColor: active ? "var(--accent)" : "var(--line)",
+                  }}
+                >
+                  {m === "all" ? t.gallery.filterAll : m}
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
+
+        <div className="min-h-0 flex-1 md:overflow-y-auto">
+          {/* key={medium}: replay the fade on filter change. The all-round
+              padding keeps an edge frame's hover transform from being
+              clipped by the scroll container. */}
+          <div key={medium} className="animate-fade flex gap-3.5 px-4 pt-5 pb-5">
+            {columns.map((col, ci) => (
+              <div key={ci} className="flex min-w-0 flex-1 flex-col gap-3.5">
+                {col.map((ill) => (
+                  <ArtFrame
+                    key={ill.slug}
+                    illustration={ill}
+                    index={indexOf(ill.slug)}
+                    onOpen={() => openWindow(ill.slug)}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {openWindows.map((w) => {
@@ -161,6 +289,6 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
           />
         );
       })}
-    </div>
+    </ViewPane>
   );
 }

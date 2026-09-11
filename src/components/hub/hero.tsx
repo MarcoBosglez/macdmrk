@@ -1,103 +1,78 @@
 "use client";
 
-import Link from "next/link";
-import dynamic from "next/dynamic";
-import { Construction } from "lucide-react";
-import { useSound } from "@/components/providers/sound-provider";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useLocale } from "@/components/providers/locale-provider";
-import { NAV_ITEMS } from "@/lib/data/nav";
+import { ViewPane } from "@/components/chrome/view-pane";
+import { KineticName } from "@/components/hub/kinetic-name";
+import { QrCode } from "@/components/hub/qr-code";
+import { SocialBar } from "@/components/hub/social-bar";
+import { PinguChat } from "@/components/hub/pingu-chat";
 
-// The 3D scene touches the browser's WebGL canvas, which doesn't exist
-// during server rendering — dynamic(..., { ssr: false }) skips it on
-// the server entirely and only mounts it once we're in the browser.
-const HeroPenguinStage = dynamic(
-  () => import("@/components/hub/hero-penguin-stage").then((m) => m.HeroPenguinStage),
-  { ssr: false }
-);
+const PANEL_GLASS =
+  "rounded-[22px] border border-line bg-glass [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]";
 
-// The home page content. "whoami" and "MARCO" are left untranslated on
-// purpose — the first reads as a literal terminal command and the
-// second is a proper name, so neither should change with language.
 export function Hero() {
-  const { playClick } = useSound();
   const { t } = useLocale();
+  const leftRef = useRef<HTMLDivElement>(null);
+  const [chatHeight, setChatHeight] = useState<number | null>(null);
+
+  // Pin the chat panel's height to the card + social bar column, measured
+  // live — so a growing message list scrolls inside it instead of ever
+  // resizing the panel itself.
+  useLayoutEffect(() => {
+    const el = leftRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver((entries) => {
+      const h = entries[0]?.contentRect.height;
+      if (h) setChatHeight(Math.round(h));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   return (
-    <div className="relative flex h-full flex-col gap-10 overflow-y-auto p-6 pb-10 md:absolute md:inset-0 md:block md:overflow-visible md:p-14">
-      {/* whoami/name, top-left corner. */}
-      <div className="md:absolute md:top-10 md:left-14">
-        <div className="mb-2 font-mono text-base text-emerald">whoami</div>
-        <h1 className="font-mono text-[16vw] leading-none font-bold tracking-tight md:text-[52px]">
-          MARCO_
-        </h1>
-      </div>
-
-      {/* Nav list — its own block, vertically centered between the
-          whoami/name block above and the role block below rather than
-          attached to either. Same directory-listing style as NavDock
-          (chrome/nav-dock.tsx): a `~/ ls nav/` header rather than bare
-          links, echoing the `~/ cat about.txt` / `~/work/ ls -la`
-          headers used elsewhere on the site. */}
-      <div className="hidden flex-col items-start gap-1.5 font-mono text-[15px] md:absolute md:top-1/2 md:left-14 md:flex md:-translate-y-1/2">
-        <div className="mb-1 text-xs text-mint">~/ ls nav/</div>
-        {NAV_ITEMS.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={() => playClick("nav")}
-            className="text-muted hover:text-emerald"
-          >
-            {item.key}/
-          </Link>
-        ))}
-      </div>
-
-      {/* Temporary notice while the visual design is still being
-          worked on — remove once the hero has real content here. */}
-      <div className="relative mx-auto flex flex-col items-center gap-2 text-center md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
-        <Construction className="h-8 w-8 text-emerald" aria-hidden="true" />
-        <span className="font-mono text-sm font-bold text-emerald">WIP</span>
-        <span className="max-w-[200px] font-mono text-xs text-muted">
-          working on the design of this page
-        </span>
-      </div>
-
-      {/* Easter egg — anchored to the corner of the whole hero area,
-          not the avatar box, so it reads as its own little mascot. */}
-      <div className="animate-penguin-bob absolute right-3 bottom-3 z-10 h-14 w-14 md:right-6 md:bottom-6 md:h-[110px] md:w-[110px]">
-        <HeroPenguinStage />
-      </div>
-
-      {/* role/origin/description/CTAs — bottom-left corner. */}
-      <div className="max-w-[340px] md:absolute md:bottom-10 md:left-14">
-        {/* Cursor lives inline in the same text run as the role string
-            (not a separate flex sibling) so it always sits immediately
-            after the last word — a flex sibling would center itself on
-            the whole row's height instead of hugging the text if the
-            role string ever wraps to a second line. */}
-        <div className="mb-3.5 font-mono text-lg text-muted">
-          {t.hero.role}
-          <span className="animate-cursor-blink text-emerald">▌</span>
+    <ViewPane note={{ file: "start_here.txt", line: t.hub.note }}>
+      <div className="grid w-full max-w-[1040px] items-stretch gap-3.5 md:grid-cols-2">
+        {/* Left — presentation card + social bar. self-start so this
+            column keeps its own natural height instead of being
+            stretched by the grid row (which would otherwise feed back
+            into the ResizeObserver measurement below). */}
+        <div ref={leftRef} className="flex flex-col gap-3.5 self-start">
+          <div className={`flex flex-col gap-3.5 p-6 ${PANEL_GLASS}`}>
+            <div className="flex items-center gap-5">
+              <div className="min-w-0 flex-1">
+                <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
+                  {t.hub.eyebrow}
+                </span>
+                <div className="mt-1">
+                  <KineticName />
+                  <div className="mt-3 font-mono text-[15px] text-dim">{t.hub.role}</div>
+                  <div className="mt-1.5 font-mono text-[13px] text-muted">{t.hub.location}</div>
+                </div>
+              </div>
+              <QrCode />
+            </div>
+            <div className="h-px" style={{ background: "var(--line-hot)", opacity: 0.7 }} />
+            {t.hub.bio ? <p className="text-[13px] leading-relaxed text-dim">{t.hub.bio}</p> : null}
+            <div className="mt-auto flex flex-wrap gap-2">
+              {t.hub.chips.map((chip) => (
+                <span
+                  key={chip}
+                  className="rounded-full border border-line px-2.5 py-1.5 font-mono text-[11px] text-dim transition-[transform,background] duration-200 hover:-translate-y-0.5 hover:bg-wash"
+                >
+                  {chip}
+                </span>
+              ))}
+            </div>
+          </div>
+          <SocialBar />
         </div>
-        <div className="mb-2 font-mono text-sm text-muted">{t.hero.origin}</div>
-        <p className="mb-4.5 text-base leading-relaxed">{t.hero.description}</p>
-        <div className="flex gap-5">
-          <Link
-            href="/work"
-            onClick={() => playClick("nav")}
-            className="font-mono text-sm font-bold text-emerald hover:underline"
-          >
-            {t.hero.ctaWork}
-          </Link>
-          <Link
-            href="/gallery"
-            onClick={() => playClick("nav")}
-            className="font-mono text-sm font-bold text-mint hover:underline"
-          >
-            {t.hero.ctaGallery}
-          </Link>
+
+        {/* Right — ask_marco.sh */}
+        <div className="flex min-h-0 flex-col">
+          <PinguChat height={chatHeight ?? undefined} />
         </div>
       </div>
-    </div>
+    </ViewPane>
   );
 }

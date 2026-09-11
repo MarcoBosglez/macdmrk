@@ -10,13 +10,10 @@ import { useLocale } from "@/components/providers/locale-provider";
 import type { Illustration } from "@/lib/data/illustrations";
 import type { OpenWindow } from "@/components/gallery/art-grid";
 
-// One floating, draggable "window" showing a single gallery piece.
-// Dragging is done by hand with pointer events rather than a library:
-// on pointer-down over the header we record how far the cursor is from
-// the window's top-left corner (the "offset"), then on every
-// pointer-move we tell the parent (ArtGrid) the new top-left position
-// — cursor position minus that same offset — so the window follows the
-// cursor instead of snapping its corner to it.
+// One floating, draggable "window" for a single gallery piece. Drag is
+// hand-rolled: on pointer-down over the header we record the cursor's
+// offset from the window's top-left, then each pointer-move reports
+// (cursor - offset) back to ArtGrid as the new position.
 export function ArtWindow({
   win,
   illustration,
@@ -41,8 +38,7 @@ export function ArtWindow({
       if (win.maximized) return;
       onFocus();
       dragState.current = { offsetX: e.clientX - win.x, offsetY: e.clientY - win.y };
-      // Pointer capture keeps move/up events targeting this header even
-      // if the cursor drags outside the window's bounds mid-drag.
+      // keeps move/up events on the header even when the drag leaves it
       e.currentTarget.setPointerCapture(e.pointerId);
     },
     [win.maximized, win.x, win.y, onFocus]
@@ -60,26 +56,22 @@ export function ArtWindow({
     dragState.current = null;
   }, []);
 
-  // Shared between both layouts below — only the outer wrapper (and
-  // where it renders) differs between a normal floating window and a
-  // maximized one.
+  // Same inner content for both the floating and maximized layouts;
+  // only the outer wrapper below differs.
   const chrome = (
     <>
       <div
         onPointerDown={onHeaderPointerDown}
         onPointerMove={onHeaderPointerMove}
         onPointerUp={onHeaderPointerUp}
-        className={`flex shrink-0 items-center justify-between border-b border-border bg-bg px-3.5 py-2.5 select-none ${
+        className={`flex shrink-0 items-center justify-between border-b border-line bg-glass-soft px-3.5 py-2.5 select-none ${
           win.maximized ? "cursor-default" : "cursor-move"
         }`}
       >
         <span className="font-mono text-xs">{illustration.caption}</span>
         <div className="flex items-center gap-3.5">
           <button
-            // Stops the pointerdown from reaching the header's own
-            // handler above — otherwise it calls setPointerCapture on
-            // the header (meant for title-bar dragging) and that
-            // redirects this button's click away before it can fire.
+            // don't let the header start a drag from this button
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => {
               playClick(win.maximized ? "minimize" : "maximize");
@@ -87,7 +79,7 @@ export function ArtWindow({
             }}
             aria-label={win.maximized ? "Restore" : "Maximize"}
             title={win.maximized ? "Restore" : "Maximize"}
-            className="text-muted hover:text-emerald"
+            className="text-muted hover:text-accent"
           >
             {win.maximized ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
           </button>
@@ -97,7 +89,7 @@ export function ArtWindow({
               playClick("close");
               onClose();
             }}
-            className="font-mono text-xs text-muted transition-transform hover:scale-115 hover:text-emerald"
+            className="font-mono text-xs text-muted transition-transform hover:scale-115 hover:text-accent"
             aria-label="Close"
           >
             ✕
@@ -105,10 +97,8 @@ export function ArtWindow({
         </div>
       </div>
       <div className="flex flex-1 flex-col overflow-auto p-5">
-        {/* object-contain (not cover) so the whole picture stays
-            visible at its real proportions — this is the "real size"
-            view, cropping belongs to the grid thumbnail, not here. */}
-        <div className="relative mb-4 min-h-20 flex-1 overflow-hidden rounded bg-bg">
+        {/* object-contain: show the whole piece, uncropped */}
+        <div className="relative mb-4 min-h-20 flex-1 overflow-hidden rounded-[12px] bg-bg">
           {illustration.image ? (
             <Image
               src={illustration.image}
@@ -134,23 +124,14 @@ export function ArtWindow({
             {illustration.description}
           </p>
         ) : null}
-        <div className="shrink-0 font-mono text-[11px] text-muted">{t.gallery.dragHint}</div>
+        <div className="shrink-0 font-mono text-[12px] text-muted">{t.gallery.dragHint}</div>
       </div>
     </>
   );
 
-  // Both maximized and normal windows portal straight to document.body
-  // and use fixed (viewport) positioning rather than rendering inline
-  // inside the gallery grid. A normal window used to be absolutely
-  // positioned inside the grid's own scrolling pane, which clipped it
-  // the moment a drag carried it past that pane's edges — you couldn't
-  // pull it out over the top bar or the nav. Being a body-level sibling
-  // like the maximized view already was removes that boundary entirely
-  // (see win.x/win.y's viewport-space starting offsets in art-grid.tsx,
-  // chosen to clear the top bar and nav sidebar on open). It's also why
-  // maximized windows can sit above the global scanline overlay
-  // (z-index 110) — nested inside AppWindow's own stacking context
-  // (z-10) they couldn't, no matter their own z-index.
+  // Portal to <body> with fixed positioning so a drag can carry the
+  // window anywhere on screen without the gallery's scroll pane
+  // clipping it. win.x/win.y are viewport coordinates (see art-grid).
   return createPortal(
     <motion.div
       initial={{ opacity: 0, scale: win.maximized ? 0.98 : 0.94 }}
@@ -159,8 +140,8 @@ export function ArtWindow({
       onPointerDownCapture={onFocus}
       className={
         win.maximized
-          ? "fixed inset-0 z-[120] flex flex-col overflow-hidden border border-border bg-panel"
-          : "fixed flex flex-col overflow-hidden rounded-lg border border-border bg-panel shadow-2xl"
+          ? "fixed inset-0 z-[120] flex flex-col overflow-hidden border border-line bg-panel [backdrop-filter:blur(22px)_saturate(1.2)]"
+          : "fixed flex flex-col overflow-hidden rounded-[18px] border border-line bg-panel [backdrop-filter:blur(22px)_saturate(1.2)] [box-shadow:var(--shadow)]"
       }
       style={
         win.maximized

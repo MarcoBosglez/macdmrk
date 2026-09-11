@@ -1,113 +1,75 @@
 @import "tailwindcss";
 
+/* next-themes is configured with attribute="class", so the active theme
+   is a `.dark` class on <html>. Everything visual is a token below, so
+   the light/dark switch only has to swap this one block. */
 @custom-variant dark (&:is(.dark *));
 
+/* ─── Design tokens: "Glass Kinetic" ─────────────────────────────────
+   Frosted glass panels over a slow aurora field, terminal-flavoured
+   mono meta, kinetic variable type. Light is the bare :root; dark
+   overrides under .dark. Accent deliberately darkens in light mode —
+   the dark-mode mint (#7FFFA6) fails contrast on a pale ground. */
 :root {
-  /* A light tint of --emerald (the contact_me color) rather than a
-     near-neutral cream — mixing emerald with white at ~30/38/48%
-     ratios for bg/panel/border keeps them all clearly on the same
-     green hue (so the page reads as green, not off-white) while
-     staying light enough for --ink below to still be near-black and
-     legible, instead of needing light text like the earlier attempt
-     at using the full-strength emerald as the background. */
-  --bg: #c5e0dd;
-  --panel: #e8f3ef;
-  --ink: #043122;
+  --bg: #eaf6ef;
+  --ink: #0b3124;
+  --dim: #2c5343;
   --muted: #4c6b5c;
-  --border: #45a481;
-  --emerald: #3ba77f;
-  --mint: #01100b;
-  /* The scanline overlay's black multiply-blend (see .scanline-overlay
-     below) darkens the backdrop by an amount proportional to its own
-     opacity regardless of how dark that backdrop already is — dark
-     mode's near-black --bg barely visibly changes, but light mode's
-     much lighter background (and --ink text sitting on it) loses a lot
-     of contrast at the same opacity. Lower here so the effect stays
-     legible against a light background. */
-  --scanline-opacity: 0.02;
+  --accent: #0e7a50;
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-soft: rgba(255, 255, 255, 0.44);
+  --line: rgba(14, 122, 80, 0.26);
+  --line-soft: rgba(14, 122, 80, 0.16);
+  --line-hot: rgba(14, 122, 80, 0.6);
+  --wash: rgba(14, 122, 80, 0.12);
+  --panel: rgba(255, 255, 255, 0.74);
+  --grid: rgba(14, 122, 80, 0.08);
+  --shadow: 0 20px 50px rgba(11, 49, 36, 0.14);
+  --blob-a: rgba(14, 122, 80, 0.16);
+  --blob-b: rgba(93, 199, 154, 0.3);
+  --blob-c: rgba(14, 122, 80, 0.1);
 }
 
 .dark {
-  --bg: #0B3124;
-  --panel: #0f1f17;
-  --ink: #edefec;
-  --muted: #7fa394;
-  --border: #2e9973;
-  --emerald: #2e9973;
-  --mint: #55c79a;
-  --scanline-opacity: 0.45;
-}
-
-:root,
-.dark {
-  --radius: 0.5rem;
-  --destructive: #e5484d;
-
-  /* shadcn/ui semantic aliases, mapped onto our own tokens so any
-     primitive pulled in later matches the site's palette automatically. */
-  --background: var(--bg);
-  --foreground: var(--ink);
-  --card: var(--panel);
-  --card-foreground: var(--ink);
-  --popover: var(--panel);
-  --popover-foreground: var(--ink);
-  --primary: var(--emerald);
-  --primary-foreground: var(--bg);
-  --secondary: var(--panel);
-  --secondary-foreground: var(--ink);
-  --muted-foreground: var(--muted);
-  --accent: var(--panel);
-  --accent-foreground: var(--ink);
-  --destructive-foreground: var(--bg);
-  --input: var(--border);
-  --ring: var(--emerald);
+  --bg: #0a2018;
+  --ink: #e4eee8;
+  --dim: #c7d6cd;
+  --muted: #9fb8ac;
+  --accent: #7fffa6;
+  --glass: rgba(228, 238, 232, 0.06);
+  --glass-soft: rgba(228, 238, 232, 0.04);
+  --line: rgba(127, 255, 166, 0.2);
+  --line-soft: rgba(127, 255, 166, 0.14);
+  --line-hot: rgba(127, 255, 166, 0.5);
+  --wash: rgba(127, 255, 166, 0.14);
+  --panel: rgba(10, 32, 24, 0.5);
+  --grid: rgba(127, 255, 166, 0.055);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  --blob-a: rgba(127, 255, 166, 0.2);
+  --blob-b: rgba(46, 153, 115, 0.32);
+  --blob-c: rgba(127, 255, 166, 0.13);
 }
 
 @theme inline {
-  --font-mono: var(--font-space-mono), ui-monospace, monospace;
-  --font-sans: var(--font-work-sans), ui-sans-serif, system-ui;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", monospace;
 
   --color-bg: var(--bg);
-  --color-panel: var(--panel);
   --color-ink: var(--ink);
+  --color-dim: var(--dim);
   --color-muted: var(--muted);
-  --color-border: var(--border);
-  --color-emerald: var(--emerald);
-  --color-mint: var(--mint);
-
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --color-glass: var(--glass);
+  --color-glass-soft: var(--glass-soft);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-line-hot: var(--line-hot);
+  --color-wash: var(--wash);
+  --color-panel: var(--panel);
 }
 
 * {
   box-sizing: border-box;
-}
-
-html {
-  /* Bumps every rem-based Tailwind text/spacing size up ~12.5% from
-     the 16px default, site-wide, without touching each component's
-     text-* classes individually. */
-  font-size: 18px;
 }
 
 html,
@@ -122,10 +84,32 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
   transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-@keyframes cursor-blink {
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* ─── The glass recipe ───────────────────────────────────────────────
+   One class so panels stay consistent. Chrome bars and gallery frames
+   override the blur radius inline (16px / 18px vs 22px). */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(22px) saturate(1.3);
+  -webkit-backdrop-filter: blur(22px) saturate(1.3);
+  box-shadow: var(--shadow);
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────────
+   blink  — the terminal cursor ▌
+   pulse  — the "open to work" status dot
+   fade   — view enter (opacity 0 / translateY 8px)
+   floatA/B/C — the three aurora blobs, each drifting its own way */
+@keyframes blink {
   0%,
   100% {
     opacity: 1;
@@ -135,170 +119,196 @@ body {
   }
 }
 
-@keyframes float-y {
+@keyframes pulse {
   0%,
   100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
     transform: translateY(0);
   }
-  50% {
-    transform: translateY(-10px);
-  }
 }
 
-@keyframes penguin-bob {
+@keyframes floatA {
   0%,
   100% {
-    transform: translate(0, 0) rotate(-3deg);
-  }
-  25% {
-    transform: translate(-3px, -6px) rotate(2deg);
+    transform: translate(0, 0) scale(1);
   }
   50% {
-    transform: translate(0, -2px) rotate(-2deg);
-  }
-  75% {
-    transform: translate(3px, -6px) rotate(3deg);
+    transform: translate(7vw, -5vh) scale(1.15);
   }
 }
 
-@keyframes noise-shift {
+@keyframes floatB {
   0%,
   100% {
-    transform: translate(0, 0);
-  }
-  10% {
-    transform: translate(-2%, -3%);
-  }
-  20% {
-    transform: translate(3%, 2%);
-  }
-  30% {
-    transform: translate(-1%, 4%);
-  }
-  40% {
-    transform: translate(2%, -2%);
+    transform: translate(0, 0) scale(1);
   }
   50% {
-    transform: translate(-3%, 1%);
-  }
-  60% {
-    transform: translate(1%, 3%);
-  }
-  70% {
-    transform: translate(-2%, -1%);
-  }
-  80% {
-    transform: translate(3%, -3%);
-  }
-  90% {
-    transform: translate(-1%, 2%);
+    transform: translate(-9vw, 6vh) scale(0.9);
   }
 }
 
-.animate-cursor-blink {
-  animation: cursor-blink 1s step-end infinite;
+@keyframes floatC {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(5vw, 8vh) scale(1.2);
+  }
 }
 
-.animate-float-y {
-  animation: float-y 5s ease-in-out infinite;
+.animate-blink {
+  animation: blink 1.1s step-end infinite;
+}
+.animate-pulse-dot {
+  animation: pulse 2s ease-in-out infinite;
+}
+.animate-fade {
+  animation: fade 0.3s ease-out;
 }
 
-.animate-penguin-bob {
-  animation: penguin-bob 1.8s ease-in-out infinite;
+/* ─── Startup animation ─────────────────────────────────────────────
+   A once-per-tab intro (see chrome/startup-animation.tsx): the name
+   assembles letter by letter — each glyph snaps from wide+heavy to its
+   rest width/weight, an accent wave washing across via the staggered
+   animation-delay — then the whole veil fades to the hub. ~2.6s total.
+   Hidden with no JS and on repeat visits this tab session (the
+   mb-skip-startup pre-paint class from layout.tsx). */
+.startup-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  animation: startup-veil-out 2.6s ease forwards;
 }
 
-/* Set by the inline script in layout.tsx, before React hydrates, when
-   sessionStorage shows the boot animation already played this tab
-   session — hides the boot screen the instant it's painted so repeat
-   page loads never flash it, even for one frame. */
-html.skip-boot .boot-screen {
+.startup-veil__name {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.9;
+  animation: startup-name-in 0.85s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+.startup-veil__row {
+  display: flex;
+}
+
+.startup-veil__row span {
+  font-family: var(--font-sans);
+  font-size: clamp(40px, 8vw, 92px);
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  font-variation-settings: "wdth" 100, "wght" 600;
+  animation: startup-letter 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@keyframes startup-letter {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+    font-variation-settings: "wdth" 125, "wght" 900;
+    color: var(--accent);
+  }
+  55% {
+    opacity: 1;
+    color: var(--accent);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    font-variation-settings: "wdth" 100, "wght" 600;
+    color: var(--ink);
+  }
+}
+
+@keyframes startup-name-in {
+  from {
+    opacity: 0.5;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes startup-veil-out {
+  0%,
+  78% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+html.mb-skip-startup .startup-veil {
   display: none !important;
 }
 
-/* The boot screen's "channel change" reveal panel — geometry mirrors
-   layout.tsx's own outer padding (`p-3 md:p-7`) at the exact same
-   breakpoint, so it's pixel-identical to the real window frame it's
-   standing in for rather than an approximation that can drift out of
-   sync. Collapsed to a horizontal line (scaleY 0) until `.boot-reveal-
-   open` is added, then snaps to full size — no width/height animation
-   needed since the box is already the right size and position the
-   whole time. */
-.boot-reveal {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  bottom: 12px;
-  left: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--ink);
-  background: var(--bg);
-  transform: scaleY(0);
-  transform-origin: center;
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@media (min-width: 768px) {
-  .boot-reveal {
-    top: 28px;
-    right: 28px;
-    bottom: 28px;
-    left: 28px;
-  }
-}
-.boot-reveal.boot-reveal-open {
-  transform: scaleY(1);
+/* Floaty shapes (chrome/floaty-field.tsx) — JS owns the transform, so
+   grab feedback is just colour + cursor. */
+.floaty--held {
+  cursor: grabbing !important;
+  color: var(--accent);
 }
 
-/* Plays once when mounted (see boot-screen.tsx — the element itself is
-   only rendered once `closing` is true) and fully finishes — up and
-   back down to nothing — before the reveal panel starts its snap. */
-@keyframes boot-flash {
-  0% {
-    opacity: 0;
-  }
-  25% {
-    opacity: 0.6;
-  }
+/* No-JS fallback: the component can't unmount the veil, so never show
+   it. (JS-off visitors just land straight on the hub.) */
+html.no-js .startup-veil {
+  display: none !important;
+}
+
+/* ─── Hub: pingu chat + social bar ──────────────────────────────────
+   pingu-dot   — the three thinking-bubble dots (staggered via inline
+                 animation-delay in pingu-chat.tsx)
+   .pingu-scroll — thin scrollbar for the chat's message list
+   .hub-motion — feature-scoped reduced-motion opt-out: these hub
+                 elements skip their hover transform only, everything
+                 else on the site still always animates. */
+@keyframes pingu-dot {
+  0%,
   100% {
-    opacity: 0;
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
   }
 }
-.boot-flash {
-  animation: boot-flash 0.2s ease-out forwards;
+
+.pingu-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.pingu-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.pingu-scroll::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 3px;
 }
 
-.noise-overlay {
-  position: absolute;
-  inset: -20%;
-  width: 140%;
-  height: 140%;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.16;
-  mix-blend-mode: screen;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: noise-shift 0.2s steps(2) infinite;
-}
-
-.scanline-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 110;
-  pointer-events: none;
-  background:
-    radial-gradient(circle, transparent 45%, rgba(0, 0, 0, 0.5) 100%),
-    repeating-linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.22) 0px,
-      rgba(0, 0, 0, 0.22) 2px,
-      transparent 2px,
-      transparent 4px
-    );
-  /* `overlay` was the original choice, but it multiplies dark backdrop
-     pixels while screening light ones — and screening black onto
-     anything leaves it ~unchanged, so scanlines showed over the dark
-     background but vanished over light-colored text. `multiply`
-     darkens every backdrop color the same way regardless of its own
-     luminance, so text gets the effect too. */
-  mix-blend-mode: multiply;
-  opacity: var(--scanline-opacity);
+@media (prefers-reduced-motion: reduce) {
+  .hub-motion:hover {
+    transform: none !important;
+  }
 }

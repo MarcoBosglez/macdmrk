@@ -9,16 +9,9 @@ import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
 import { NAV_ITEMS } from "@/lib/data/nav";
 
-// On small screens the desktop pill nav (see TopBar) gets too cramped
-// to use comfortably, so mobile gets its own nav entirely: a single
-// round button fixed at the bottom-left corner that pops open a stack
-// of "bubble" links directly above it. Hidden above the md breakpoint,
-// where TopBar's own nav takes over instead.
-//
-// This uses AnimatePresence for the open/close animation, which is
-// safe here (unlike the page-transition bug fixed earlier) because
-// "open" is plain local component state, not something layered on
-// top of Next.js's own page routing.
+// The mobile nav: a single round button fixed at the bottom-left that
+// pops open a stack of "bubble" links above it. Hidden at md and up,
+// where the ChromeBar pill nav takes over.
 export function MobileNavBubbles() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -30,15 +23,12 @@ export function MobileNavBubbles() {
     setOpen(false);
   }
 
-  // Reversed so the first nav item ends up nearest the button (bottom
-  // of the popup stack) and the last one ends up furthest away (top).
+  // Reversed so the first nav item sits nearest the button.
   const itemsNearestFirst = [...NAV_ITEMS].reverse();
 
   return (
-    // This wrapper is only ever as big as the button itself — the
-    // popup list below is positioned absolutely, so it doesn't add to
-    // the wrapper's size. That's what keeps the button fixed in place
-    // instead of drifting as the list opens and closes.
+    // Wrapper stays button-sized (the popup list is absolute) so the
+    // button doesn't shift as the list opens/closes.
     <div className="fixed bottom-6 left-6 z-30 md:hidden">
       <div className="pointer-events-none absolute bottom-full left-0 mb-2.5 flex flex-col items-start gap-2.5">
         <AnimatePresence>
@@ -60,8 +50,8 @@ export function MobileNavBubbles() {
                     className={cn(
                       "block rounded-full border px-4 py-2 font-mono text-xs font-bold whitespace-nowrap shadow-lg",
                       active
-                        ? "border-emerald bg-emerald text-bg"
-                        : "border-border bg-panel text-ink"
+                        ? "border-accent bg-accent text-bg"
+                        : "border-line bg-panel text-ink"
                     )}
                   >
                     {t.nav[item.key]}
@@ -79,7 +69,7 @@ export function MobileNavBubbles() {
         }}
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-panel text-lg text-ink shadow-lg"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-panel text-lg text-ink shadow-lg"
       >
         {open ? "✕" : "☰"}
       </button>
