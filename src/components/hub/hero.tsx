@@ -4,7 +4,6 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { useLocale } from "@/components/providers/locale-provider";
 import { ViewPane } from "@/components/chrome/view-pane";
 import { KineticName } from "@/components/hub/kinetic-name";
-import { QrCode } from "@/components/hub/qr-code";
 import { SocialBar } from "@/components/hub/social-bar";
 import { PinguChat } from "@/components/hub/pingu-chat";
 
@@ -46,26 +45,21 @@ export function Hero() {
 
   return (
     <ViewPane note={{ file: "start_here.txt", line: t.hub.note }}>
-      <div className="grid w-full max-w-[1040px] items-stretch gap-3.5 md:grid-cols-2">
+      <div className="grid w-full max-w-[1040px] grid-cols-1 items-stretch gap-3.5 md:grid-cols-2">
         {/* Left — presentation card + social bar. self-start so this
             column keeps its own natural height instead of being
             stretched by the grid row (which would otherwise feed back
             into the ResizeObserver measurement below). */}
-        <div ref={leftRef} className="flex flex-col gap-3.5 self-start">
+        <div ref={leftRef} className="flex @container flex-col gap-3.5 self-start">
           <div className={`flex flex-col gap-3.5 p-6 ${PANEL_GLASS}`}>
-            <div className="flex items-center gap-5">
-              <div className="min-w-0 flex-1">
-                <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
-                  {t.hub.eyebrow}
-                </span>
-                <div className="mt-1">
-                  <KineticName />
-                  <div className="mt-3 font-mono text-[15px] text-dim">{t.hub.role}</div>
-                  <div className="mt-1.5 font-mono text-[13px] text-muted">{t.hub.location}</div>
-                </div>
-              </div>
-              <div className="hidden md:block">
-                <QrCode />
+            <div>
+              <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
+                {t.hub.eyebrow}
+              </span>
+              <div className="mt-1">
+                <KineticName />
+                <div className="mt-3 font-mono text-[15px] text-dim">{t.hub.role}</div>
+                <div className="mt-1.5 font-mono text-[13px] text-muted">{t.hub.location}</div>
               </div>
             </div>
             <div className="h-px" style={{ background: "var(--line-hot)", opacity: 0.7 }} />
@@ -82,9 +76,6 @@ export function Hero() {
             </div>
           </div>
           <SocialBar />
-          <div className="flex justify-center md:hidden">
-            <QrCode />
-          </div>
         </div>
 
         {/* Right — ask_marco.sh */}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { IgIcon, InIcon, MailIcon, DocIcon } from "@/components/chrome/link-icons";
 import { LINKS } from "@/lib/data/links";
+import { QrCodeButton } from "@/components/hub/qr-code";
 
 // One shared hover for every button here — lift + border-hot + wash.
 const GLASS_BTN =
@@ -54,7 +55,7 @@ function MoreInContact() {
       onMouseLeave={() => setOn(false)}
       onFocus={() => setOn(true)}
       onBlur={() => setOn(false)}
-      className={`hub-motion flex h-12 min-w-0 items-center justify-center gap-1.5 border border-line px-3 md:flex-1 ${GLASS_BTN}`}
+      className={`hub-motion flex h-12 min-w-0 items-center justify-center gap-1.5 border border-line px-3 @min-[460px]:flex-1 ${GLASS_BTN}`}
       style={{
         background: on ? "var(--wash)" : undefined,
         transform: on ? "translateY(-4px)" : undefined,
@@ -72,13 +73,30 @@ function MoreInContact() {
   );
 }
 
+// Icons are always icon-only — no in-between labelled state. Below
+// ~460px of card width the row can't fit MoreInContact's text next to
+// five icons on one line, so icons get their own full-width row
+// (`justify-between`, spanning the card edge to edge with no dead air)
+// and MoreInContact drops to a full-width row below it. From ~460px up
+// there's room for both on one line, so the icon row collapses to
+// `contents` and MoreInContact (now `flex-1`) absorbs whatever space is
+// left — there's never empty space left over to fill, at any width.
+// Measured against the card's own width via a container query (`@`
+// variants, see the `@container` on hero.tsx's column), not the
+// viewport: the hub's grid caps a desktop column at ~513px, so a
+// viewport-based breakpoint would either never reach the one-line mode
+// or falsely trigger it right as the grid drops to two columns and the
+// card suddenly shrinks.
 export function SocialBar() {
   return (
-    <div className="flex flex-wrap items-stretch justify-center gap-2 md:justify-start md:flex-nowrap">
-      <SocialButton href={LINKS.instagram} external title="Instagram — @marcobglz" Icon={IgIcon} />
-      <SocialButton href={LINKS.linkedin} external title="LinkedIn — marco-bosquez" Icon={InIcon} />
-      <SocialButton href={`mailto:${LINKS.email}`} title="Email" Icon={MailIcon} />
-      <SocialButton href={LINKS.resume} external title="Résumé — PDF" Icon={DocIcon} />
+    <div className="flex flex-col gap-2 @min-[460px]:flex-row @min-[460px]:items-stretch">
+      <div className="flex items-stretch justify-between gap-2 @min-[460px]:contents">
+        <SocialButton href={LINKS.instagram} external title="Instagram — @marcobglz" Icon={IgIcon} />
+        <SocialButton href={LINKS.linkedin} external title="LinkedIn — marco-bosquez" Icon={InIcon} />
+        <SocialButton href={`mailto:${LINKS.email}`} title="Email" Icon={MailIcon} />
+        <SocialButton href={LINKS.resume} external title="Résumé — PDF" Icon={DocIcon} />
+        <QrCodeButton />
+      </div>
       <MoreInContact />
     </div>
   );

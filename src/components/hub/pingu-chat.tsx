@@ -6,18 +6,16 @@ import { usePrefersReducedMotion } from "@/lib/hooks/use-reduced-motion";
 type MessageStatus = "thinking" | "typing" | "done";
 type ChatMessage = { id: number; role: "bot" | "user"; text: string; status: MessageStatus };
 
-const OPENING = "hi — i'm pingu, marco's stand-in while he's compiling. ask me the small stuff.";
+const OPENING = "hi! i'm pingu, marco's assistant while he's compiling. ask me the small stuff.";
 
-// Hardcoded for now — swap this for a real model call later. Everything
-// below it (thinking dots, then typewriter) stays the same either way.
 const QA: { q: string; a: string }[] = [
   {
     q: "dev or artist?",
-    a: "both. he works as a backend engineer and makes digital art in 3D and illustration — two separate skill sets he keeps active.",
+    a: "his main gig is as a software developer/backend engineer. illustration is mostly a hobby but open to comissions. two separate skill sets he keeps active.",
   },
   {
     q: "what do you build?",
-    a: "backend APIs and services at bank scale. his last role was the layer wiring BBVA's Blue AI assistant to its LLMs, frontends and databases.",
+    a: "backend APIs and services at bank scale. his last role was integrating BBVA's Blue AI assistant to its LLMs, frontends and databases.",
   },
   {
     q: "llm work?",
@@ -25,23 +23,23 @@ const QA: { q: string; a: string }[] = [
   },
   {
     q: "what do you make art with?",
-    a: "Blender and 3D modeling, pixel art, digital illustration. he has also shipped Spotify campaign banners, which is art with a deadline.",
+    a: "Clip Studio Paint mostly. he has also shipped Spotify campaign banners, which is art with a deadline.",
   },
   {
     q: "where are you?",
-    a: "Redmond, Washington — full-time on an M.S. in Computer Science at DigiPen since mid-2026. before that: Mexico City, four years of engineering work.",
+    a: "Redmond, Washington. Full-time on an M.S. in Computer Science at DigiPen since mid-2026. before that: Mexico City, four years of engineering work.",
   },
   {
     q: "are you legal to hire?",
-    a: "in the US on student status at DigiPen, open to internships and full-time after. native English and Spanish, C2 certified. ask him for specifics.",
+    a: "not legally authorized to work with a student visa. open to internships and full-time after. native English and Spanish, C2 certified. ask him for specifics.",
   },
   {
     q: "stack?",
-    a: "TypeScript, Node, Python, Java, React and Next.js; APIs, databases and scraping at volume. Blender and Tailwind on the other side of his brain.",
+    a: "TypeScript, Node, Python, Java, React and Next.js; APIs, databases and scraping at volume. Clip Studio Paint the other side of his brain.",
   },
   {
     q: "coffee or tea?",
-    a: "coffee, and more of it than the doctor drew up. i get fish.",
+    a: "atole, and more of it. i get fish :)",
   },
   {
     q: "can i hire you?",
