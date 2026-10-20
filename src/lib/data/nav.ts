@@ -9,7 +9,7 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   { key: "home", href: "/" },
   { key: "work", href: "/work" },
-  { key: "gallery", href: "/gallery" },
   { key: "about", href: "/about" },
+  { key: "gallery", href: "/gallery" },
   { key: "contact", href: "/contact" },
 ];

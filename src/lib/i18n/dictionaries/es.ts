@@ -4,8 +4,8 @@ export const es: Dictionary = {
   nav: {
     home: "inicio",
     about: "sobre mí",
-    work: "trabajo",
-    gallery: "galería",
+    work: "proyectos",
+    gallery: "ilustraciones",
     contact: "contacto",
   },
   chrome: {
@@ -13,7 +13,7 @@ export const es: Dictionary = {
   },
   hub: {
     eyebrow: "quién soy",
-    role: "Ingeniero de Software & Ilustrador Digital",
+    role: "Ingeniero de Software",
     location: "En Seattle, WA · de la Ciudad de México <3",
     bio: "",
     chips: ["4 Años de Experiencia Back-End", "Integraciones LLM", "M.S. CS @ DigiPen", "Ilustración Digital"],
@@ -22,13 +22,19 @@ export const es: Dictionary = {
   work: {
     eyebrow: "trabajo seleccionado",
     range: "2020 — 2026",
-    whatIDid: "lo que hice",
+    whyLabel: "el porqué",
+    whatIDid: "el cómo",
     outcomeLabel: "resultado",
+    roleLabel: "rol",
     linkHint: "abre el proyecto en una pestaña nueva",
+    viewProject: "ver proyecto",
+    viewCode: "ver código",
+    learnMore: "saber más",
+    backToWork: "← volver a trabajo",
     note: "→ todos mis proyectos personales, pasados y actuales, en una lista",
   },
   gallery: {
-    eyebrow: "galería",
+    eyebrow: "ilustraciones",
     countJoiner: "mostradas",
     filterAll: "todo",
     dragHint: "arrastra la barra de título para mover · maximiza para ver en resolución completa",
@@ -36,7 +42,7 @@ export const es: Dictionary = {
   },
   about: {
     eyebrow: "sobre mí",
-    lead: "Hola! Soy Ingeniero de Software y Artista Digital. Actualmente estoy haciendo mi Maestría en Ciencias de la Computación en Digipen Institute of Technology.",
+    lead: "Hola! Soy Ingeniero de Software y Artista Digital Aficionado. Actualmente estoy haciendo mi Maestría en Ciencias de la Computación en Digipen Institute of Technology.",
     leadAccent: "Maestría en Ciencias de la Computación",
     stackChips: ["TypeScript", "Python", "React", "Node", "integración de LLMs"],
     elsewhereCta: "contáctame →",

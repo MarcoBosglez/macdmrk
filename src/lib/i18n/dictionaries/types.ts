@@ -35,9 +35,15 @@ export type Dictionary = {
   work: {
     eyebrow: string;
     range: string;
+    whyLabel: string;
     whatIDid: string;
     outcomeLabel: string;
+    roleLabel: string;
     linkHint: string;
+    viewProject: string;
+    viewCode: string;
+    learnMore: string;
+    backToWork: string;
     note: string;
   };
   gallery: {

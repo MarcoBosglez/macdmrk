@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion } from "motion/react";
@@ -32,6 +32,24 @@ export function ArtWindow({
   const { playClick } = useSound();
   const { t } = useLocale();
   const dragState = useRef<{ offsetX: number; offsetY: number } | null>(null);
+
+  // "Maximize" stays below the chrome bar instead of covering it —
+  // measured live off #site-chrome-bar, tracked inline since this
+  // window already has its own portal/drag wrapper.
+  const [chromeBarHeight, setChromeBarHeight] = useState(0);
+  useEffect(() => {
+    if (!win.maximized) return;
+    const bar = document.getElementById("site-chrome-bar");
+    const update = () => setChromeBarHeight(bar?.getBoundingClientRect().height ?? 0);
+    update();
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
+    if (bar && ro) ro.observe(bar);
+    window.addEventListener("resize", update);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [win.maximized]);
 
   const onHeaderPointerDown = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
@@ -140,12 +158,12 @@ export function ArtWindow({
       onPointerDownCapture={onFocus}
       className={
         win.maximized
-          ? "fixed inset-0 z-[120] flex flex-col overflow-hidden border border-line bg-panel [backdrop-filter:blur(22px)_saturate(1.2)]"
+          ? "fixed inset-x-0 bottom-0 z-[100] flex flex-col overflow-hidden border border-line bg-panel [backdrop-filter:blur(22px)_saturate(1.2)]"
           : "fixed flex flex-col overflow-hidden rounded-[18px] border border-line bg-panel [backdrop-filter:blur(22px)_saturate(1.2)] [box-shadow:var(--shadow)]"
       }
       style={
         win.maximized
-          ? undefined
+          ? { top: chromeBarHeight }
           : { left: win.x, top: win.y, width: win.w, height: win.h, zIndex: win.z }
       }
     >

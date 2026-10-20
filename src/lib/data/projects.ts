@@ -11,11 +11,13 @@ export type Project = {
   did: { en: string[]; es: string[] };
   outcome: Localized;
   url?: string;
+  image?: string;
 };
 
 export const PROJECTS: Project[] = [
   {
     slug: "web-portfolio",
+    image: "/work/portfolio.PNG",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Three.js"],
     title: { en: "Web Portfolio", es: "Portafolio Web" },
     category: { en: "Web Portfolio", es: "Portafolio Web" },
@@ -45,6 +47,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "spotify-banner",
+    image: "/work/banneronerpm.PNG",
     tags: ["HTML", "CSS", "JavaScript", "GitHub"],
     title: {
       en: "Spotify Banner for ONErpm",
@@ -77,6 +80,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "aws-rsh",
+    image: "/work/rsh.PNG",
     tags: ["Java", "Spring", "Docker", "React"],
     title: {
       en: "Amazon Recorder System Helper",
@@ -109,6 +113,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "sentiment-analysis",
+    image: "/work/ml_article.PNG",
     tags: ["Machine Learning", "Python", "NLTK", "NLP"],
     title: {
       en: "ML Sentiment Analysis",

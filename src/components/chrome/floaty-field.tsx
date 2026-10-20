@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 // Little shapes that tumble in 3D and drift around the viewport behind
 // the glass panels (z-1); the cursor scatters them by proximity. Hand-
@@ -85,11 +86,17 @@ function ShapeSvg({ shape }: { shape: Shape }) {
 }
 
 export function FloatyField() {
+  // Hub-only — rendered in the root layout, so this mounts once for
+  // every route; the effect's own guard (not an early return before
+  // the hooks) is what lets it start/stop as `pathname` changes across
+  // client-side navigations instead of just at first mount.
+  const pathname = usePathname();
   const bodies = useRef<Body[]>(SHAPES.map(blankBody));
   const rafRef = useRef<number | null>(null);
   const cursor = useRef({ x: -999, y: -999, px: -999, py: -999 });
 
   useEffect(() => {
+    if (pathname !== "/") return;
     if (!window.matchMedia("(min-width: 768px)").matches) return;
 
     let W = window.innerWidth;
@@ -243,7 +250,9 @@ export function FloatyField() {
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, []);
+  }, [pathname]);
+
+  if (pathname !== "/") return null;
 
   return (
     <div

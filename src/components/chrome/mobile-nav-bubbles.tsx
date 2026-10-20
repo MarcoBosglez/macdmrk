@@ -18,6 +18,10 @@ export function MobileNavBubbles() {
   const { playClick } = useSound();
   const { t } = useLocale();
 
+  // A project's own page carries its own back link + project switcher
+  // instead — same "no section menu" reduction as ChromeBar there.
+  if (/^\/work\/[^/]+$/.test(pathname)) return null;
+
   function closeAfterNavigating() {
     playClick("nav");
     setOpen(false);

@@ -4,8 +4,8 @@ export const en: Dictionary = {
   nav: {
     home: "hub",
     about: "about",
-    work: "work",
-    gallery: "gallery",
+    work: "project work",
+    gallery: "illustrations",
     contact: "contact",
   },
   chrome: {
@@ -13,7 +13,7 @@ export const en: Dictionary = {
   },
   hub: {
     eyebrow: "who am i",
-    role: "Software Engineer & Illustrator",
+    role: "Software Engineer",
     location: "Based in Seattle, WA · from Mexico City <3",
     bio: "",
     chips: ["4 Years Back-End Experience", "LLM integrations", "M.S. CS @ DigiPen", "Digital Illustration"],
@@ -22,13 +22,19 @@ export const en: Dictionary = {
   work: {
     eyebrow: "selected work",
     range: "2020 — 2026",
-    whatIDid: "what i did",
+    whyLabel: "the why",
+    whatIDid: "the how",
     outcomeLabel: "outcome",
+    roleLabel: "role",
     linkHint: "open the project in a new tab",
+    viewProject: "view project",
+    viewCode: "view code",
+    learnMore: "learn more",
+    backToWork: "← back to project work",
     note: "→ all my previous & current personal projects in one list",
   },
   gallery: {
-    eyebrow: "gallery",
+    eyebrow: "illustrations",
     countJoiner: "shown",
     filterAll: "all",
     dragHint: "drag the title bar to move · maximize for full resolution",

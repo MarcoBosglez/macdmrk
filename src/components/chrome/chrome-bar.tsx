@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Volume2, VolumeX } from "lucide-react";
@@ -20,8 +21,17 @@ const CAPSULE =
 // The one bar on top of every view: identity capsule (left), the nav
 // pill group (centre, desktop only), and a status/controls capsule
 // (right — clock, theme, mute, language).
+// A project's own page (/work/<slug>) runs a reduced chrome bar — no
+// section nav — since it already carries its own back link and
+// project switcher; the browser view (/work itself) keeps the normal
+// one.
+function isProjectDetailPage(pathname: string) {
+  return /^\/work\/[^/]+$/.test(pathname);
+}
+
 export function ChromeBar() {
   const pathname = usePathname();
+  const reduced = isProjectDetailPage(pathname);
   const { muted, toggleMute, playClick } = useSound();
   const { resolvedTheme, setTheme } = useTheme();
   const { locale, setLocale, t } = useLocale();
@@ -47,6 +57,7 @@ export function ChromeBar() {
   useEffect(() => () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
   }, []);
+
   function handleLogoClick() {
     playClick("honk");
     setMouthOpen(true);
@@ -55,13 +66,17 @@ export function ChromeBar() {
   }
 
   return (
-    <div className="relative z-[5] flex shrink-0 flex-nowrap items-center justify-between gap-2 px-3 py-2.5 sm:flex-wrap sm:gap-3 sm:px-4 sm:py-3 md:px-[26px] md:py-4">
-      {/* Left — identity */}
+    <div
+      id="site-chrome-bar"
+      className="relative z-[5] flex shrink-0 flex-nowrap items-center justify-between gap-2 px-3 py-2.5 sm:flex-wrap sm:gap-3 sm:px-4 sm:py-3 md:px-[26px] md:py-4"
+    >
+      {/* Left — identity. Simple squash on press. */}
       <Link
         href="/"
         onClick={handleLogoClick}
         aria-label="Home"
-        className={CAPSULE}
+        className={`${CAPSULE} active:scale-90`}
+        style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1)" }}
       >
         <Image
           src={mouthOpen ? "/logo-open.svg" : "/logo.svg"}
@@ -78,10 +93,11 @@ export function ChromeBar() {
         </span>
       </Link>
 
-      {/* Centre — nav pills (desktop; mobile uses MobileNavBubbles) */}
+      {/* Centre — nav pills (desktop; mobile uses MobileNavBubbles).
+          Dropped entirely on a project's own page — reduced chrome. */}
       <nav
         aria-label="Primary"
-        className="hidden items-center gap-1.5 rounded-[14px] border border-line-soft bg-glass-soft p-1.5 [backdrop-filter:blur(16px)] md:flex"
+        className={`${reduced ? "hidden" : "hidden md:flex"} items-center gap-1.5 rounded-[14px] border border-line-soft bg-glass-soft p-1.5 [backdrop-filter:blur(16px)]`}
       >
         {NAV_ITEMS.map((item) => {
           const active =
@@ -94,10 +110,9 @@ export function ChromeBar() {
               href={item.href}
               onClick={() => playClick("nav")}
               aria-current={active ? "page" : undefined}
-              className="rounded-[10px] px-3.5 py-1.5 text-[13px] transition-[background,color,font-variation-settings] duration-200"
+              className="relative rounded-[10px] px-3.5 py-1.5 text-[13px] transition-[color,font-variation-settings] duration-200"
               style={{
                 color: active ? "var(--bg)" : "var(--dim)",
-                background: active ? "var(--accent)" : "transparent",
                 fontVariationSettings: active
                   ? "'wdth' 118, 'wght' 750"
                   : "'wdth' 88, 'wght' 500",
@@ -113,7 +128,22 @@ export function ChromeBar() {
                 e.currentTarget.style.fontVariationSettings = "'wdth' 88, 'wght' 500";
               }}
             >
-              {t.nav[item.key].toLowerCase()}
+              {/* The pill itself — travels between items via a shared
+                  layoutId instead of just appearing on the new one.
+                  No negative z-index: the Link has `relative` but no
+                  z-index of its own, so it doesn't form a stacking
+                  context — a negative value on this span would escape
+                  it entirely and land behind unrelated page content.
+                  Plain DOM order + a positive z-index on the label
+                  keeps the pill reliably behind the text instead. */}
+              {active && (
+                <motion.span
+                  layoutId="nav-active-pill"
+                  className="absolute inset-0 rounded-[10px] bg-accent"
+                  transition={{ type: "spring", stiffness: 520, damping: 38 }}
+                />
+              )}
+              <span className="relative z-10">{t.nav[item.key].toLowerCase()}</span>
             </Link>
           );
         })}
