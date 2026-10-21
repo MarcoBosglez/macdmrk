@@ -245,39 +245,45 @@ export function LiftLogApp() {
   const wd = new Date().getDay();
 
   return (
-    <div className="flex h-full flex-col gap-3 overflow-y-auto px-2.5 py-4 pb-20 md:p-6 md:pb-28">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">~/ lift.log</h1>
-          <p className="mt-1 text-[13px] text-dim">Saved on this device only.</p>
+    <div className="flex h-full flex-col gap-3 overflow-y-auto px-2.5 py-4 pb-16 md:p-6 md:pb-10">
+      <div className="flex flex-col">
+        {/* Title + nav share one dark panel on mobile so the top of
+            the page reads as a single header bar instead of the title
+            floating loose above a separate dark tab strip — only the
+            nav stays sticky once you scroll past it. */}
+        <div className="-mx-2.5 -mt-4 flex flex-wrap items-start justify-between gap-3 bg-[rgba(4,10,8,0.94)] px-2.5 pt-4 pb-3 md:mx-0 md:mt-0 md:bg-transparent md:px-0 md:pt-0 md:pb-0">
+          <div>
+            <h1 className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">~/ lift.log</h1>
+            <p className="mt-1 text-[13px] text-dim">Saved on this device only.</p>
+          </div>
+          <Link href="/meal" className={BTN}>
+            meal log →
+          </Link>
         </div>
-        <Link href="/meal" className={BTN}>
-          meal log →
-        </Link>
-      </div>
 
-      <nav className="sticky top-0 z-[2] -mx-2.5 flex shrink-0 gap-1.5 overflow-x-auto bg-[rgba(4,10,8,0.94)] px-2.5 py-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden">
-        {TABS.map((t) => {
-          const label = PLAN[t] ? PLAN[t].name : TAB_LABEL[t];
-          const isToday = PLAN[t] && PLAN[t].day === wd;
-          const active = t === tab;
-          return (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className="shrink-0 whitespace-nowrap rounded-full border px-3.5 py-1.5 font-mono text-[12px] font-bold transition-colors"
-              style={{
-                borderColor: active ? "var(--accent)" : "var(--line)",
-                background: active ? "var(--accent)" : "var(--glass-soft)",
-                color: active ? "var(--bg)" : "var(--dim)",
-              }}
-            >
-              {label}
-              {isToday ? <span className="ml-1.5 font-sans text-[10px] font-normal opacity-70">today</span> : null}
-            </button>
-          );
-        })}
-      </nav>
+        <nav className="sticky top-0 z-[2] -mx-2.5 flex shrink-0 gap-1.5 overflow-x-auto bg-[rgba(4,10,8,0.94)] px-2.5 py-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:mt-3 md:px-0 [&::-webkit-scrollbar]:hidden">
+          {TABS.map((t) => {
+            const label = PLAN[t] ? PLAN[t].name : TAB_LABEL[t];
+            const isToday = PLAN[t] && PLAN[t].day === wd;
+            const active = t === tab;
+            return (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className="shrink-0 whitespace-nowrap rounded-full border px-3.5 py-1.5 font-mono text-[12px] font-bold transition-colors"
+                style={{
+                  borderColor: active ? "var(--accent)" : "var(--line)",
+                  background: active ? "var(--accent)" : "var(--glass-soft)",
+                  color: active ? "var(--bg)" : "var(--dim)",
+                }}
+              >
+                {label}
+                {isToday ? <span className="ml-1.5 font-sans text-[10px] font-normal opacity-70">today</span> : null}
+              </button>
+            );
+          })}
+        </nav>
+      </div>
 
       {PLAN[tab] ? (
         <WorkoutView
@@ -295,21 +301,22 @@ export function LiftLogApp() {
         <PlanView />
       )}
 
+      {/* Save session now lives at the end of the page flow instead of
+          pinned on screen at all times — it only shows up once you've
+          scrolled down to it. */}
       {PLAN[tab] ? (
-        <div className="fixed inset-x-0 bottom-0 z-[6] border-t border-line bg-[rgba(4,10,8,0.94)] px-4 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom,0px))] md:px-6">
-          <div className="mx-auto flex max-w-[720px] items-center gap-3">
-            <Link
-              href="/"
-              aria-label="Back to home"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-line bg-glass-soft text-ink transition-colors hover:border-line-hot hover:text-accent"
-            >
-              <Home className="h-4 w-4" />
-            </Link>
-            <span className="min-h-[1.2em] flex-1 text-[13px] text-muted">{status}</span>
-            <button onClick={() => saveSession(tab)} className={BTN_SOLID}>
-              Save session
-            </button>
-          </div>
+        <div className="mt-1 flex items-center gap-3 rounded-[14px] border border-line bg-panel px-4 py-3">
+          <Link
+            href="/"
+            aria-label="Back to home"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-line bg-glass-soft text-ink transition-colors hover:border-line-hot hover:text-accent"
+          >
+            <Home className="h-4 w-4" />
+          </Link>
+          <span className="min-h-[1.2em] flex-1 text-[13px] text-muted">{status}</span>
+          <button onClick={() => saveSession(tab)} className={BTN_SOLID}>
+            Save session
+          </button>
         </div>
       ) : null}
     </div>
