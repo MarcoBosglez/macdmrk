@@ -55,8 +55,10 @@ export type Dictionary = {
   };
   about: {
     eyebrow: string;
+    greeting: string;
     lead: string;
     leadAccent: string;
+    stackLabel: string;
     stackChips: string[];
     elsewhereCta: string;
     experienceLabel: string;
@@ -64,6 +66,7 @@ export type Dictionary = {
     interests: string;
     quirk: string;
     disclaimer: string;
+    workCta: string;
     note: string;
   };
   contact: {

@@ -10,6 +10,7 @@ import { CursorProvider } from "@/components/providers/cursor-provider";
 import { AuroraField } from "@/components/chrome/aurora-field";
 import { ChromeBar } from "@/components/chrome/chrome-bar";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
+import { PrivateToolsButton } from "@/components/chrome/private-tools-button";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
 import { FloatyField } from "@/components/chrome/floaty-field";
 
@@ -78,6 +79,7 @@ export default function RootLayout({
                     {children}
                   </main>
                   <MobileNavBubbles />
+                  <PrivateToolsButton />
                 </div>
               </CursorProvider>
             </LocaleProvider>

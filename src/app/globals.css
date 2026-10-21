@@ -129,9 +129,18 @@ body {
   transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-a {
-  color: var(--accent);
-  text-decoration: none;
+/* Layered (not plain global CSS) so Tailwind utilities — `text-bg` on a
+   solid-fill button/link, for instance — can actually override this.
+   Cascade layers always lose to unlayered styles regardless of
+   specificity, so an unlayered `a { color }` here would silently beat
+   `.text-bg` even though a class selector normally outranks a bare
+   element one — which is exactly the bug that made some button text
+   invisible (same color as its own background). */
+@layer base {
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
 }
 
 /* ─── The glass recipe ───────────────────────────────────────────────

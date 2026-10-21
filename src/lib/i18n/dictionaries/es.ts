@@ -42,8 +42,10 @@ export const es: Dictionary = {
   },
   about: {
     eyebrow: "sobre mí",
-    lead: "Hola! Soy Ingeniero de Software y Artista Digital Aficionado. Actualmente estoy haciendo mi Maestría en Ciencias de la Computación en Digipen Institute of Technology.",
+    greeting: "Hola, soy Marco.",
+    lead: "Ingeniero de Software y Artista Digital Aficionado, actualmente cursando mi Maestría en Ciencias de la Computación en Digipen Institute of Technology.",
     leadAccent: "Maestría en Ciencias de la Computación",
+    stackLabel: "stack",
     stackChips: ["TypeScript", "Python", "React", "Node", "integración de LLMs"],
     elsewhereCta: "contáctame →",
     experienceLabel: "experiencia",
@@ -51,6 +53,7 @@ export const es: Dictionary = {
     interests: "videojuegos · dibujo · artes marciales mixtas",
     quirk: "// mi color favorito es el verde, por si no se nota",
     disclaimer: "Uso de IA solo de apoyo para generación de código.",
+    workCta: "mira mi trabajo en proyectos →",
     note: "→ mi experiencia y mis redes!",
   },
   contact: {

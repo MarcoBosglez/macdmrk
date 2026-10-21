@@ -21,7 +21,7 @@ export function ViewPane({
           {children}
         </div>
       </div>
-      <div className="flex w-full max-w-[1040px] shrink-0 items-baseline gap-3 rounded-[14px] border border-dashed border-line bg-glass-soft px-3.5 py-2.5 [backdrop-filter:blur(14px)]">
+      <div className="flex w-full max-w-[1040px] shrink-0 items-baseline gap-3 rounded-[14px] border border-line bg-glass-soft px-3.5 py-2.5 [backdrop-filter:blur(14px)]">
         <span className="shrink-0 font-mono text-[10px] text-muted">{note.file}</span>
         <span className="font-mono text-[12px] leading-relaxed text-dim">{note.line}</span>
       </div>

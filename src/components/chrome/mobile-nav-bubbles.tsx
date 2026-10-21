@@ -7,7 +7,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
-import { NAV_ITEMS } from "@/lib/data/nav";
+import { NAV_ITEMS, isMinimalChromePage } from "@/lib/data/nav";
 
 // The mobile nav: a single round button fixed at the bottom-left that
 // pops open a stack of "bubble" links above it. Hidden at md and up,
@@ -18,9 +18,10 @@ export function MobileNavBubbles() {
   const { playClick } = useSound();
   const { t } = useLocale();
 
-  // A project's own page carries its own back link + project switcher
-  // instead — same "no section menu" reduction as ChromeBar there.
-  if (/^\/work\/[^/]+$/.test(pathname)) return null;
+  // Same reduction as ChromeBar: a project's own page carries its own
+  // back link + switcher, and /lift, /meal aren't part of the
+  // section flow at all.
+  if (isMinimalChromePage(pathname)) return null;
 
   function closeAfterNavigating() {
     playClick("nav");

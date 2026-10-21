@@ -9,7 +9,7 @@ import { Moon, Sun, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
-import { NAV_ITEMS } from "@/lib/data/nav";
+import { NAV_ITEMS, isMinimalChromePage } from "@/lib/data/nav";
 
 // How long the logo's "open mouth" honk pose (public/logo-open.svg)
 // stays up after a click before swapping back to the resting mark.
@@ -21,17 +21,9 @@ const CAPSULE =
 // The one bar on top of every view: identity capsule (left), the nav
 // pill group (centre, desktop only), and a status/controls capsule
 // (right — clock, theme, mute, language).
-// A project's own page (/work/<slug>) runs a reduced chrome bar — no
-// section nav — since it already carries its own back link and
-// project switcher; the browser view (/work itself) keeps the normal
-// one.
-function isProjectDetailPage(pathname: string) {
-  return /^\/work\/[^/]+$/.test(pathname);
-}
-
 export function ChromeBar() {
   const pathname = usePathname();
-  const reduced = isProjectDetailPage(pathname);
+  const reduced = isMinimalChromePage(pathname);
   const { muted, toggleMute, playClick } = useSound();
   const { resolvedTheme, setTheme } = useTheme();
   const { locale, setLocale, t } = useLocale();

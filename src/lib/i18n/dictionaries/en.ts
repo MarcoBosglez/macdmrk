@@ -42,8 +42,10 @@ export const en: Dictionary = {
   },
   about: {
     eyebrow: "about",
-    lead: "Hi! I'm a Software Engineer & Hobbyist Digital Artist. Currently pursing my M.S. in Computer Science at Digipen Institute of Technology!",
+    greeting: "Hi, my name is Marco.",
+    lead: "Software Engineer & Hobbyist Digital Artist, currently pursuing my M.S. in Computer Science at Digipen Institute of Technology.",
     leadAccent: "M.S. in Computer Science",
+    stackLabel: "stack",
     stackChips: ["TypeScript", "Python", "React", "Node", "LLM integration"],
     elsewhereCta: "get in touch →",
     experienceLabel: "experience",
@@ -51,6 +53,7 @@ export const en: Dictionary = {
     interests: "videogames · drawing · mixed martial arts",
     quirk: "// my favorite color is green if you can't tell",
     disclaimer: "AI usage only to assist to code generation.",
+    workCta: "check out my project work →",
     note: "→ my experience & socials!",
   },
   contact: {
