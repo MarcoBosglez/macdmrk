@@ -9,6 +9,7 @@ import { LocaleProvider } from "@/components/providers/locale-provider";
 import { CursorProvider } from "@/components/providers/cursor-provider";
 import { AuroraField } from "@/components/chrome/aurora-field";
 import { ChromeBar } from "@/components/chrome/chrome-bar";
+import { MainShell } from "@/components/chrome/main-shell";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
 import { PrivateToolsButton } from "@/components/chrome/private-tools-button";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
@@ -75,9 +76,7 @@ export default function RootLayout({
                   <AuroraField />
                   <FloatyField />
                   <ChromeBar />
-                  <main className="relative z-[2] min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-4 pb-24 md:overflow-hidden md:px-[26px] md:pb-[22px] md:pt-1.5">
-                    {children}
-                  </main>
+                  <MainShell>{children}</MainShell>
                   <MobileNavBubbles />
                   <PrivateToolsButton />
                 </div>

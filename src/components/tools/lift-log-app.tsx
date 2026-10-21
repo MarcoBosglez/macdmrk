@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { Home } from "lucide-react";
 import { ExportImport } from "@/components/tools/export-import";
 import { localStore } from "@/lib/local-store";
 
@@ -114,14 +115,16 @@ const setStr = (x: { w: string; r: string }, from: Unit, unit: Unit) =>
 
 const BTN = "rounded-[10px] border border-line bg-glass-soft px-3 py-1.5 font-mono text-[11px] font-bold text-ink transition-colors hover:border-line-hot hover:text-accent";
 const BTN_SOLID = "rounded-[10px] bg-accent px-4 py-2.5 font-mono text-[13px] font-bold text-bg";
-const CARD = "rounded-[16px] border border-line bg-panel p-4";
+const CARD = "rounded-[16px] border border-line bg-panel p-3 md:p-4";
 const INPUT = "w-full rounded-[8px] border border-line bg-bg px-2.5 py-2 text-center font-mono text-[15px] text-ink outline-none focus:border-line-hot";
 
 // ─── Main component ─────────────────────────────────────────────────
 export function LiftLogApp() {
   const [mounted, setMounted] = useState(false);
   const [tab, setTab] = useState("upperA");
-  const [unit, setUnit] = useState<Unit>("kg");
+  // Weights here are lbs only — no unit switcher. `conv()` still handles
+  // reading any older kg-tagged history correctly.
+  const unit: Unit = "lb";
   const [sessions, setSessions] = useState<Session[]>([]);
   const [checkins, setCheckins] = useState<Checkin[]>([]);
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
@@ -130,7 +133,6 @@ export function LiftLogApp() {
   useEffect(() => {
     const wd = new Date().getDay();
     setTab(localStore.get("lift-tab", WORKOUT_KEYS.find((k) => PLAN[k].day === wd) || "upperA"));
-    setUnit(localStore.get<Unit>("lift-unit", "kg"));
     setSessions(localStore.get("lift-sessions", []));
     setCheckins(localStore.get("lift-checkins", []));
     setDrafts(localStore.get("lift-draft", {}));
@@ -173,24 +175,6 @@ export function LiftLogApp() {
 
   function updateDraft(w: string, updater: (d: Draft) => Draft) {
     setDrafts((prev) => ({ ...prev, [w]: updater(prev[w] || getDraft(w)) }));
-  }
-
-  function switchUnit(to: Unit) {
-    if (to === unit) return;
-    setDrafts((prev) => {
-      const next: Record<string, Draft> = {};
-      for (const [w, d] of Object.entries(prev)) {
-        const from = d.unit || "kg";
-        const entries: Record<string, SetEntry[]> = {};
-        for (const [k, arr] of Object.entries(d.entries)) {
-          entries[k] = arr.map((x) => ({ ...x, w: conv(x.w, from, to) }));
-        }
-        next[w] = { ...d, unit: to, entries };
-      }
-      return next;
-    });
-    setUnit(to);
-    localStore.set("lift-unit", to);
   }
 
   async function saveSession(w: string) {
@@ -261,35 +245,18 @@ export function LiftLogApp() {
   const wd = new Date().getDay();
 
   return (
-    <div className="flex h-full flex-col gap-3 overflow-y-auto p-4 pb-28 md:p-6 md:pb-28">
-      <div className="flex flex-wrap items-baseline justify-between gap-3">
+    <div className="flex h-full flex-col gap-3 overflow-y-auto px-2.5 py-4 pb-20 md:p-6 md:pb-28">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">~/ lift.log</h1>
           <p className="mt-1 text-[13px] text-dim">Saved on this device only.</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Link href="/meal" className={BTN}>
-            meal log →
-          </Link>
-          <div className="flex overflow-hidden rounded-[10px] border border-line">
-            {(["kg", "lb"] as Unit[]).map((u) => (
-              <button
-                key={u}
-                onClick={() => switchUnit(u)}
-                className="px-3 py-1.5 font-mono text-[12px] font-bold transition-colors"
-                style={{
-                  background: unit === u ? "var(--accent)" : "transparent",
-                  color: unit === u ? "var(--bg)" : "var(--muted)",
-                }}
-              >
-                {u}
-              </button>
-            ))}
-          </div>
-        </div>
+        <Link href="/meal" className={BTN}>
+          meal log →
+        </Link>
       </div>
 
-      <nav className="sticky top-0 z-[2] -mx-4 flex shrink-0 gap-1.5 overflow-x-auto px-4 py-2 md:mx-0 md:px-0">
+      <nav className="sticky top-0 z-[2] -mx-2.5 flex shrink-0 gap-1.5 overflow-x-auto bg-[rgba(4,10,8,0.94)] px-2.5 py-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden">
         {TABS.map((t) => {
           const label = PLAN[t] ? PLAN[t].name : TAB_LABEL[t];
           const isToday = PLAN[t] && PLAN[t].day === wd;
@@ -329,8 +296,15 @@ export function LiftLogApp() {
       )}
 
       {PLAN[tab] ? (
-        <div className="fixed inset-x-0 bottom-0 z-[6] border-t border-line bg-panel px-4 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom,0px))] md:px-6">
+        <div className="fixed inset-x-0 bottom-0 z-[6] border-t border-line bg-[rgba(4,10,8,0.94)] px-4 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom,0px))] md:px-6">
           <div className="mx-auto flex max-w-[720px] items-center gap-3">
+            <Link
+              href="/"
+              aria-label="Back to home"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-line bg-glass-soft text-ink transition-colors hover:border-line-hot hover:text-accent"
+            >
+              <Home className="h-4 w-4" />
+            </Link>
             <span className="min-h-[1.2em] flex-1 text-[13px] text-muted">{status}</span>
             <button onClick={() => saveSession(tab)} className={BTN_SOLID}>
               Save session
@@ -644,7 +618,7 @@ function BodyView({
             </table>
           </div>
         ) : (
-          <p className="text-[13.5px] text-dim">No check-ins yet. Goal for Phase 1: about +0.25–0.5 kg per month toward ~73 kg.</p>
+          <p className="text-[13.5px] text-dim">No check-ins yet. Goal for Phase 1: about +0.5–1 lb per month toward ~161 lb.</p>
         )}
       </div>
 
@@ -683,7 +657,7 @@ function PlanView() {
     <div className="flex flex-col gap-3">
       <div>
         <h2 className="font-sans text-[22px] font-bold tracking-tight text-ink">The plan</h2>
-        <p className="text-[12.5px] text-muted">Phase 1: lean gain 70–71 → ~73 kg over 4–6 months. Phase 2 (optional): 6–8 week lean-out.</p>
+        <p className="text-[12.5px] text-muted">Phase 1: lean gain 154–157 → ~161 lb over 4–6 months. Phase 2 (optional): 6–8 week lean-out.</p>
       </div>
 
       <div className={CARD}>
@@ -715,9 +689,9 @@ function PlanView() {
         <SimpleTable
           head={["What you see", "What to do"]}
           rows={[
-            ["Weight flat or under 0.25 kg/month", "Add 50 g rice to lunch and dinner"],
-            ["Up 0.25–0.5 kg/month, waist steady", "Change nothing"],
-            ["Over 0.5 kg/month, waist growing", "Remove 50 g rice from dinner"],
+            ["Weight flat or under 0.5 lb/month", "Add 50 g rice to lunch and dinner"],
+            ["Up 0.5–1 lb/month, waist steady", "Change nothing"],
+            ["Over 1 lb/month, waist growing", "Remove 50 g rice from dinner"],
           ]}
         />
       </div>
@@ -727,11 +701,11 @@ function PlanView() {
         <ol className="list-decimal space-y-1.5 pl-5 text-[13.5px] text-dim">
           <li>Use a weight that lands you at the bottom of the rep range.</li>
           <li>Add reps each session until you hit the top of the range on all sets.</li>
-          <li>Then add the smallest jump (+2.5 kg / 5 lb on a barbell, next dumbbell, small plate on machines) and start at the bottom again.</li>
+          <li>Then add the smallest jump (+5 lb on a barbell, next dumbbell, small plate on machines) and start at the bottom again.</li>
           <li>Every 6–8 weeks, take an easy week with half the sets.</li>
         </ol>
         <p className="mt-2 text-[13px] text-muted">
-          Example: bench 3 × 6–8 at 50 kg → 8/7/6 → 8/8/7 → 8/8/8 → next session 52.5 kg.
+          Example: bench 3 × 6–8 at 110 lb → 8/7/6 → 8/8/7 → 8/8/8 → next session 115 lb.
         </p>
       </div>
 

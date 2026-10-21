@@ -24,6 +24,10 @@ const CAPSULE =
 export function ChromeBar() {
   const pathname = usePathname();
   const reduced = isMinimalChromePage(pathname);
+  // /lift is tight on mobile vertical space — the logo and status
+  // capsule just eat room there and have nowhere useful to go, so the
+  // whole bar is dropped below md; desktop keeps it as-is.
+  const hiddenOnMobile = pathname === "/lift";
   const { muted, toggleMute, playClick } = useSound();
   const { resolvedTheme, setTheme } = useTheme();
   const { locale, setLocale, t } = useLocale();
@@ -60,7 +64,7 @@ export function ChromeBar() {
   return (
     <div
       id="site-chrome-bar"
-      className="relative z-[5] flex shrink-0 flex-nowrap items-center justify-between gap-2 px-3 py-2.5 sm:flex-wrap sm:gap-3 sm:px-4 sm:py-3 md:px-[26px] md:py-4"
+      className={`relative z-[5] ${hiddenOnMobile ? "hidden md:flex" : "flex"} shrink-0 flex-nowrap items-center justify-between gap-2 px-3 py-2.5 sm:flex-wrap sm:gap-3 sm:px-4 sm:py-3 md:px-[26px] md:py-4`}
     >
       {/* Left — identity. Simple squash on press. */}
       <Link
