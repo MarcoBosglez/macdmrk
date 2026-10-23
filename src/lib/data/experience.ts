@@ -11,42 +11,42 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     period: { en: "2026 — 2027", es: "2026 — 2027" },
     role: {
-      en: "M.S. Computer Science",
-      es: "Maestría en Computación",
+      en: "M.S. Computer Science, AI Specialization",
+      es: "Maestría en Computación, especialización en IA",
     },
     company: "DigiPen Institute of Technology",
   },
   {
-    period: { en: "2024 — 2026", es: "2024 — 2026" },
-    role: { en: "Backend Developer", es: "Desarrollador Backend" },
-    company: "BBVA México · Capgemini",
+    period: { en: "Apr 2024 — May 2026", es: "abr 2024 — may 2026" },
+    role: { en: "Back-End Developer", es: "Desarrollador Back-End" },
+    company: "Capgemini",
     detail: {
-      en: "Backend developer on the cross-functional team that integrated Blue, BBVA's AI assistant, into the bank's large-scale systems — building and maintaining the APIs and services connecting the LLMs, frontend, and databases. Staffed on-site with BBVA México through Capgemini.",
-      es: "Desarrollador backend en el equipo multidisciplinario que integró Blue, el asistente de IA de BBVA, en los sistemas a gran escala del banco — construyendo y manteniendo las APIs y servicios que conectan los LLMs, el frontend y las bases de datos. Asignado en sitio con BBVA México a través de Capgemini.",
+      en: "Collaborated on a cross-functional team integrating Blue, BBVA's AI assistant, into the bank's large-scale production banking systems. Designed and shipped REST APIs and backend services connecting LLMs, frontend, and databases, ramping up independently on an unfamiliar, high-stakes codebase. Partnered with frontend, data, and ML engineers through code review and Agile ceremonies, and authored technical documentation that shortened ramp-up time for new teammates.",
+      es: "Colaboré en un equipo multidisciplinario que integró Blue, el asistente de IA de BBVA, en los sistemas bancarios de producción a gran escala del banco. Diseñé y entregué APIs REST y servicios backend que conectan LLMs, frontend y bases de datos, adaptándome de forma independiente a un código base desconocido y de alto impacto. Colaboré con ingenieros de frontend, datos y ML mediante revisión de código y ceremonias Agile, y redacté documentación técnica que redujo el tiempo de incorporación de nuevos compañeros.",
     },
   },
   {
     period: { en: "2022 — 2024", es: "2022 — 2024" },
-    role: { en: "Parse Engineer", es: "Ingeniero Parse" },
+    role: { en: "Back-End Intern", es: "Becario Back-End" },
     company: "Scale AI",
     detail: {
-      en: "Built web-scraping systems that pulled product data from e-commerce sites to train machine-learning models — robust Node.js, Puppeteer and TypeScript scripts and automated workflows for reliable extraction across websites, APIs, and other online sources.",
-      es: "Construí sistemas de web scraping que extraían datos de productos de sitios de e-commerce para entrenar modelos de machine learning — scripts y flujos automatizados en Node.js, Puppeteer y TypeScript para una extracción confiable desde sitios web, APIs y otros repositorios en línea.",
+      en: "Built TypeScript + Node.js services for large-scale web data collection and automation. Redesigned core workflows for scalability and reliability, cutting processing errors and turnaround time, and built a habit of collaborative code review.",
+      es: "Construí servicios en TypeScript + Node.js para la recolección y automatización de datos web a gran escala. Rediseñé flujos de trabajo clave para mejorar escalabilidad y fiabilidad, reduciendo errores de procesamiento y tiempos de entrega, y desarrollé el hábito de la revisión de código colaborativa.",
     },
   },
   {
-    period: { en: "2022", es: "2022" },
-    role: { en: "Intern", es: "Becario" },
+    period: { en: "Aug 2022", es: "ago 2022" },
+    role: { en: "Full-Stack Intern, First Author", es: "Becario Full-Stack, Primer Autor" },
     company: "NDS Cognitive Labs",
     detail: {
-      en: "Built a ReactJS web app for dynamic document search, and worked with the front-end team on the \"Virtual Assistant Management Platform\" — a tool for re-training chatbots.",
-      es: "Desarrollé una aplicación web en ReactJS para búsqueda dinámica de documentos, y colaboré con el equipo de front-end en la \"Plataforma de Gestión de Asistentes Virtuales\", una herramienta para reentrenar chatbots.",
+      en: "Co-authored a journal publication about dynamic search for AI chatbot retraining. Built a ReactJS web app for dynamic document search, and integrated MongoDB and IBM Watson APIs to improve chatbot retraining and UX.",
+      es: "Coautor de una publicación académica sobre búsqueda dinámica para el reentrenamiento de chatbots con IA. Desarrollé una aplicación web en ReactJS para búsqueda dinámica de documentos, e integré las APIs de MongoDB e IBM Watson para mejorar el reentrenamiento y la experiencia del chatbot.",
     },
   },
   {
-    period: { en: "2018 — 2022", es: "2018 — 2022" },
+    period: { en: "2018 — 2023", es: "2018 — 2023" },
     role: {
-      en: "B.S. Computer Science",
+      en: "B.S. Computer Engineering",
       es: "Ing. en Sistemas Computacionales",
     },
     company: "Tecnológico de Monterrey, CCM",
