@@ -45,6 +45,48 @@ export type Dictionary = {
     learnMore: string;
     backToWork: string;
     note: string;
+    // TODO: these are new (project-work revamp from advisor feedback) —
+    // double check the wording reads well once real content is in.
+    contributionsLabel: string;
+    challengesLabel: string;
+    processLabel: string;
+    filterAll: string;
+    kindFeatured: string;
+    kindPersonal: string;
+    kindAcademic: string;
+    kindProfessional: string;
+    processTodo: string;
+    challengesToggle: string;
+    // TODO: "design D" case-study adaptation — new labels for the
+    // richer /work/<slug> layout (meta grid, stack table, diagram).
+    tldrLabel: string;
+    backstoryLabel: string;
+    timelineLabel: string;
+    teamLabel: string;
+    statusLabel: string;
+    stackLabel: string;
+    themeLabel: string;
+    inputLabel: string;
+    coreLabel: string;
+    outputLabel: string;
+    beforeLabel: string;
+    goalLabel: string;
+    fixLabel: string;
+    allProjects: string;
+    tocLabel: string;
+    cmdLabel: string;
+    typeLabel: string;
+    usageLabel: string;
+    // TODO: "design I" /work homepage-grid adaptation (featured row +
+    // filtered, paginated grid) — double check wording once more
+    // projects are added and pagination actually kicks in.
+    allWorkLabel: string;
+    projectsSuffix: string;
+    rangeOf: string;
+    noProjectsYet: string;
+    prevPageLabel: string;
+    nextPageLabel: string;
+    pageLabel: string;
   };
   gallery: {
     eyebrow: string;

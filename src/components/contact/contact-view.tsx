@@ -86,7 +86,7 @@ export function ContactView() {
   const clock = useClock();
 
   return (
-    <ViewPane note={{ file: "contact.txt", line: t.contact.note }}>
+    <ViewPane>
       <div className="grid w-full max-w-[1000px] items-stretch gap-3.5 md:grid-cols-2">
         {/* Left — intro + mailto button + meta row */}
         <div className="flex flex-col gap-4 rounded-[22px] border border-line bg-glass p-6 [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]">

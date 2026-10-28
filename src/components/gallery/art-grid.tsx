@@ -203,7 +203,7 @@ export function ArtGrid({ illustrations }: { illustrations: Illustration[] }) {
   }
 
   return (
-    <ViewPane center={false} note={{ file: "mediums.txt", line: t.gallery.note }}>
+    <ViewPane center={false}>
       <div className="flex w-full max-w-[1040px] flex-1 flex-col gap-3 md:min-h-0">
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2">
           <div className="flex items-baseline gap-3">

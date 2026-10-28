@@ -36,7 +36,7 @@ export function AboutContent() {
   const [before, after] = t.about.lead.split(t.about.leadAccent);
 
   return (
-    <ViewPane note={{ file: "readme.md", line: t.about.note }}>
+    <ViewPane>
       <div className="grid w-full max-w-[1000px] items-stretch gap-3.5 md:grid-cols-2">
         {/* Left — the person */}
         <div className={CARD}>

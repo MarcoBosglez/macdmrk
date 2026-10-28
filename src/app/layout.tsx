@@ -13,7 +13,6 @@ import { MainShell } from "@/components/chrome/main-shell";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
 import { PrivateToolsButton } from "@/components/chrome/private-tools-button";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
-import { FloatyField } from "@/components/chrome/floaty-field";
 
 // Archivo as a variable font (wdth + wght axes live) — the kinetic type
 // animates font-variation-settings, not size. JetBrains Mono is the
@@ -74,7 +73,6 @@ export default function RootLayout({
               <CursorProvider>
                 <div className="relative flex h-dvh w-screen flex-col overflow-hidden">
                   <AuroraField />
-                  <FloatyField />
                   <ChromeBar />
                   <MainShell>{children}</MainShell>
                   <MobileNavBubbles />
