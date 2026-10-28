@@ -292,9 +292,8 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
 
               {project.backstory ? (
                 <p className="text-[12px] leading-relaxed text-dim">
-                  <span className="text-muted">{`// ${t.work.backstoryLabel}:</span>${" "}`}
+                  <span className="text-muted">{`// {t.work.backstoryLabel}`}:</span>{" "} 
                   {localize(project.backstory, locale)}
-                  
                 </p>
               ) : null}
 
