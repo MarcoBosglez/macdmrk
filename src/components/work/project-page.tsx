@@ -254,7 +254,7 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
               <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
                 <div className="flex min-w-0 flex-1 flex-col gap-2.5">
                   <span className="text-[11px] tracking-[0.08em]" style={{ color: AMBER }}>
-                    // {project.slug} · {project.years}
+                    {`// ${project.slug} · ${project.years}`}
                   </span>
                   <h1
                     className="uppercase text-accent"
@@ -292,8 +292,9 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
 
               {project.backstory ? (
                 <p className="text-[12px] leading-relaxed text-dim">
-                  <span className="text-muted">// {t.work.backstoryLabel}:</span>{" "}
+                  <span className="text-muted">{`// ${t.work.backstoryLabel}:</span>${" "}`}
                   {localize(project.backstory, locale)}
+                  
                 </p>
               ) : null}
 
