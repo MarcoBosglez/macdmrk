@@ -15,6 +15,10 @@ import type { Localized } from "@/lib/i18n/dictionaries";
 //   metric — the TODOs below are scaffolding so the page has something
 //   to render; swap them out rather than leaving "TODO" text live.
 
+// TODO, make projects customizable so some of the content can be hidden
+// Might be good to add a few reaction icons while explaining the projects, could be fun to add ascii characters like <3
+// Fix \n new lines and add hyperlinks to links like https://www.youtube.com/@shar
+
 export type ProjectCategory = "personal" | "academic" | "professional";
 export type StackKind = "lang" | "lib" | "tool";
 
@@ -118,16 +122,13 @@ export const PROJECTS: Project[] = [
       en: "An interactive personal platform built to show both my Computer Science background and my digital art in one place.",
       es: "Una plataforma personal interactiva, hecha para mostrar mi carrera de Ciencias de la Computación y mi arte digital en un mismo lugar.",
     },
-    tldr: {
-      en: "A hand-built, bilingual portfolio with a glass/aurora visual language, a draggable illustration gallery, and two private React tools (a lift and meal log) layered on top — designed, illustrated and engineered solo.",
-      es: "Un portafolio bilingüe hecho a mano, con un lenguaje visual de vidrio/aurora, una galería de ilustraciones arrastrable, y dos herramientas privadas en React (un registro de pesas y de comidas) construidas encima — diseñado, ilustrado y programado en solitario.",
-    },
-    // TODO: write the real backstory — when this started, what the very
-    // first version looked like, and a couple of the fun/weird moments
-    // from building it.
     backstory: {
       en: "TODO — the real story: when I started this, what the very first version looked like, why a hand-made site instead of a template, a couple of fun/weird moments along the way.",
       es: "TODO — la historia real: cuándo empecé esto, cómo se veía la primera versión, por qué un sitio hecho a mano en vez de una plantilla, un par de momentos divertidos/raros en el camino.",
+    },
+    tldr: {
+      en: "A hand-built, bilingual portfolio with a glass/aurora visual language, a draggable illustration gallery, and two private React tools (a lift and meal log) layered on top — designed, illustrated and engineered solo.",
+      es: "Un portafolio bilingüe hecho a mano, con un lenguaje visual de vidrio/aurora, una galería de ilustraciones arrastrable, y dos herramientas privadas en React (un registro de pesas y de comidas) construidas encima — diseñado, ilustrado y programado en solitario.",
     },
     role: { en: "designer + developer", es: "diseñador + desarrollador" },
     timeline: { en: "Jul 2024 — now", es: "jul 2024 — ahora" },
@@ -142,72 +143,69 @@ export const PROJECTS: Project[] = [
     ],
     why: {
       problem: {
-        en: "A resume and a GitHub link don't show how I think visually, and a template site doesn't show how I engineer.",
-        es: "Un currículum y un enlace a GitHub no muestran cómo pienso visualmente, y una plantilla no muestra cómo construyo software.",
+        en: "I started my web portfolio back in 2020 while I was doing my undergrad in Mexico City. For a while I have been looking for a way to express myself as a software engineer and digital artist. My career is in tech but I've always appreciated and had love for art. Showcasing a profile like that is tricky as it requires I balance both my professional journey and my main hobby.",
+        es: "",
       },
-      before: { en: "scattered links, no single story", es: "enlaces dispersos, sin una historia unificada" },
-      goal: { en: "one link for the engineering and the art", es: "un solo enlace para la ingeniería y el arte" },
+      before: { en: "", es: "" },
+      goal: { en: "creating a web hub that and represented my personality", es: "" },
     },
+    // contributions could go at the very beginning or at the very last
     contributions: {
       summary: {
         en: "Sole designer, illustrator and developer — owned the project end to end, from the visual language to deployment.",
-        es: "Único diseñador, ilustrador y desarrollador — a cargo del proyecto de punta a punta, desde el lenguaje visual hasta el despliegue.",
+        es: ".",
       },
       done: {
         en: [
           "Designed the whole visual language and drew every illustration",
           "Built the site on Next.js with bilingual copy and a theme switch",
           "Wrote the draggable gallery windows and synthesized UI sounds",
-          "Wrote every line of bilingual copy (EN/ES) myself",
         ],
         es: [
-          "Diseñé todo el lenguaje visual y dibujé cada ilustración",
-          "Construí el sitio en Next.js con copy bilingüe y cambio de tema",
-          "Programé las ventanas arrastrables de la galería y los sonidos de UI",
-          "Escribí cada línea de copy bilingüe (EN/ES) yo mismo",
+          "",
         ],
       },
     },
     how: {
       summary: {
-        en: "A static Next.js App Router site: a shared aurora/glass shell renders every route, with a small i18n layer and a sound/haptics provider wired through context.",
-        es: "Un sitio estático con Next.js App Router: un shell compartido de aurora/vidrio renderiza cada ruta, con una capa de i18n y un proveedor de sonido/haptics conectado vía contexto.",
+        en: "I wanted to make something where I was familiar with the tools and I had already worked with React.js, so the move to Next.js was a natural progression.",
+        es: ".",
       },
       diagram: {
-        input: { en: "bilingual content (en/es)", es: "contenido bilingüe (en/es)" },
-        core: { en: "Next.js App Router + Tailwind", es: "Next.js App Router + Tailwind" },
-        output: { en: "static, themeable site", es: "sitio estático y con temas" },
+        input: { en: "content", es: "" },
+        core: { en: "Next.js App Router + Tailwind", es: "" },
+        output: { en: "fun site", es: "" },
       },
     },
     process: [
       {
-        title: { en: "Earliest sketch", es: "Primer boceto" },
+        title: { en: "Early version", es: "" },
         body: {
-          en: "TODO — write what the very first layout idea looked like before any code existed.",
-          es: "TODO — escribir cómo era la primera idea de layout antes de que existiera código.",
+          en: "My very first try in 2020 was a HTML+CSS static website with very few features/animations. The main goal was to copy the content from my resume and put it in a web format. Back then I had very few work experience in Full Stack development, so the site was very simple and static.",
+          es: ".",
         },
         image: { alt: { en: "earliest wireframe / sketch of the layout", es: "primer wireframe / boceto del layout" } },
       },
       {
-        title: { en: "First working version", es: "Primera versión funcional" },
+        title: { en: "Inspiration to Modern Design", es: "" },
         body: {
-          en: "TODO — write what shipped first, before the glass/aurora theme existed.",
-          es: "TODO — escribir qué se lanzó primero, antes de que existiera el tema glass/aurora.",
+          en: "In 2025 while I was working at Capgemini/BBVA, I started to explore the idea of redisigning the portfolio with a more modern look and feel. \nThe inspiration came mostly from a youtube video by @shar (https://www.youtube.com/@shar) where she went into detail about how she designed her portfolio and the design decisions she made. I particularly liked the presentation card design that she went into.",
+          es: "",
         },
         image: { alt: { en: "first working version, before the glass/aurora theme", es: "primera versión funcional, antes del tema glass/aurora" } },
       },
       {
-        title: { en: "Glass/aurora redesign", es: "Rediseño glass/aurora" },
+        title: { en: "Redesign Process", es: "" },
         body: {
-          en: "TODO — write about the redesign into the current visual language.",
-          es: "TODO — escribir sobre el rediseño hacia el lenguaje visual actual.",
+          en: "With the core idea, I started gathering inspiration from multiple portfolio websites with similar designs and created a mood board highlighting the main designs that interested me the most. With the visual direction in  mind, I also thought of listing the main features I wanted to implement and what I wanted the website to look like and work like. \n Here are some of the bullets: \n - 5 sections (hub, work, about, illustrations, contact) \n - Dark/Light modes \n - Draggable gallery windows \n - Custom UI sounds \n - Responsive design \n - Bilingual design (the inspiration for this came from LinkedIn's multi-lingual profile designs) \n - Scrollless (back when I was working with the current version, my mouse's scroll wheel broke and I had to use my keyboard to navigate!) \n - Intuitive and clean design without overloading the user with a lot of information \n - Dark green palette \n - Glass card design \n - Custom 404 page",
+          es: "",
         },
       },
       {
         title: { en: "Current state", es: "Estado actual" },
         body: {
-          en: "Still actively iterating — most recently reworked the project-work case-study pages you're reading right now.",
-          es: "Sigue en iteración activa — lo más reciente fue rehacer estas páginas de caso de proyecto que estás leyendo ahora mismo.",
+          en: "Still actively adding ideas on the fly! I have a ton of creative ideas I still want to implement. My goal now is to not be shy o adding silly and fun ideas that I want to experiment with (maybe in their own section)",
+          es: ".",
         },
         image: { alt: { en: "current state", es: "estado actual" } },
       },
