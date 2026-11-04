@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
@@ -8,7 +9,8 @@ import { useSound } from "@/components/providers/sound-provider";
 import { localize, type Locale } from "@/lib/i18n/dictionaries";
 import { isGithubUrl } from "@/components/work/work-view";
 import { GhIcon } from "@/components/chrome/link-icons";
-import type { Project, Figure, StackItem, StackKind } from "@/lib/data/projects";
+import { InlineText, RichText } from "@/components/work/rich-text";
+import type { Project, ProjectBlock, ProjectSection, Figure, StackItem, StackKind } from "@/lib/data/projects";
 
 // Small candy-colour accents borrowed from the client's "design D"
 // case-study reference — kept as literal hex (like the site's existing
@@ -182,7 +184,20 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
   const prev = projects[index - 1];
   const next = projects[index + 1];
 
-  const TOC = [
+  const steps = project.process.filter((step) => !step.hidden);
+  const challenges = project.challenges.filter((c) => !c.hidden);
+  const metrics = project.outcome.metrics.filter((m) => !m.hidden);
+  const before = localize(project.why.before, locale);
+  const goal = localize(project.why.goal, locale);
+
+  const hidden = new Set<ProjectBlock>(project.hide);
+  if (!steps.length) hidden.add("process");
+  if (!challenges.length) hidden.add("challenges");
+  const show = (block: ProjectBlock) => !hidden.has(block);
+
+  // Default page order. A project's `sectionOrder` goes first, and
+  // anything it doesn't mention follows in this order.
+  const allSections: { id: ProjectSection; label: string }[] = [
     { id: "tldr", label: t.work.tldrLabel },
     { id: "why", label: t.work.whyLabel },
     { id: "role", label: t.work.contributionsLabel },
@@ -191,6 +206,177 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
     { id: "challenges", label: t.work.challengesLabel },
     { id: "outcome", label: t.work.outcomeLabel },
   ];
+  const orderedIds = new Set([...(project.sectionOrder ?? []), ...allSections.map((s) => s.id)]);
+  const TOC = Array.from(orderedIds)
+    .filter(show)
+    .map((id) => allSections.find((s) => s.id === id)!);
+  // Numbered from what's left, so hiding or moving a section leaves no gap.
+  const sectionNum = (id: ProjectSection) =>
+    String(TOC.findIndex((s) => s.id === id) + 1).padStart(2, "0");
+
+  const sections: Record<ProjectSection, React.ReactNode> = {
+    tldr: (
+      <section id="tldr" className="flex scroll-mt-4 flex-col gap-2.5">
+        <SectionHeading num={sectionNum("tldr")}>{t.work.tldrLabel}</SectionHeading>
+        <RichText
+          className="rounded-[8px] border border-line-soft bg-glass-soft px-4 py-3 text-[13px] leading-relaxed text-ink"
+          text={localize(project.tldr, locale)}
+        />
+      </section>
+    ),
+
+    why: (
+      <section id="why" className="flex scroll-mt-4 flex-col gap-2.5">
+        <SectionHeading num={sectionNum("why")}>{t.work.whyLabel}</SectionHeading>
+        <RichText className="text-[13px] leading-relaxed text-dim" text={localize(project.why.problem, locale)} />
+        {before || goal ? (
+          <div className="overflow-hidden rounded-[8px] border border-line-soft text-[12.5px]">
+            {before ? (
+              <div className="px-3.5 py-2" style={{ background: RED_BG, color: RED }}>
+                − {t.work.beforeLabel}: <InlineText text={before} />
+              </div>
+            ) : null}
+            {goal ? (
+              <div className="px-3.5 py-2" style={{ background: GREEN_BG, color: "var(--accent)" }}>
+                + {t.work.goalLabel}: <InlineText text={goal} />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </section>
+    ),
+
+    role: (
+      <section id="role" className="flex scroll-mt-4 flex-col gap-2.5">
+        <SectionHeading num={sectionNum("role")}>{t.work.contributionsLabel}</SectionHeading>
+        <RichText
+          className="text-[13px] leading-relaxed text-dim"
+          text={localize(project.contributions.summary, locale)}
+        />
+        <ul className="flex flex-col gap-1.5">
+          {project.contributions.done[locale].map((line) => (
+            <li key={line} className="flex gap-3 text-[13px] text-ink">
+              <span className="shrink-0 text-accent">[x]</span>
+              <span>
+                <InlineText text={line} />
+              </span>
+            </li>
+          ))}
+          {project.contributions.others?.[locale].map((line) => (
+            <li key={line} className="flex gap-3 text-[13px] text-muted">
+              <span className="shrink-0">[ ]</span>
+              <span>
+                <InlineText text={line} />
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ),
+
+    how: (
+      <section id="how" className="flex scroll-mt-4 flex-col gap-3">
+        <SectionHeading num={sectionNum("how")}>{t.work.whatIDid}</SectionHeading>
+        <RichText className="text-[13px] leading-relaxed text-dim" text={localize(project.how.summary, locale)} />
+        <div className="flex flex-wrap items-stretch gap-2 rounded-[8px] border border-line-soft bg-glass-soft p-4">
+          {(
+            [
+              { label: t.work.inputLabel, value: project.how.diagram.input },
+              { label: t.work.coreLabel, value: project.how.diagram.core },
+              { label: t.work.outputLabel, value: project.how.diagram.output },
+            ] satisfies { label: string; value: Project["title"] }[]
+          ).map((node, i, arr) => (
+            <div key={node.label} className="flex flex-1 items-center gap-2" style={{ minWidth: 140 }}>
+              <div className="flex-1 rounded-[6px] border border-line px-3 py-2 text-center">
+                <div className="text-[10px] text-muted">{node.label}</div>
+                <div className="mt-0.5 text-[12px] text-ink">{localize(node.value, locale)}</div>
+              </div>
+              {i < arr.length - 1 ? <span className="shrink-0 text-muted">──▶</span> : null}
+            </div>
+          ))}
+        </div>
+      </section>
+    ),
+
+    process: (
+      <section id="process" className="flex scroll-mt-4 flex-col gap-2.5">
+        <SectionHeading num={sectionNum("process")}>{t.work.processLabel}</SectionHeading>
+        <ol className="flex flex-col">
+          {steps.map((step, i) => (
+            <li key={i} className="flex gap-4 border-t border-dashed border-line-soft py-3.5 first:border-t-0">
+              <span className="w-[32px] shrink-0 text-[18px] font-bold" style={{ color: AMBER }}>
+                {String(i).padStart(2, "0")}
+              </span>
+              <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                <h3 className="text-[13px] font-semibold text-ink">{localize(step.title, locale)}</h3>
+                <RichText className="text-[12.5px] leading-relaxed text-dim" text={localize(step.body, locale)} />
+                {step.image ? (
+                  <div className="max-w-[320px]">
+                    <FigureBox figure={step.image} locale={locale} ratio="16 / 9" sizes="320px" />
+                  </div>
+                ) : null}
+                {step.beforeAfter ? (
+                  <div className="grid max-w-[460px] grid-cols-2 gap-2.5">
+                    <FigureBox figure={step.beforeAfter.before} locale={locale} ratio="4 / 3" sizes="220px" />
+                    <FigureBox figure={step.beforeAfter.after} locale={locale} ratio="4 / 3" sizes="220px" />
+                  </div>
+                ) : null}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ),
+
+    challenges: (
+      <section id="challenges" className="flex scroll-mt-4 flex-col gap-2.5">
+        <SectionHeading num={sectionNum("challenges")}>{t.work.challengesLabel}</SectionHeading>
+        <div className="flex flex-col gap-2.5">
+          {challenges.map((c, i) => (
+            <div key={i} className="overflow-hidden rounded-[8px] border border-line-soft">
+              <div
+                className="px-3.5 py-2 text-[12.5px]"
+                style={{
+                  background: c.level === "error" ? RED_BG : AMBER_BG,
+                  color: c.level === "error" ? RED : AMBER,
+                }}
+              >
+                {c.level === "error" ? "✗ " : "⚠ "}
+                <InlineText text={localize(c.problem, locale)} />
+              </div>
+              <RichText
+                className="px-3.5 py-2.5 text-[12.5px] leading-relaxed text-ink"
+                text={localize(c.fix, locale)}
+                lead={<span className="font-bold text-accent">✓ {t.work.fixLabel}: </span>}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    ),
+
+    outcome: (
+      <section id="outcome" className="flex scroll-mt-4 flex-col gap-3">
+        <SectionHeading num={sectionNum("outcome")}>{t.work.outcomeLabel}</SectionHeading>
+        {metrics.length ? (
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+            {metrics.map((m, i) => (
+              <div key={i} className="rounded-[8px] border border-line-soft px-3.5 py-3">
+                <div className="text-[22px] font-bold text-accent">{m.value}</div>
+                <div className="text-[11px] text-muted">{localize(m.label, locale)}</div>
+              </div>
+            ))}
+          </div>
+        ) : null}
+        <RichText className="text-[13px] leading-relaxed text-ink" text={localize(project.outcome.summary, locale)} />
+        {project.outcome.figure ? (
+          <div className="max-w-[420px]">
+            <FigureBox figure={project.outcome.figure} locale={locale} ratio="16 / 9" />
+          </div>
+        ) : null}
+      </section>
+    ),
+  };
 
   return (
     <div className="flex h-full min-h-0 flex-col items-center overflow-y-auto p-4 font-mono md:overflow-hidden md:p-8">
@@ -290,39 +476,44 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
                 ) : null}
               </div>
 
-              {project.backstory ? (
-                <p className="text-[12px] leading-relaxed text-dim">
-                  <span className="text-muted">{`// {t.work.backstoryLabel}`}:</span>{" "} 
-                  {localize(project.backstory, locale)}
-                </p>
+              {project.backstory && show("backstory") ? (
+                <RichText
+                  className="text-[12px] leading-relaxed text-dim"
+                  text={localize(project.backstory, locale)}
+                  lead={<span className="text-muted">{`// ${t.work.backstoryLabel}: `}</span>}
+                />
               ) : null}
 
-              <div className="grid grid-cols-2 divide-y divide-dashed divide-line-soft rounded-[8px] border border-dashed border-line-soft sm:grid-cols-4 sm:divide-x sm:divide-y-0">
-                <MetaCell label={t.work.roleLabel} color={AMBER}>
-                  {localize(project.role, locale)}
-                </MetaCell>
-                <MetaCell label={t.work.timelineLabel} color={BLUE}>
-                  {localize(project.timeline, locale)}
-                </MetaCell>
-                <MetaCell label={t.work.teamLabel} color={PURPLE}>
-                  {localize(project.team, locale)}
-                </MetaCell>
-                <MetaCell label={t.work.statusLabel} color="var(--accent)">
-                  <span style={{ color: "var(--accent)" }}>●</span> {localize(project.status, locale)}
-                </MetaCell>
-              </div>
+              {show("meta") ? (
+                <div className="grid grid-cols-2 divide-y divide-dashed divide-line-soft rounded-[8px] border border-dashed border-line-soft sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+                  <MetaCell label={t.work.roleLabel} color={AMBER}>
+                    {localize(project.role, locale)}
+                  </MetaCell>
+                  <MetaCell label={t.work.timelineLabel} color={BLUE}>
+                    {localize(project.timeline, locale)}
+                  </MetaCell>
+                  <MetaCell label={t.work.teamLabel} color={PURPLE}>
+                    {localize(project.team, locale)}
+                  </MetaCell>
+                  <MetaCell label={t.work.statusLabel} color="var(--accent)">
+                    <span style={{ color: "var(--accent)" }}>●</span> {localize(project.status, locale)}
+                  </MetaCell>
+                </div>
+              ) : null}
 
-              <StackTable
-                stack={project.stack}
-                label={t.work.stackLabel}
-                cmdLabel={t.work.cmdLabel}
-                typeLabel={t.work.typeLabel}
-                usageLabel={t.work.usageLabel}
-              />
+              {show("stack") ? (
+                <StackTable
+                  stack={project.stack}
+                  label={t.work.stackLabel}
+                  cmdLabel={t.work.cmdLabel}
+                  typeLabel={t.work.typeLabel}
+                  usageLabel={t.work.usageLabel}
+                />
+              ) : null}
 
-              {project.tags.length ? <ThemesBox tags={project.tags} label={t.work.themeLabel} /> : null}
+              {project.tags.length && show("themes") ? <ThemesBox tags={project.tags} label={t.work.themeLabel} /> : null}
 
-              {project.image ? (
+              {project.image && show("cover") ? (
                 <div className="relative overflow-hidden rounded-[10px] border border-line bg-bg" style={{ aspectRatio: "21 / 9" }}>
                   <Image
                     src={project.image}
@@ -350,147 +541,9 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
               </nav>
 
               <div className="flex min-w-0 flex-1 flex-col gap-8">
-                {/* ---------- tl;dr ---------- */}
-                <section id="tldr" className="flex scroll-mt-4 flex-col gap-2.5">
-                  <SectionHeading num="01">{t.work.tldrLabel}</SectionHeading>
-                  <div className="rounded-[8px] border border-line-soft bg-glass-soft px-4 py-3 text-[13px] leading-relaxed text-ink">
-                    {localize(project.tldr, locale)}
-                  </div>
-                </section>
-
-                {/* ---------- why ---------- */}
-                <section id="why" className="flex scroll-mt-4 flex-col gap-2.5">
-                  <SectionHeading num="02">{t.work.whyLabel}</SectionHeading>
-                  <p className="text-[13px] leading-relaxed text-dim">{localize(project.why.problem, locale)}</p>
-                  <div className="overflow-hidden rounded-[8px] border border-line-soft text-[12.5px]">
-                    <div className="px-3.5 py-2" style={{ background: RED_BG, color: RED }}>
-                      − {t.work.beforeLabel}: {localize(project.why.before, locale)}
-                    </div>
-                    <div className="px-3.5 py-2" style={{ background: GREEN_BG, color: "var(--accent)" }}>
-                      + {t.work.goalLabel}: {localize(project.why.goal, locale)}
-                    </div>
-                  </div>
-                </section>
-
-                {/* ---------- role & contributions ---------- */}
-                <section id="role" className="flex scroll-mt-4 flex-col gap-2.5">
-                  <SectionHeading num="03">{t.work.contributionsLabel}</SectionHeading>
-                  <p className="text-[13px] leading-relaxed text-dim">
-                    {localize(project.contributions.summary, locale)}
-                  </p>
-                  <ul className="flex flex-col gap-1.5">
-                    {project.contributions.done[locale].map((line) => (
-                      <li key={line} className="flex gap-3 text-[13px] text-ink">
-                        <span className="shrink-0 text-accent">[x]</span>
-                        <span>{line}</span>
-                      </li>
-                    ))}
-                    {project.contributions.others?.[locale].map((line) => (
-                      <li key={line} className="flex gap-3 text-[13px] text-muted">
-                        <span className="shrink-0">[ ]</span>
-                        <span>{line}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-
-                {/* ---------- how ---------- */}
-                <section id="how" className="flex scroll-mt-4 flex-col gap-3">
-                  <SectionHeading num="04">{t.work.whatIDid}</SectionHeading>
-                  <p className="text-[13px] leading-relaxed text-dim">{localize(project.how.summary, locale)}</p>
-                  <div className="flex flex-wrap items-stretch gap-2 rounded-[8px] border border-line-soft bg-glass-soft p-4">
-                    {(
-                      [
-                        { label: t.work.inputLabel, value: project.how.diagram.input },
-                        { label: t.work.coreLabel, value: project.how.diagram.core },
-                        { label: t.work.outputLabel, value: project.how.diagram.output },
-                      ] satisfies { label: string; value: Project["title"] }[]
-                    ).map((node, i, arr) => (
-                      <div key={node.label} className="flex flex-1 items-center gap-2" style={{ minWidth: 140 }}>
-                        <div className="flex-1 rounded-[6px] border border-line px-3 py-2 text-center">
-                          <div className="text-[10px] text-muted">{node.label}</div>
-                          <div className="mt-0.5 text-[12px] text-ink">{localize(node.value, locale)}</div>
-                        </div>
-                        {i < arr.length - 1 ? <span className="shrink-0 text-muted">──▶</span> : null}
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* ---------- process ---------- */}
-                <section id="process" className="flex scroll-mt-4 flex-col gap-2.5">
-                  <SectionHeading num="05">{t.work.processLabel}</SectionHeading>
-                  <ol className="flex flex-col">
-                    {project.process.map((step, i) => (
-                      <li key={i} className="flex gap-4 border-t border-dashed border-line-soft py-3.5 first:border-t-0">
-                        <span className="w-[32px] shrink-0 text-[18px] font-bold" style={{ color: AMBER }}>
-                          {String(i).padStart(2, "0")}
-                        </span>
-                        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                          <h3 className="text-[13px] font-semibold text-ink">{localize(step.title, locale)}</h3>
-                          <p className="text-[12.5px] leading-relaxed text-dim">{localize(step.body, locale)}</p>
-                          {step.image ? (
-                            <div className="max-w-[320px]">
-                              <FigureBox figure={step.image} locale={locale} ratio="16 / 9" sizes="320px" />
-                            </div>
-                          ) : null}
-                          {step.beforeAfter ? (
-                            <div className="grid max-w-[460px] grid-cols-2 gap-2.5">
-                              <FigureBox figure={step.beforeAfter.before} locale={locale} ratio="4 / 3" sizes="220px" />
-                              <FigureBox figure={step.beforeAfter.after} locale={locale} ratio="4 / 3" sizes="220px" />
-                            </div>
-                          ) : null}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </section>
-
-                {/* ---------- challenges ---------- */}
-                <section id="challenges" className="flex scroll-mt-4 flex-col gap-2.5">
-                  <SectionHeading num="06">{t.work.challengesLabel}</SectionHeading>
-                  <div className="flex flex-col gap-2.5">
-                    {project.challenges.map((c, i) => (
-                      <div key={i} className="overflow-hidden rounded-[8px] border border-line-soft">
-                        <div
-                          className="px-3.5 py-2 text-[12.5px]"
-                          style={{
-                            background: c.level === "error" ? RED_BG : AMBER_BG,
-                            color: c.level === "error" ? RED : AMBER,
-                          }}
-                        >
-                          {c.level === "error" ? "✗ " : "⚠ "}
-                          {localize(c.problem, locale)}
-                        </div>
-                        <div className="px-3.5 py-2.5 text-[12.5px] leading-relaxed text-ink">
-                          <span className="font-bold text-accent">✓ {t.work.fixLabel}:</span>{" "}
-                          {localize(c.fix, locale)}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* ---------- outcome ---------- */}
-                <section id="outcome" className="flex scroll-mt-4 flex-col gap-3">
-                  <SectionHeading num="07">{t.work.outcomeLabel}</SectionHeading>
-                  {project.outcome.metrics.length ? (
-                    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-                      {project.outcome.metrics.map((m, i) => (
-                        <div key={i} className="rounded-[8px] border border-line-soft px-3.5 py-3">
-                          <div className="text-[22px] font-bold text-accent">{m.value}</div>
-                          <div className="text-[11px] text-muted">{localize(m.label, locale)}</div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-                  <p className="text-[13px] leading-relaxed text-ink">{localize(project.outcome.summary, locale)}</p>
-                  {project.outcome.figure ? (
-                    <div className="max-w-[420px]">
-                      <FigureBox figure={project.outcome.figure} locale={locale} ratio="16 / 9" />
-                    </div>
-                  ) : null}
-                </section>
+                {TOC.map(({ id }) => (
+                  <Fragment key={id}>{sections[id]}</Fragment>
+                ))}
 
                 {/* ---------- prev / next ---------- */}
                 {prev || next ? (

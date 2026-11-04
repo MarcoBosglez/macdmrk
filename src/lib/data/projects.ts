@@ -15,9 +15,20 @@ import type { Localized } from "@/lib/i18n/dictionaries";
 //   metric — the TODOs below are scaffolding so the page has something
 //   to render; swap them out rather than leaving "TODO" text live.
 
-// TODO, make projects customizable so some of the content can be hidden
-// Might be good to add a few reaction icons while explaining the projects, could be fun to add ascii characters like <3
-// Fix \n new lines and add hyperlinks to links like https://www.youtube.com/@shar
+// Copy formatting: prose fields go through components/work/rich-text.tsx,
+// so `\n` starts a paragraph, "- " starts a bullet, URLs become links, and
+// ASCII reactions like <3 get coloured.
+//
+// Hiding content (project page only, the /work cards are unaffected):
+// - `hide` on a project drops whole blocks, and the remaining sections
+//   renumber themselves.
+// - `hidden: true` on a process step, challenge or metric drops just that
+//   entry. A section left with no entries disappears too.
+// - An empty `why.before` / `why.goal` drops that row of the diff.
+//
+// Moving sections: `sectionOrder` on a project lists the sections to put
+// first, and the rest keep their usual order, so ["role"] is all it takes
+// to lead with contributions. To put one last, list all the others.
 
 export type ProjectCategory = "personal" | "academic" | "professional";
 export type StackKind = "lang" | "lib" | "tool";
@@ -41,18 +52,25 @@ export type ProcessStep = {
   body: Localized;
   image?: Figure;
   beforeAfter?: { before: Figure; after: Figure };
+  hidden?: boolean;
 };
 
 export type Challenge = {
   level: "error" | "warn";
   problem: Localized;
   fix: Localized;
+  hidden?: boolean;
 };
 
 export type Metric = {
   value: string;
   label: Localized;
+  hidden?: boolean;
 };
+
+// The ids double as the section anchors on the project page.
+export type ProjectSection = "tldr" | "why" | "role" | "how" | "process" | "challenges" | "outcome";
+export type ProjectBlock = ProjectSection | "backstory" | "meta" | "stack" | "themes" | "cover";
 
 export type Project = {
   slug: string;
@@ -62,6 +80,10 @@ export type Project = {
   // Shows in the ★ Featured row at the top of /work (first featured
   // project gets the big card, next two get the side cards).
   featured?: boolean;
+  // Blocks to leave off this project's page, e.g. ["challenges", "stack"].
+  hide?: ProjectBlock[];
+  // Sections to show first on this project's page, e.g. ["role"].
+  sectionOrder?: ProjectSection[];
   title: Localized;
   // Short type label shown on cards, e.g. "AWS Tooling", "ML Paper".
   kindLabel: Localized;
@@ -111,6 +133,8 @@ export const PROJECTS: Project[] = [
     slug: "web-portfolio",
     category: "personal",
     featured: true,
+    sectionOrder: ["role"],
+    hide: ["tldr"],
     image: "/work/portfolio.PNG",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Three.js"],
     title: { en: "Web Portfolio", es: "Portafolio Web" },
@@ -127,8 +151,8 @@ export const PROJECTS: Project[] = [
       es: "TODO — la historia real: cuándo empecé esto, cómo se veía la primera versión, por qué un sitio hecho a mano en vez de una plantilla, un par de momentos divertidos/raros en el camino.",
     },
     tldr: {
-      en: "A hand-built, bilingual portfolio with a glass/aurora visual language, a draggable illustration gallery, and two private React tools (a lift and meal log) layered on top — designed, illustrated and engineered solo.",
-      es: "Un portafolio bilingüe hecho a mano, con un lenguaje visual de vidrio/aurora, una galería de ilustraciones arrastrable, y dos herramientas privadas en React (un registro de pesas y de comidas) construidas encima — diseñado, ilustrado y programado en solitario.",
+      en: "",
+      es: "",
     },
     role: { en: "designer + developer", es: "diseñador + desarrollador" },
     timeline: { en: "Jul 2024 — now", es: "jul 2024 — ahora" },
@@ -149,7 +173,6 @@ export const PROJECTS: Project[] = [
       before: { en: "", es: "" },
       goal: { en: "creating a web hub that and represented my personality", es: "" },
     },
-    // contributions could go at the very beginning or at the very last
     contributions: {
       summary: {
         en: "Sole designer, illustrator and developer — owned the project end to end, from the visual language to deployment.",
@@ -189,7 +212,7 @@ export const PROJECTS: Project[] = [
       {
         title: { en: "Inspiration to Modern Design", es: "" },
         body: {
-          en: "In 2025 while I was working at Capgemini/BBVA, I started to explore the idea of redisigning the portfolio with a more modern look and feel. \nThe inspiration came mostly from a youtube video by @shar (https://www.youtube.com/@shar) where she went into detail about how she designed her portfolio and the design decisions she made. I particularly liked the presentation card design that she went into.",
+          en: "In 2025 while I was working at Capgemini/BBVA, I started to explore the idea of redesigning the portfolio with a more modern look and feel. \nThe inspiration came mostly from a youtube video by @shar (https://www.youtube.com/@shar) where she went into detail about how she designed her portfolio and the design decisions she made. I particularly liked the presentation card design that she went into <3",
           es: "",
         },
         image: { alt: { en: "first working version, before the glass/aurora theme", es: "primera versión funcional, antes del tema glass/aurora" } },
@@ -197,14 +220,14 @@ export const PROJECTS: Project[] = [
       {
         title: { en: "Redesign Process", es: "" },
         body: {
-          en: "With the core idea, I started gathering inspiration from multiple portfolio websites with similar designs and created a mood board highlighting the main designs that interested me the most. With the visual direction in  mind, I also thought of listing the main features I wanted to implement and what I wanted the website to look like and work like. \n Here are some of the bullets: \n - 5 sections (hub, work, about, illustrations, contact) \n - Dark/Light modes \n - Draggable gallery windows \n - Custom UI sounds \n - Responsive design \n - Bilingual design (the inspiration for this came from LinkedIn's multi-lingual profile designs) \n - Scrollless (back when I was working with the current version, my mouse's scroll wheel broke and I had to use my keyboard to navigate!) \n - Intuitive and clean design without overloading the user with a lot of information \n - Dark green palette \n - Glass card design \n - Custom 404 page",
+          en: "With the core idea, I started gathering inspiration from multiple portfolio websites with similar designs and created a mood board highlighting the main designs that interested me the most. With the visual direction in  mind, I also thought of listing the main features I wanted to implement and what I wanted the website to look like and work like. \n Here are some of the bullets: \n - 5 sections (hub, work, about, illustrations, contact) \n - Dark/Light modes \n - Draggable gallery windows \n - Custom UI sounds \n - Responsive design \n - Bilingual design (the inspiration for this came from LinkedIn's multilingual profile designs) \n - Scrollless (back when I was working with the current version, my mouse's scroll wheel broke and I had to use my keyboard to navigate! >_<) \n - Intuitive and clean design without overloading the user with a lot of information \n - Dark green palette \n - Glass card design \n - Custom 404 page",
           es: "",
         },
       },
       {
         title: { en: "Current state", es: "Estado actual" },
         body: {
-          en: "Still actively adding ideas on the fly! I have a ton of creative ideas I still want to implement. My goal now is to not be shy o adding silly and fun ideas that I want to experiment with (maybe in their own section)",
+          en: "Still actively adding ideas on the fly ^_^ I have a ton of creative ideas I still want to implement. My goal now is to not be shy of adding silly and fun ideas that I want to experiment with (maybe in their own section)",
           es: ".",
         },
         image: { alt: { en: "current state", es: "estado actual" } },
