@@ -12,6 +12,7 @@ import { ChromeBar } from "@/components/chrome/chrome-bar";
 import { MainShell } from "@/components/chrome/main-shell";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
 import { PrivateToolsButton } from "@/components/chrome/private-tools-button";
+import { CopyrightMark } from "@/components/chrome/copyright-mark";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
 
 // Archivo as a variable font (wdth + wght axes live) — the kinetic type
@@ -77,6 +78,7 @@ export default function RootLayout({
                   <MainShell>{children}</MainShell>
                   <MobileNavBubbles />
                   <PrivateToolsButton />
+                  <CopyrightMark />
                 </div>
               </CursorProvider>
             </LocaleProvider>

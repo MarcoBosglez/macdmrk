@@ -45,3 +45,7 @@ Fully bilingual via `src/lib/i18n/dictionaries/`. Terminal-style text (fake file
 ## Note on the design
 
 The visual design and illustrations are original human work — AI tools were only used to help write the code (see the disclaimer on the About page).
+
+## License
+
+All rights reserved — see [LICENSE](LICENSE). This isn't an open-source project; you're welcome to read the code for learning or reference, but please don't copy the design, redistribute any part of this repo, or deploy a derivative of it (including forks) without permission.
