@@ -30,6 +30,8 @@ import type { Localized } from "@/lib/i18n/dictionaries";
 // first, and the rest keep their usual order, so ["role"] is all it takes
 // to lead with contributions. To put one last, list all the others.
 
+// TODO: Change animation for moving opening another page of project work. Currently it is a fade in, but I want to make it a slide in from the right.
+
 export type ProjectCategory = "personal" | "academic" | "professional";
 export type StackKind = "lang" | "lib" | "tool";
 
