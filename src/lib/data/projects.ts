@@ -585,4 +585,610 @@ export const PROJECTS: Project[] = [
       },
     },
   },
+  {
+    slug: "rock-em",
+    category: "academic",
+    featured: false,
+    image: "/work/ml_article.PNG",
+    tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
+    title: { en: "Rock 'Em", es: "Rock 'Em" },
+    kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
+    url: "TODO add url",
+    years: "2026",
+    pitch: {
+      en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
+      es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
+    },
+    tldr: {
+      en: "Developed a Game AI simulation using behavior trees, implemented in C++.",
+      es: "Desarrolló una simulación de IA de juego usando árboles de comportamiento, implementada en C++.",
+    },
+    role: { en: "researcher + developer", es: "investigador + desarrollador" },
+    timeline: { en: "2026", es: "2026" },
+    team: { en: "solo", es: "en solitario" },
+    status: { en: "published", es: "publicado" },
+    stack: [
+      { name: "c++", kind: "lang", usage: 8 },
+      { name: "behavior-trees", kind: "lib", usage: 7 },
+    ],
+    why: {
+      problem: {
+        en: "class",
+        es: "class",
+      },
+      before: { en: "", es: "" },
+      goal: { en: "", es: "" },
+    },
+    contributions: {
+      summary: {
+        en: "Coded it all myself and used blender free of use 3d models.",
+        es: "",
+      },
+      done: {
+        en: [
+          "",
+        ],
+        es: [
+          "",
+        ],
+      },
+    },
+    how: {
+      summary: {
+        en: "",
+        es: "",
+      },
+      diagram: {
+        input: { en: "", es: "" },
+        core: { en: "", es: "" },
+        output: { en: "", es: "" },
+      },
+    },
+    process: [
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO.",
+          es: "TODO",
+        },
+        image: { alt: { en: "labeling spreadsheet / early dataset", es: "hoja de etiquetado / dataset inicial" } },
+      },
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO",
+          es: "TODO",
+        },
+        image: { alt: { en: "model results / confusion matrix", es: "resultados del modelo / matriz de confusión" } },
+      },
+    ],
+    challenges: [
+      {
+        level: "warn",
+        problem: {
+          en: "",
+          es: "",
+        },
+        fix: {
+          en: "TODO.",
+          es: "TODO",
+        },
+      },
+    ],
+    outcome: {
+      metrics: [
+        { value: "", label: { en: "", es: "" } },
+        { value: "TODO%", label: { en: "", es: "" } },
+      ],
+      summary: {
+        en: "",
+        es: "",
+      },
+    },
+  },
+  {
+    slug: "steam-dataset-project",
+    category: "academic",
+    featured: false,
+    image: "/work/ml_article.PNG",
+    tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
+    title: { en: "Steam Data Set Project", es: "steam dataset project" },
+    kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
+    url: "TODO add url",
+    years: "2026",
+    pitch: {
+      en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
+      es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
+    },
+    tldr: {
+      en: "Developed a Game AI simulation using behavior trees, implemented in C++.",
+      es: "Desarrolló una simulación de IA de juego usando árboles de comportamiento, implementada en C++.",
+    },
+    role: { en: "researcher + developer", es: "investigador + desarrollador" },
+    timeline: { en: "2026", es: "2026" },
+    team: { en: "solo", es: "en solitario" },
+    status: { en: "published", es: "publicado" },
+    stack: [
+      { name: "c++", kind: "lang", usage: 8 },
+      { name: "behavior-trees", kind: "lib", usage: 7 },
+    ],
+    why: {
+      problem: {
+        en: "class",
+        es: "class",
+      },
+      before: { en: "", es: "" },
+      goal: { en: "", es: "" },
+    },
+    contributions: {
+      summary: {
+        en: "Coded it all myself and used blender free of use 3d models.",
+        es: "",
+      },
+      done: {
+        en: [
+          "",
+        ],
+        es: [
+          "",
+        ],
+      },
+    },
+    how: {
+      summary: {
+        en: "",
+        es: "",
+      },
+      diagram: {
+        input: { en: "", es: "" },
+        core: { en: "", es: "" },
+        output: { en: "", es: "" },
+      },
+    },
+    process: [
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO.",
+          es: "TODO",
+        },
+        image: { alt: { en: "labeling spreadsheet / early dataset", es: "hoja de etiquetado / dataset inicial" } },
+      },
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO",
+          es: "TODO",
+        },
+        image: { alt: { en: "model results / confusion matrix", es: "resultados del modelo / matriz de confusión" } },
+      },
+    ],
+    challenges: [
+      {
+        level: "warn",
+        problem: {
+          en: "",
+          es: "",
+        },
+        fix: {
+          en: "TODO.",
+          es: "TODO",
+        },
+      },
+    ],
+    outcome: {
+      metrics: [
+        { value: "", label: { en: "", es: "" } },
+        { value: "TODO%", label: { en: "", es: "" } },
+      ],
+      summary: {
+        en: "",
+        es: "",
+      },
+    },
+  },
+  {
+    slug: "ufc-mma-prediction-in-progress",
+    category: "academic",
+    featured: false,
+    image: "/work/ml_article.PNG",
+    tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
+    title: { en: "UFC MMA Prediction", es: "Predicción de UFC MMA" },
+    kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
+    url: "TODO add url",
+    years: "2026",
+    pitch: {
+      en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
+      es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
+    },
+    tldr: {
+      en: "Developed a Game AI simulation using behavior trees, implemented in C++.",
+      es: "Desarrolló una simulación de IA de juego usando árboles de comportamiento, implementada en C++.",
+    },
+    role: { en: "researcher + developer", es: "investigador + desarrollador" },
+    timeline: { en: "2026", es: "2026" },
+    team: { en: "solo", es: "en solitario" },
+    status: { en: "published", es: "publicado" },
+    stack: [
+      { name: "c++", kind: "lang", usage: 8 },
+      { name: "behavior-trees", kind: "lib", usage: 7 },
+    ],
+    why: {
+      problem: {
+        en: "class",
+        es: "class",
+      },
+      before: { en: "", es: "" },
+      goal: { en: "", es: "" },
+    },
+    contributions: {
+      summary: {
+        en: "Coded it all myself and used blender free of use 3d models.",
+        es: "",
+      },
+      done: {
+        en: [
+          "",
+        ],
+        es: [
+          "",
+        ],
+      },
+    },
+    how: {
+      summary: {
+        en: "",
+        es: "",
+      },
+      diagram: {
+        input: { en: "", es: "" },
+        core: { en: "", es: "" },
+        output: { en: "", es: "" },
+      },
+    },
+    process: [
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO.",
+          es: "TODO",
+        },
+        image: { alt: { en: "labeling spreadsheet / early dataset", es: "hoja de etiquetado / dataset inicial" } },
+      },
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO",
+          es: "TODO",
+        },
+        image: { alt: { en: "model results / confusion matrix", es: "resultados del modelo / matriz de confusión" } },
+      },
+    ],
+    challenges: [
+      {
+        level: "warn",
+        problem: {
+          en: "",
+          es: "",
+        },
+        fix: {
+          en: "TODO.",
+          es: "TODO",
+        },
+      },
+    ],
+    outcome: {
+      metrics: [
+        { value: "", label: { en: "", es: "" } },
+        { value: "TODO%", label: { en: "", es: "" } },
+      ],
+      summary: {
+        en: "",
+        es: "",
+      },
+    },
+  },
+  {
+    slug: "a-star-algorithm-pathfinding-in-progress",
+    category: "academic",
+    featured: false,
+    image: "/work/ml_article.PNG",
+    tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
+    title: { en: "A* Algorithm Pathfinding", es: "Encontrando Caminos con A*" },
+    kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
+    url: "TODO add url",
+    years: "2026",
+    pitch: {
+      en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
+      es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
+    },
+    tldr: {
+      en: "Developed a Game AI simulation using behavior trees, implemented in C++.",
+      es: "Desarrolló una simulación de IA de juego usando árboles de comportamiento, implementada en C++.",
+    },
+    role: { en: "researcher + developer", es: "investigador + desarrollador" },
+    timeline: { en: "2026", es: "2026" },
+    team: { en: "solo", es: "en solitario" },
+    status: { en: "published", es: "publicado" },
+    stack: [
+      { name: "c++", kind: "lang", usage: 8 },
+      { name: "behavior-trees", kind: "lib", usage: 7 },
+    ],
+    why: {
+      problem: {
+        en: "class",
+        es: "class",
+      },
+      before: { en: "", es: "" },
+      goal: { en: "", es: "" },
+    },
+    contributions: {
+      summary: {
+        en: "Coded it all myself and used blender free of use 3d models.",
+        es: "",
+      },
+      done: {
+        en: [
+          "",
+        ],
+        es: [
+          "",
+        ],
+      },
+    },
+    how: {
+      summary: {
+        en: "",
+        es: "",
+      },
+      diagram: {
+        input: { en: "", es: "" },
+        core: { en: "", es: "" },
+        output: { en: "", es: "" },
+      },
+    },
+    process: [
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO.",
+          es: "TODO",
+        },
+        image: { alt: { en: "labeling spreadsheet / early dataset", es: "hoja de etiquetado / dataset inicial" } },
+      },
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO",
+          es: "TODO",
+        },
+        image: { alt: { en: "model results / confusion matrix", es: "resultados del modelo / matriz de confusión" } },
+      },
+    ],
+    challenges: [
+      {
+        level: "warn",
+        problem: {
+          en: "",
+          es: "",
+        },
+        fix: {
+          en: "TODO.",
+          es: "TODO",
+        },
+      },
+    ],
+    outcome: {
+      metrics: [
+        { value: "", label: { en: "", es: "" } },
+        { value: "TODO%", label: { en: "", es: "" } },
+      ],
+      summary: {
+        en: "",
+        es: "",
+      },
+    },
+  },
+  {
+    slug: "urban-mobility",
+    category: "academic",
+    featured: false,
+    image: "/work/ml_article.PNG",
+    tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
+    title: { en: "RUrban Mobility", es: "Movilidad Urbana" },
+    kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
+    url: "TODO add url",
+    years: "2026",
+    pitch: {
+      en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
+      es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
+    },
+    tldr: {
+      en: "Developed a Game AI simulation using behavior trees, implemented in C++.",
+      es: "Desarrolló una simulación de IA de juego usando árboles de comportamiento, implementada en C++.",
+    },
+    role: { en: "researcher + developer", es: "investigador + desarrollador" },
+    timeline: { en: "2026", es: "2026" },
+    team: { en: "solo", es: "en solitario" },
+    status: { en: "published", es: "publicado" },
+    stack: [
+      { name: "c++", kind: "lang", usage: 8 },
+      { name: "behavior-trees", kind: "lib", usage: 7 },
+    ],
+    why: {
+      problem: {
+        en: "class",
+        es: "class",
+      },
+      before: { en: "", es: "" },
+      goal: { en: "", es: "" },
+    },
+    contributions: {
+      summary: {
+        en: "Coded it all myself and used blender free of use 3d models.",
+        es: "",
+      },
+      done: {
+        en: [
+          "",
+        ],
+        es: [
+          "",
+        ],
+      },
+    },
+    how: {
+      summary: {
+        en: "",
+        es: "",
+      },
+      diagram: {
+        input: { en: "", es: "" },
+        core: { en: "", es: "" },
+        output: { en: "", es: "" },
+      },
+    },
+    process: [
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO.",
+          es: "TODO",
+        },
+        image: { alt: { en: "labeling spreadsheet / early dataset", es: "hoja de etiquetado / dataset inicial" } },
+      },
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO",
+          es: "TODO",
+        },
+        image: { alt: { en: "model results / confusion matrix", es: "resultados del modelo / matriz de confusión" } },
+      },
+    ],
+    challenges: [
+      {
+        level: "warn",
+        problem: {
+          en: "",
+          es: "",
+        },
+        fix: {
+          en: "TODO.",
+          es: "TODO",
+        },
+      },
+    ],
+    outcome: {
+      metrics: [
+        { value: "", label: { en: "", es: "" } },
+        { value: "TODO%", label: { en: "", es: "" } },
+      ],
+      summary: {
+        en: "",
+        es: "",
+      },
+    },
+  },
+  {
+    slug: "nds-cognitive-labs-journal-publication",
+    category: "academic",
+    featured: false,
+    image: "/work/ml_article.PNG",
+    tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
+    title: { en: "Journal Publication", es: "Publicación en Revista" },
+    kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
+    url: "TODO add url",
+    years: "2026",
+    pitch: {
+      en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
+      es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
+    },
+    tldr: {
+      en: "Developed a Game AI simulation using behavior trees, implemented in C++.",
+      es: "Desarrolló una simulación de IA de juego usando árboles de comportamiento, implementada en C++.",
+    },
+    role: { en: "researcher + developer", es: "investigador + desarrollador" },
+    timeline: { en: "2026", es: "2026" },
+    team: { en: "solo", es: "en solitario" },
+    status: { en: "published", es: "publicado" },
+    stack: [
+      { name: "c++", kind: "lang", usage: 8 },
+      { name: "behavior-trees", kind: "lib", usage: 7 },
+    ],
+    why: {
+      problem: {
+        en: "class",
+        es: "class",
+      },
+      before: { en: "", es: "" },
+      goal: { en: "", es: "" },
+    },
+    contributions: {
+      summary: {
+        en: "Coded it all myself and used blender free of use 3d models.",
+        es: "",
+      },
+      done: {
+        en: [
+          "",
+        ],
+        es: [
+          "",
+        ],
+      },
+    },
+    how: {
+      summary: {
+        en: "",
+        es: "",
+      },
+      diagram: {
+        input: { en: "", es: "" },
+        core: { en: "", es: "" },
+        output: { en: "", es: "" },
+      },
+    },
+    process: [
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO.",
+          es: "TODO",
+        },
+        image: { alt: { en: "labeling spreadsheet / early dataset", es: "hoja de etiquetado / dataset inicial" } },
+      },
+      {
+        title: { en: "", es: "" },
+        body: {
+          en: "TODO",
+          es: "TODO",
+        },
+        image: { alt: { en: "model results / confusion matrix", es: "resultados del modelo / matriz de confusión" } },
+      },
+    ],
+    challenges: [
+      {
+        level: "warn",
+        problem: {
+          en: "",
+          es: "",
+        },
+        fix: {
+          en: "TODO.",
+          es: "TODO",
+        },
+      },
+    ],
+    outcome: {
+      metrics: [
+        { value: "", label: { en: "", es: "" } },
+        { value: "TODO%", label: { en: "", es: "" } },
+      ],
+      summary: {
+        en: "",
+        es: "",
+      },
+    },
+  }
 ];
