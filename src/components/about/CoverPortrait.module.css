@@ -1,0 +1,127 @@
+/* "Magazine cover" hero for the About section — a cutout photo
+   standing in front of the name set in huge type, on the same dark
+   green terminal card recipe used by the homepage featured-work
+   cards (#143023 → #0f2419 gradient, #2b5a3f border, #7dffa8 accent). */
+
+.card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: 560px;
+  border-radius: 22px;
+  border: 1px solid #2b5a3f;
+  background: linear-gradient(160deg, #143023, #0f2419);
+}
+
+@media (max-width: 760px) {
+  .card {
+    height: 380px;
+  }
+}
+
+.nameWrap {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  white-space: nowrap;
+  font-family: var(--font-inter-tight, "Inter Tight", sans-serif);
+  font-size: clamp(64px, 11vw, 120px);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  transform: translateX(-50%);
+  transition: transform 0.25s ease;
+}
+
+.nameLine1 {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #7dffa8;
+}
+
+.nameLine2 {
+  color: #7dffa8;
+}
+
+.card:hover .nameWrap {
+  transform: translateX(-50%) translateY(-4px);
+}
+
+.photoWrap,
+.placeholder {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 1;
+  height: 88%;
+  aspect-ratio: 3 / 4;
+  transform: translateX(-50%);
+  transition: transform 0.25s ease;
+}
+
+.card:hover .photoWrap {
+  transform: translateX(-50%) scale(1.02);
+}
+
+.photo {
+  object-fit: contain;
+  object-position: bottom;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px dashed #2b5a3f;
+  background: rgba(6, 18, 11, 0.4);
+  color: #9fb8ac;
+  font-family: var(--font-jetbrains-mono, monospace);
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.tags {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tag {
+  white-space: nowrap;
+  border-radius: 999px;
+  background: rgba(6, 18, 11, 0.8);
+  padding: 6px 12px;
+  font-family: var(--font-jetbrains-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #cfe3d6;
+}
+
+@media (max-width: 640px) {
+  .nameWrap {
+    top: 14px;
+  }
+
+  .tag {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nameWrap,
+  .photoWrap {
+    transition: none !important;
+  }
+}

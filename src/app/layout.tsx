@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Archivo, JetBrains_Mono } from "next/font/google";
+import { Archivo, JetBrains_Mono, Inter_Tight } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -32,6 +32,15 @@ const jetBrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+// Condensed display weight for the About page's magazine-cover hero —
+// not used anywhere else, so it's scoped to its own variable.
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  weight: ["800"],
+  variable: "--font-inter-tight",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Marco Bosquez",
   description: "Marco Bosquez — software developer & digital artist.",
@@ -53,7 +62,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`no-js ${archivo.variable} ${jetBrainsMono.variable}`}
+      className={`no-js ${archivo.variable} ${jetBrainsMono.variable} ${interTight.variable}`}
     >
       <body>
         {/* Runs before paint: drop the no-js guard, and if the startup
