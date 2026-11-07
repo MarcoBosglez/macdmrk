@@ -27,12 +27,12 @@ export const featuredProjects: FeaturedProject[] = [
     slug: "web-portfolio",
     name: "Web Portfolio",
     category: "personal",
-    year: "2024 — now",
+    year: "2026",
     description:
       "An interactive personal platform built to show both my Computer Science background and my digital art in one place.",
     href: "/work/web-portfolio",
     repoUrl: "https://github.com/MarcoBosglez/macdmrk",
-    image: { src: "/work/portfolio.PNG", alt: "Web Portfolio" },
+    image: { src: "/work/web-portfolio.webp", alt: "Web Portfolio" },
     stack: ["Next.js", "TypeScript", "Tailwind CSS"],
   },
   {
@@ -43,8 +43,7 @@ export const featuredProjects: FeaturedProject[] = [
     description:
       "A full-stack extension for Amazon Connect that recorded call-center interactions between agents and customers, for audit, training and performance metrics.",
     href: "/work/aws-rsh",
-    // Not a public repo — omitted on purpose (the LinkedIn post isn't source code).
-    image: { src: "/work/rsh.PNG", alt: "Amazon Recorder System Helper" },
+    image: { src: "/work/aws-rsh-cover.webp", alt: "Amazon Recorder System Helper" },
     stack: ["Java", "Spring", "Docker", "React"],
   },
   {
@@ -56,7 +55,7 @@ export const featuredProjects: FeaturedProject[] = [
       "An NLP study on mental-health tweets: multiclass and multi-label classification of 625 hand-labeled tweets to measure the accuracy of a negative-sentiment model.",
     href: "/work/sentiment-analysis",
     // Published paper, not a repo — omitted on purpose.
-    image: { src: "/work/ml_article.PNG", alt: "ML Sentiment Analysis" },
+    image: { src: "/work/sentiment-analysis-cover.webp", alt: "ML Sentiment Analysis" },
     stack: ["Python", "NLTK"],
   },
 ];

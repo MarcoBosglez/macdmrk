@@ -146,11 +146,14 @@
 
 .card {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 10px;
   padding: 10px;
   border-radius: 18px;
   border: 1px solid var(--fw-border);
   background: linear-gradient(160deg, #143023, #0f2419);
+  color: inherit;
+  text-decoration: none;
   transition: border-color 0.2s ease;
 }
 
@@ -160,9 +163,8 @@
 
 .thumb {
   position: relative;
-  flex: none;
-  width: 92px;
-  align-self: stretch;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   border-radius: 11px;
   overflow: hidden;
   background: var(--fw-control);
@@ -234,121 +236,6 @@
   -webkit-line-clamp: 2;
 }
 
-.actions {
-  display: flex;
-  gap: 6px;
-  margin-top: auto;
-}
-
-.learnMore {
-  position: relative;
-  display: inline-flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 44px;
-  padding: 0 14px;
-  border-radius: 11px;
-  background: var(--fw-soft);
-  color: var(--fw-accent);
-  font-size: 12px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.learnMore:hover,
-.learnMore:focus-visible {
-  background: var(--fw-soft-hover);
-  box-shadow: 0 0 0 3px rgba(125, 255, 168, 0.12);
-}
-
-.learnMore:active {
-  transform: scale(0.97);
-}
-
-.learnText {
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.cursor {
-  display: inline-block;
-  width: 6px;
-  height: 12px;
-  margin-left: 2px;
-  background: var(--fw-accent);
-  opacity: 0;
-}
-
-.learnMore:hover .cursor,
-.learnMore:focus-visible .cursor {
-  opacity: 1;
-  animation: fw-blink 1s step-end infinite;
-}
-
-.learnArrow {
-  display: inline-block;
-  flex: none;
-  transition: transform 0.3s cubic-bezier(0.3, 1.7, 0.5, 1);
-}
-
-.learnMore:hover .learnArrow,
-.learnMore:focus-visible .learnArrow {
-  transform: translateX(5px);
-}
-
-@keyframes fw-blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-.code {
-  position: relative;
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 11px;
-  border: 1px solid var(--fw-control);
-  color: var(--fw-dim);
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-
-.code span {
-  display: inline-block;
-  transition: transform 0.2s ease;
-}
-
-.code:hover,
-.code:focus-visible {
-  border-color: var(--fw-accent);
-  color: var(--fw-accent);
-}
-
-.code:hover span:first-child,
-.code:focus-visible span:first-child {
-  transform: translateX(-2px);
-}
-
-.code:hover span:nth-child(2),
-.code:focus-visible span:nth-child(2) {
-  transform: rotate(18deg);
-}
-
-.code:hover span:last-child,
-.code:focus-visible span:last-child {
-  transform: translateX(2px);
-}
-
 .section a:focus-visible {
   outline: 2px solid var(--fw-accent);
   outline-offset: 2px;
@@ -356,15 +243,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .allWork::before,
-  .arrowLine,
-  .learnArrow,
-  .code span,
-  .cursor {
+  .arrowLine {
     transition: none !important;
-    animation: none !important;
-  }
-
-  .learnMore:active {
-    transform: none;
   }
 }

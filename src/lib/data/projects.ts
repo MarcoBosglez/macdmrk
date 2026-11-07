@@ -90,6 +90,10 @@ export type Project = {
   // Short type label shown on cards, e.g. "AWS Tooling", "ML Paper".
   kindLabel: Localized;
   years: string;
+  // Drives sort order on /work (newest first) — `years` is just display
+  // text ("2024 — now") and isn't reliably parseable, so this is the
+  // actual sortable value. Use the project's start year.
+  startYear: number;
   // Repo/code link — not every project has one.
   url?: string;
   // Separate live-demo link — also optional; most projects will only
@@ -137,13 +141,14 @@ export const PROJECTS: Project[] = [
     featured: true,
     sectionOrder: ["role"],
     hide: ["tldr"],
-    image: "/work/portfolio.PNG",
+    image: "/work/web-portfolio.webp",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Three.js"],
     title: { en: "Web Portfolio", es: "Portafolio Web" },
     kindLabel: { en: "Web Portfolio", es: "Portafolio Web" },
     url: "https://github.com/MarcoBosglez/macdmrk",
     demoUrl: "https://macdmrk.vercel.app",
-    years: "2024 — now",
+    years: "2026",
+    startYear: 2024,
     pitch: {
       en: "An interactive personal platform built to show both my Computer Science background and my digital art in one place.",
       es: "Una plataforma personal interactiva, hecha para mostrar mi carrera de Ciencias de la Computación y mi arte digital en un mismo lugar.",
@@ -262,12 +267,13 @@ export const PROJECTS: Project[] = [
   {
     slug: "spotify-banner",
     category: "professional",
-    image: "/work/banneronerpm.PNG",
+    image: "/work/spotify-banner.webp",
     tags: ["HTML", "CSS", "JavaScript", "GitHub"],
     title: { en: "Spotify Banner for ONErpm", es: "Spotify Banner para ONErpm" },
     kindLabel: { en: "Banner Design", es: "Diseño de Banners" },
     url: "https://github.com/MarcoBosglez/banner-interactivo",
-    years: "2021",
+    years: "2025",
+    startYear: 2025,
     pitch: {
       en: "High-visibility Spotify promotional banners for music distribution campaigns, with custom scripts and HTML/CSS layouts for the release assets.",
       es: "Banners promocionales de Spotify de alta visibilidad para campañas de distribución musical, con scripts a medida y maquetación HTML/CSS para los assets de lanzamiento.",
@@ -277,7 +283,7 @@ export const PROJECTS: Project[] = [
       es: "Maquetación de banners en HTML/CSS a mano para campañas de lanzamiento de ONErpm, con scripts de apoyo para que el equipo regenerara assets en lanzamientos futuros sin rehacer el diseño.",
     },
     role: { en: "design + front-end", es: "diseño + front-end" },
-    timeline: { en: "2021", es: "2021" },
+    timeline: { en: "2025", es: "2025" },
     team: { en: "solo", es: "en solitario" },
     status: { en: "shipped", es: "lanzado" },
     stack: [
@@ -367,12 +373,13 @@ export const PROJECTS: Project[] = [
     slug: "aws-rsh",
     category: "academic",
     featured: true,
-    image: "/work/rsh.PNG",
+    image: "/work/aws-rsh-cover.webp",
     tags: ["Java", "Spring", "Docker", "React"],
     title: { en: "Amazon Recorder System Helper", es: "Amazon Recorder System Helper" },
     kindLabel: { en: "AWS Tooling", es: "Herramientas AWS" },
     url: "https://www.linkedin.com/feed/update/urn:li:activity:6943381454940753920/",
     years: "2022",
+    startYear: 2022,
     pitch: {
       en: "A full-stack extension for Amazon Connect that recorded call-center interactions between agents and customers, for audit, training and performance metrics.",
       es: "Una extensión full-stack para Amazon Connect que grababa las interacciones de un call center entre agentes y clientes, para auditoría, capacitación y métricas de desempeño.",
@@ -486,12 +493,13 @@ export const PROJECTS: Project[] = [
     slug: "sentiment-analysis",
     category: "academic",
     featured: true,
-    image: "/work/ml_article.PNG",
+    image: "/work/sentiment-analysis-cover.webp",
     tags: ["Machine Learning", "Python", "NLTK", "NLP"],
     title: { en: "ML Sentiment Analysis", es: "Análisis de Sentimiento con ML" },
     kindLabel: { en: "ML Paper", es: "Artículo de ML" },
     url: "https://rcs.cic.ipn.mx/2023_152_12/Development%20of%20a%20Front-End%20with%20Dynamic%20Searches%20for%20Chatbot%20Retraining%20Using%20ReactJS.pdf",
     years: "2023",
+    startYear: 2023,
     pitch: {
       en: "An NLP study on mental-health tweets: multiclass and multi-label classification of 625 hand-labeled tweets to measure the accuracy of a negative-sentiment model.",
       es: "Un estudio de PLN sobre tuits de salud mental: clasificación multiclase y multietiqueta de 625 tuits etiquetados a mano para medir la precisión de un modelo de sentimiento negativo.",
@@ -591,12 +599,13 @@ export const PROJECTS: Project[] = [
     slug: "rock-em",
     category: "academic",
     featured: false,
-    image: "/work/ml_article.PNG",
+    image: "/work/project-motif-cover.webp",
     tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
     title: { en: "Rock 'Em", es: "Rock 'Em" },
     kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
     url: "TODO add url",
     years: "2026",
+    startYear: 2026,
     pitch: {
       en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
       es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
@@ -692,12 +701,13 @@ export const PROJECTS: Project[] = [
     slug: "steam-dataset-project",
     category: "academic",
     featured: false,
-    image: "/work/ml_article.PNG",
+    image: "/work/project-motif-cover.webp",
     tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
     title: { en: "Steam Data Set Project", es: "steam dataset project" },
     kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
     url: "TODO add url",
     years: "2026",
+    startYear: 2026,
     pitch: {
       en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
       es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
@@ -793,12 +803,13 @@ export const PROJECTS: Project[] = [
     slug: "ufc-mma-prediction-in-progress",
     category: "academic",
     featured: false,
-    image: "/work/ml_article.PNG",
+    image: "/work/project-motif-cover.webp",
     tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
     title: { en: "UFC MMA Prediction", es: "Predicción de UFC MMA" },
     kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
     url: "TODO add url",
     years: "2026",
+    startYear: 2026,
     pitch: {
       en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
       es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
@@ -894,12 +905,13 @@ export const PROJECTS: Project[] = [
     slug: "a-star-algorithm-pathfinding-in-progress",
     category: "academic",
     featured: false,
-    image: "/work/ml_article.PNG",
+    image: "/work/project-motif-cover.webp",
     tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
     title: { en: "A* Algorithm Pathfinding", es: "Encontrando Caminos con A*" },
     kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
     url: "TODO add url",
     years: "2026",
+    startYear: 2026,
     pitch: {
       en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
       es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
@@ -995,12 +1007,13 @@ export const PROJECTS: Project[] = [
     slug: "urban-mobility",
     category: "academic",
     featured: false,
-    image: "/work/ml_article.PNG",
+    image: "/work/project-motif-cover.webp",
     tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
     title: { en: "RUrban Mobility", es: "Movilidad Urbana" },
     kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
     url: "TODO add url",
-    years: "2026",
+    years: "2022",
+    startYear: 2022,
     pitch: {
       en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
       es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
@@ -1010,7 +1023,7 @@ export const PROJECTS: Project[] = [
       es: "Desarrolló una simulación de IA de juego usando árboles de comportamiento, implementada en C++.",
     },
     role: { en: "researcher + developer", es: "investigador + desarrollador" },
-    timeline: { en: "2026", es: "2026" },
+    timeline: { en: "2022", es: "2022" },
     team: { en: "solo", es: "en solitario" },
     status: { en: "published", es: "publicado" },
     stack: [
@@ -1096,12 +1109,13 @@ export const PROJECTS: Project[] = [
     slug: "nds-cognitive-labs-journal-publication",
     category: "academic",
     featured: false,
-    image: "/work/ml_article.PNG",
+    image: "/work/project-motif-cover.webp",
     tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
     title: { en: "Journal Publication", es: "Publicación en Revista" },
     kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
     url: "TODO add url",
     years: "2026",
+    startYear: 2022,
     pitch: {
       en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
       es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
@@ -1111,7 +1125,7 @@ export const PROJECTS: Project[] = [
       es: "Desarrolló una simulación de IA de juego usando árboles de comportamiento, implementada en C++.",
     },
     role: { en: "researcher + developer", es: "investigador + desarrollador" },
-    timeline: { en: "2026", es: "2026" },
+    timeline: { en: "2022", es: "2022" },
     team: { en: "solo", es: "en solitario" },
     status: { en: "published", es: "publicado" },
     stack: [

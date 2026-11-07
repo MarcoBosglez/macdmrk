@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { AnimatePresence, motion } from "motion/react";
 import { ExternalLink } from "lucide-react";
 import { GhIcon } from "@/components/chrome/link-icons";
 import { useLocale } from "@/components/providers/locale-provider";
@@ -186,10 +187,10 @@ function SideCard({ project, locale, t, onNav }: { project: Project; locale: Loc
 
 function GridCard({ project, locale, t, onNav }: { project: Project; locale: Locale; t: Dictionary; onNav: () => void }) {
   return (
-    <article className="group animate-fade flex flex-col gap-1.5 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot">
+    <article className="group flex flex-col gap-1.5 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot">
       <Cover project={project} ratio="16 / 8" sizes="(max-width: 700px) 100vw, 340px" />
       <div className="flex flex-1 flex-col gap-1 px-1.5">
-        <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
+        <div className="flex min-h-[46px] flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
           <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
           <span>{localize(project.kindLabel, locale)}</span>
           <span>{project.years}</span>
@@ -197,7 +198,10 @@ function GridCard({ project, locale, t, onNav }: { project: Project; locale: Loc
             <span style={{ color: AMBER }} aria-label="Featured">★</span>
           ) : null}
         </div>
-        <h3 className="text-[15px] leading-tight font-bold text-ink" style={{ letterSpacing: "-0.02em" }}>
+        <h3
+          className="line-clamp-2 min-h-[38px] text-[15px] leading-tight font-bold text-ink"
+          style={{ letterSpacing: "-0.02em" }}
+        >
           {localize(project.title, locale)}
         </h3>
         <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
@@ -223,22 +227,40 @@ function GridCard({ project, locale, t, onNav }: { project: Project; locale: Loc
   );
 }
 
+const gridSlideVariants = {
+  enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 48 : -48 }),
+  center: { opacity: 1, x: 0 },
+  exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -48 : 48 }),
+};
+
 // The work browser: a ★ Featured row (big lead card + up to two side
-// cards, in `PROJECTS` order among the featured ones) above a filtered,
-// paginated grid of everything. Ported structurally from the client's
-// own "design I" reference and reskinned onto this site's tokens.
+// cards, newest first among the featured ones) above a filtered,
+// paginated grid of everything, also newest first. Ported structurally
+// from the client's own "design I" reference and reskinned onto this
+// site's tokens.
 export function WorkView({ projects }: { projects: Project[] }) {
   const { locale, t } = useLocale();
   const { playClick } = useSound();
   const [filter, setFilter] = useState<"all" | ProjectCategory>("all");
   const [page, setPage] = useState(0);
+  // +1 slides the incoming grid in from the right (moving forward),
+  // -1 from the left (moving back) — set right before every page/filter
+  // change so the very next render's enter animation picks it up.
+  const [direction, setDirection] = useState(1);
 
-  const featured = useMemo(() => projects.filter((p) => p.featured), [projects]);
+  // Newest startYear first; ties (e.g. several WIPs sharing a year) keep
+  // their original array order since Array#sort is stable.
+  const sorted = useMemo(
+    () => [...projects].sort((a, b) => b.startYear - a.startYear),
+    [projects]
+  );
+
+  const featured = useMemo(() => sorted.filter((p) => p.featured), [sorted]);
   const [lead, ...side] = featured;
 
   const matching = useMemo(
-    () => (filter === "all" ? projects : projects.filter((p) => p.category === filter)),
-    [projects, filter]
+    () => (filter === "all" ? sorted : sorted.filter((p) => p.category === filter)),
+    [sorted, filter]
   );
   const pageCount = Math.max(1, Math.ceil(matching.length / PER_PAGE));
   const current = Math.min(page, pageCount - 1);
@@ -249,6 +271,10 @@ export function WorkView({ projects }: { projects: Project[] }) {
     f === "all" ? projects.length : projects.filter((p) => p.category === f).length;
 
   const onNav = () => playClick("nav");
+  const goToPage = (n: number) => {
+    setDirection(n >= current ? 1 : -1);
+    setPage(n);
+  };
 
   return (
     <ViewPane>
@@ -297,6 +323,7 @@ export function WorkView({ projects }: { projects: Project[] }) {
                   aria-pressed={active}
                   onClick={() => {
                     onNav();
+                    setDirection(1);
                     setFilter(f);
                     setPage(0);
                   }}
@@ -314,34 +341,59 @@ export function WorkView({ projects }: { projects: Project[] }) {
             })}
           </div>
 
-          <div
-            key={`${filter}-${current}`}
-            className="grid gap-4"
-            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
-          >
-            {visible.map((p) => (
-              <GridCard key={p.slug} project={p} locale={locale} t={t} onNav={onNav} />
-            ))}
+          <div className="relative overflow-hidden">
+            <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+              <motion.div
+                key={`${filter}-${current}`}
+                custom={direction}
+                variants={gridSlideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                className="grid gap-4"
+                style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
+              >
+                {visible.map((p) => (
+                  <GridCard key={p.slug} project={p} locale={locale} t={t} onNav={onNav} />
+                ))}
+                {/* Invisible filler cards pad the grid out to a full page
+                    of rows, so a filter that leaves only a handful of
+                    results doesn't collapse the section's height — the
+                    page stays the same size whether 1 or PER_PAGE match. */}
+                {visible.length > 0
+                  ? Array.from({ length: Math.max(0, PER_PAGE - visible.length) }, (_, i) => (
+                      <div key={`filler-${i}`} aria-hidden="true" className="invisible">
+                        <GridCard project={visible[0]} locale={locale} t={t} onNav={() => {}} />
+                      </div>
+                    ))
+                  : null}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          {pageCount > 1 ? (
-            <nav aria-label="Project pages" className="mt-3 flex flex-wrap justify-center gap-1.5 font-mono text-[12px]">
+          {matching.length > 0 ? (
+            <nav
+              aria-label="Project pages"
+              aria-hidden={pageCount <= 1 ? "true" : undefined}
+              className={`mt-3 flex flex-wrap justify-center gap-1.5 font-mono text-[12px] ${pageCount <= 1 ? "invisible" : ""}`}
+            >
               <button
                 type="button"
                 aria-label={t.work.prevPageLabel}
                 disabled={current === 0}
-                onClick={() => setPage(current - 1)}
+                onClick={() => goToPage(current - 1)}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-line-hot disabled:cursor-default disabled:opacity-35"
               >
                 ←
               </button>
-              {Array.from({ length: pageCount }, (_, n) => (
+              {Array.from({ length: Math.max(pageCount, 1) }, (_, n) => (
                 <button
                   key={n}
                   type="button"
                   aria-label={`${t.work.pageLabel} ${n + 1}`}
                   aria-current={n === current ? "page" : undefined}
-                  onClick={() => setPage(n)}
+                  onClick={() => goToPage(n)}
                   className="flex h-9 w-9 items-center justify-center rounded-full border font-bold transition-colors"
                   style={{
                     background: n === current ? "var(--accent)" : "var(--panel)",

@@ -40,10 +40,16 @@ export default function FeaturedWork({
 
 function FeaturedCard({ project: p, index }: { project: FeaturedProject; index: number }) {
   return (
-    <div className={s.card}>
+    <Link href={p.href} className={s.card}>
       {p.image ? (
         <span className={s.thumb}>
-          <Image src={p.image.src} alt={p.image.alt} fill sizes="92px" className={s.thumbImg} />
+          <Image
+            src={p.image.src}
+            alt={p.image.alt}
+            fill
+            sizes="(max-width: 640px) 100vw, 340px"
+            className={s.thumbImg}
+          />
         </span>
       ) : null}
       <div className={s.body}>
@@ -54,31 +60,7 @@ function FeaturedCard({ project: p, index }: { project: FeaturedProject; index: 
         </div>
         <div className={s.name}>{p.name}</div>
         <p className={s.desc}>{p.description}</p>
-        <div className={s.actions}>
-          <Link href={p.href} className={s.learnMore}>
-            <span className={s.learnText}>
-              learn more
-              <span className={s.cursor} aria-hidden="true" />
-            </span>
-            <span className={s.learnArrow} aria-hidden="true">
-              →
-            </span>
-          </Link>
-          {p.repoUrl ? (
-            <a
-              href={p.repoUrl}
-              target="_blank"
-              rel="noreferrer"
-              className={s.code}
-              aria-label={`${p.name} source code`}
-            >
-              <span>&lt;</span>
-              <span>/</span>
-              <span>&gt;</span>
-            </a>
-          ) : null}
-        </div>
       </div>
-    </div>
+    </Link>
   );
 }
