@@ -9,4 +9,4 @@
 Make main hub eye animation with a natural feel
 Blinking, perlin noise expressions to not feel static
 
-Make it feel alive
+Make it feel alive by floating around like water
