@@ -1,132 +1,54 @@
 "use client";
 
-import { Fragment } from "react";
+// This page stays a client component — not a true Server Component —
+// because `locale`/`t` come from a client-side React Context
+// (LocaleProvider) with no server-readable equivalent (no locale
+// cookie/segment), and `playClick` needs the SoundProvider context.
+// Every other top-level view in this app (Hero, WorkView, AboutContent,
+// ContactView) is "use client" for the same reason. What *is* isolated
+// into their own client components, per the brief, are the two genuinely
+// interactive pieces: the project switcher popover and the scroll-spy
+// progress nav — see project-switcher.tsx / progress-nav.tsx.
+
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { useLocale } from "@/components/providers/locale-provider";
 import { useSound } from "@/components/providers/sound-provider";
-import { localize, type Locale } from "@/lib/i18n/dictionaries";
+import { localize } from "@/lib/i18n/dictionaries";
 import { isGithubUrl } from "@/components/work/work-view";
 import { GhIcon } from "@/components/chrome/link-icons";
 import { InlineText, RichText } from "@/components/work/rich-text";
-import type { Project, ProjectBlock, ProjectSection, Figure, StackItem, StackKind } from "@/lib/data/projects";
+import { ProjectSwitcher } from "@/components/work/project-switcher";
+import { ProgressNav } from "@/components/work/progress-nav";
+import switcherStyles from "@/components/work/switcher.module.css";
+import type { Project } from "@/lib/data/projects";
 
-// Small candy-colour accents borrowed from the client's "design D"
-// case-study reference — kept as literal hex (like the site's existing
-// PROT_COLOR/amber badge in the lift log) rather than themed tokens,
-// since they're meant to read as fixed terminal syntax-highlight
-// colours, not something that should shift with the site's theme.
+// Fixed literal palette (not the adaptive --accent/--line tokens) — this
+// page always reads as the dark green terminal, regardless of the
+// site's own light/dark toggle, same convention as the homepage's
+// FeaturedWork cards and the About page's receipt/cover hero.
+const BG = "#0a1a12";
+const PANEL = "#0f2117";
+const BORDER = "#2b5a3f";
+const BORDER_HOT = "#3e7a57";
+const INK = "#e4eee8";
+const DIM = "#c7d6cd";
+const MUTED = "#8fae9c";
+const ACCENT = "#7dffa8";
+const ACCENT_BG = "rgba(125,255,168,0.12)";
 const AMBER = "#ffb347";
 const BLUE = "#7fb2ff";
-const PURPLE = "#c792ea";
 const RED = "#ff8a7a";
 const RED_BG = "rgba(255,138,122,0.12)";
-const AMBER_BG = "rgba(255,179,71,0.12)";
-const GREEN_BG = "color-mix(in srgb, var(--accent) 12%, transparent)";
+const BLUE_BG = "rgba(127,178,255,0.12)";
+const INTER = "var(--font-inter-tight, 'Inter Tight', sans-serif)";
+const MONO = "var(--font-jetbrains-mono, ui-monospace, monospace)";
+const FOCUS_RING =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7dffa8]";
 
-const KIND_COLOR: Record<StackKind, string> = { lang: BLUE, lib: PURPLE, tool: "var(--muted)" };
-
-function usageBar(n: number) {
-  const v = Math.max(0, Math.min(10, Math.round(n)));
-  return `[${"|".repeat(v)}${" ".repeat(10 - v)}]`;
-}
-
-// "## 03 section title" heading, straight from the reference's
-// terminal-doc styling.
-function SectionHeading({ num, children }: { num: string; children: React.ReactNode }) {
-  return (
-    <h2 className="flex items-baseline gap-2 font-mono text-[15px] font-bold text-accent">
-      <span className="text-muted">##</span>
-      <span style={{ color: AMBER }}>{num}</span>
-      <span>{children}</span>
-    </h2>
-  );
-}
-
-// Image + caption; unset `src` renders the dashed TODO placeholder so
-// a step/section can exist before the real screenshot does.
-function FigureBox({
-  figure,
-  locale,
-  ratio = "16 / 9",
-  sizes = "(max-width: 900px) 100vw, 800px",
-}: {
-  figure: Figure;
-  locale: Locale;
-  ratio?: string;
-  sizes?: string;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <div
-        className="relative overflow-hidden rounded-[8px] border border-dashed border-line bg-bg"
-        style={{ aspectRatio: ratio }}
-      >
-        {figure.src ? (
-          <Image src={figure.src} alt={localize(figure.alt, locale)} fill sizes={sizes} className="object-cover" />
-        ) : (
-          <div className="flex h-full items-center justify-center p-2 text-center font-mono text-[10px] text-muted">
-            TODO — {localize(figure.alt, locale)}
-          </div>
-        )}
-      </div>
-      {figure.caption ? (
-        <span className="font-mono text-[11px] text-muted">{localize(figure.caption, locale)}</span>
-      ) : null}
-    </div>
-  );
-}
-
-function MetaCell({ label, color, children }: { label: string; color: string; children: React.ReactNode }) {
-  return (
-    <div className="px-3.5 py-2.5">
-      <div className="font-mono text-[10px] tracking-[0.1em] uppercase" style={{ color }}>
-        {label}
-      </div>
-      <div className="mt-0.5 text-[13px] text-ink">{children}</div>
-    </div>
-  );
-}
-
-function StackTable({
-  stack,
-  label,
-  cmdLabel,
-  typeLabel,
-  usageLabel,
-}: {
-  stack: StackItem[];
-  label: string;
-  cmdLabel: string;
-  typeLabel: string;
-  usageLabel: string;
-}) {
-  return (
-    <div className="rounded-[8px] border border-dashed border-line-soft px-3.5 py-3">
-      <div className="mb-2 font-mono text-[11px] text-muted">--{label}</div>
-      <div className="grid grid-cols-[minmax(0,1fr)_64px_110px] gap-x-3 gap-y-1 font-mono text-[12px]">
-        <span className="w-fit rounded-[2px] bg-wash px-1.5 py-0.5 text-accent uppercase">{cmdLabel}</span>
-        <span className="w-fit rounded-[2px] bg-wash px-1.5 py-0.5 text-accent uppercase">{typeLabel}</span>
-        <span className="w-fit rounded-[2px] bg-wash px-1.5 py-0.5 text-accent uppercase">{usageLabel}</span>
-        {stack.map((t) => (
-          <div key={t.name} className="contents">
-            <span className="truncate text-ink">{t.name}</span>
-            <span style={{ color: KIND_COLOR[t.kind] }}>{t.kind}</span>
-            <span className="whitespace-pre text-accent">{usageBar(t.usage)}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// Bigger, bolder action buttons matching the reference's primary
-// (filled) / ghost (outlined) pair — not reusing the compact pill
-// ProjectCtaButton here since its own classes would fight these on
-// specificity. `demoUrl` is optional on purpose: not every project has
-// a repo *and* a separate live demo, sometimes neither.
-function ActionButton({
+function HeroButton({
   href,
   primary,
   onClick,
@@ -143,11 +65,12 @@ function ActionButton({
       target="_blank"
       rel="noopener noreferrer"
       onClick={onClick}
-      className="flex min-h-[44px] items-center justify-center gap-2 rounded-[4px] px-5 text-[13px] font-bold transition-[filter,background] duration-150 hover:brightness-110"
+      className={`flex min-h-[44px] items-center justify-center gap-2 rounded-[10px] px-5 text-[14px] font-bold transition-[filter] hover:brightness-110 ${FOCUS_RING}`}
       style={{
-        background: primary ? "var(--accent)" : "transparent",
-        color: primary ? "var(--bg)" : "var(--accent)",
-        border: primary ? "none" : "1px solid var(--accent)",
+        fontFamily: INTER,
+        background: primary ? ACCENT : "transparent",
+        color: primary ? BG : ACCENT,
+        border: primary ? "none" : `1px solid ${ACCENT}`,
       }}
     >
       {children}
@@ -155,440 +78,536 @@ function ActionButton({
   );
 }
 
-function ThemesBox({ tags, label }: { tags: string[]; label: string }) {
+function FactCell({ label, color, children }: { label: string; color: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-wrap items-center gap-2 px-0.5 py-1 font-mono text-[12px]">
-      <span className="text-muted">--{label}</span>
-      {tags.map((tag) => (
-        <span key={tag} className="rounded-[3px] bg-wash px-2 py-1 text-[11px]" style={{ color: AMBER }}>
-          #{tag}
-        </span>
-      ))}
+    <div className="px-3.5 py-3">
+      <dt className="font-mono text-[10px] tracking-[0.1em] uppercase" style={{ color, fontFamily: MONO }}>
+        {label}
+      </dt>
+      <dd className="mt-1 text-[14px]" style={{ color: INK, fontFamily: INTER }}>
+        {children}
+      </dd>
     </div>
   );
 }
 
-// One project's dedicated page: the client's own "design D" case-study
-// reference, ported structurally as-is and reskinned onto this site's
-// glass/mono-green tokens — window chrome, project tabs (replacing the
-// old left sidebar), sticky table of contents, meta grid, stack table,
-// diff/checklist/diagram/process/challenges/outcome sections, and the
-// prev/next pager all come straight from that reference. Home stays
-// the site's own top-left logo, so there's no separate "cd ~" link in
-// the window itself.
+function TldrCard({
+  n,
+  color,
+  bg,
+  label,
+  text,
+}: {
+  n: string;
+  color: string;
+  bg: string;
+  label: string;
+  text: string;
+}) {
+  return (
+    <div className="flex flex-col gap-2 rounded-[14px] border p-3.5" style={{ borderColor: BORDER, background: PANEL }}>
+      <span
+        className="flex h-7 w-7 items-center justify-center rounded-full font-mono text-[13px] font-bold"
+        style={{ color, background: bg, fontFamily: MONO }}
+      >
+        {n}
+      </span>
+      <span className="font-mono text-[10px] uppercase tracking-[0.1em]" style={{ color: MUTED, fontFamily: MONO }}>
+        {label}
+      </span>
+      <p className="text-[17px] leading-snug" style={{ color: INK, fontFamily: INTER }}>
+        {text}
+      </p>
+    </div>
+  );
+}
+
+function SectionLabel({ id, num, label }: { id: string; num: string; label: string }) {
+  return (
+    <span
+      id={`${id}-tag`}
+      className="font-mono text-[11px] tracking-[0.1em] uppercase"
+      style={{ color: MUTED, fontFamily: MONO }}
+    >
+      {num} · {label}
+    </span>
+  );
+}
+
+function SectionHeadline({ id, children }: { id: string; children: React.ReactNode }) {
+  return (
+    <h2
+      id={`${id}-heading`}
+      className="text-[21px] font-bold sm:text-[25px]"
+      style={{ color: INK, fontFamily: INTER, letterSpacing: "-0.01em", lineHeight: 1.2 }}
+    >
+      {children}
+    </h2>
+  );
+}
+
+// why / did: two columns (text + optional image) that alternate sides.
+// With no image (the common case right now — none of the data has
+// section images yet), this is just the text column, full width.
+function StoryRow({
+  id,
+  num,
+  label,
+  headline,
+  image,
+  imageAlt,
+  imageOnLeft,
+  children,
+}: {
+  id: string;
+  num: string;
+  label: string;
+  headline: string;
+  image?: string;
+  imageAlt: string;
+  imageOnLeft: boolean;
+  children: React.ReactNode;
+}) {
+  const text = (
+    <div className="flex min-w-0 flex-1 flex-col gap-2.5">
+      <SectionLabel id={id} num={num} label={label} />
+      <SectionHeadline id={id}>{headline}</SectionHeadline>
+      {children}
+    </div>
+  );
+  const img = (
+    <div
+      className="relative w-full shrink-0 overflow-hidden rounded-[16px] border md:w-[280px]"
+      style={{ aspectRatio: "4 / 3", borderColor: BORDER, background: BG }}
+    >
+      {image ? (
+        <Image src={image} alt={imageAlt} fill sizes="(max-width: 900px) 100vw, 280px" className="object-cover" />
+      ) : (
+        <div className="flex h-full items-center justify-center p-3 text-center font-mono text-[11px]" style={{ color: MUTED }}>
+          [ image ]
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <section
+      id={id}
+      aria-labelledby={`${id}-heading`}
+      className="scroll-mt-20 flex flex-col gap-5 md:flex-row md:items-start"
+    >
+      {imageOnLeft ? img : null}
+      {text}
+      {!imageOnLeft ? img : null}
+    </section>
+  );
+}
+
 export function ProjectPage({ project, projects }: { project: Project; projects: Project[] }) {
   const { locale, t } = useLocale();
   const { playClick } = useSound();
+  const onNav = () => playClick("nav");
+
+  // The top bar wraps to two rows on narrow screens, so the progress
+  // nav's sticky offset (it sits lower in the DOM, right before the
+  // sections) has to track the bar's real height rather than a
+  // hardcoded pixel guess.
+  const headerRef = useRef<HTMLElement>(null);
+  const [headerH, setHeaderH] = useState(0);
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(() => setHeaderH(el.offsetHeight));
+    ro.observe(el);
+    setHeaderH(el.offsetHeight);
+    return () => ro.disconnect();
+  }, []);
 
   const index = projects.findIndex((p) => p.slug === project.slug);
-  const prev = projects[index - 1];
-  const next = projects[index + 1];
+  const total = projects.length;
+  const prevProject = projects[(index - 1 + total) % total];
+  const nextProject = projects[(index + 1) % total];
 
-  const steps = project.process.filter((step) => !step.hidden);
-  const challenges = project.challenges.filter((c) => !c.hidden);
-  const metrics = project.outcome.metrics.filter((m) => !m.hidden);
-  const before = localize(project.why.before, locale);
-  const goal = localize(project.why.goal, locale);
+  const challengeItems = project.challenges?.items ?? [];
 
-  const hidden = new Set<ProjectBlock>(project.hide);
-  if (!steps.length) hidden.add("process");
-  if (!challenges.length) hidden.add("challenges");
-  const show = (block: ProjectBlock) => !hidden.has(block);
+  const sectionDefs = [
+    project.why ? { id: "why", label: t.work.sectionWhy } : null,
+    project.did ? { id: "did", label: t.work.sectionDid } : null,
+    project.how ? { id: "how", label: t.work.sectionHow } : null,
+    challengeItems.length ? { id: "challenges", label: t.work.sectionChallenges } : null,
+    project.outcome ? { id: "outcome", label: t.work.sectionOutcome } : null,
+  ].filter((s): s is { id: string; label: string } => s !== null);
+  const sectionNum = (id: string) => String(sectionDefs.findIndex((s) => s.id === id) + 1).padStart(2, "0");
 
-  // Default page order. A project's `sectionOrder` goes first, and
-  // anything it doesn't mention follows in this order.
-  const allSections: { id: ProjectSection; label: string }[] = [
-    { id: "tldr", label: t.work.tldrLabel },
-    { id: "why", label: t.work.whyLabel },
-    { id: "role", label: t.work.contributionsLabel },
-    { id: "how", label: t.work.whatIDid },
-    { id: "process", label: t.work.processLabel },
-    { id: "challenges", label: t.work.challengesLabel },
-    { id: "outcome", label: t.work.outcomeLabel },
-  ];
-  const orderedIds = new Set([...(project.sectionOrder ?? []), ...allSections.map((s) => s.id)]);
-  const TOC = Array.from(orderedIds)
-    .filter(show)
-    .map((id) => allSections.find((s) => s.id === id)!);
-  // Numbered from what's left, so hiding or moving a section leaves no gap.
-  const sectionNum = (id: ProjectSection) =>
-    String(TOC.findIndex((s) => s.id === id) + 1).padStart(2, "0");
-
-  const sections: Record<ProjectSection, React.ReactNode> = {
-    tldr: (
-      <section id="tldr" className="flex scroll-mt-4 flex-col gap-2.5">
-        <SectionHeading num={sectionNum("tldr")}>{t.work.tldrLabel}</SectionHeading>
-        <RichText
-          className="rounded-[8px] border border-line-soft bg-glass-soft px-4 py-3 text-[13px] leading-relaxed text-ink"
-          text={localize(project.tldr, locale)}
-        />
-      </section>
-    ),
-
-    why: (
-      <section id="why" className="flex scroll-mt-4 flex-col gap-2.5">
-        <SectionHeading num={sectionNum("why")}>{t.work.whyLabel}</SectionHeading>
-        <RichText className="text-[13px] leading-relaxed text-dim" text={localize(project.why.problem, locale)} />
-        {before || goal ? (
-          <div className="overflow-hidden rounded-[8px] border border-line-soft text-[12.5px]">
-            {before ? (
-              <div className="px-3.5 py-2" style={{ background: RED_BG, color: RED }}>
-                − {t.work.beforeLabel}: <InlineText text={before} />
-              </div>
-            ) : null}
-            {goal ? (
-              <div className="px-3.5 py-2" style={{ background: GREEN_BG, color: "var(--accent)" }}>
-                + {t.work.goalLabel}: <InlineText text={goal} />
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-      </section>
-    ),
-
-    role: (
-      <section id="role" className="flex scroll-mt-4 flex-col gap-2.5">
-        <SectionHeading num={sectionNum("role")}>{t.work.contributionsLabel}</SectionHeading>
-        <RichText
-          className="text-[13px] leading-relaxed text-dim"
-          text={localize(project.contributions.summary, locale)}
-        />
-        <ul className="flex flex-col gap-1.5">
-          {project.contributions.done[locale].map((line) => (
-            <li key={line} className="flex gap-3 text-[13px] text-ink">
-              <span className="shrink-0 text-accent">[x]</span>
-              <span>
-                <InlineText text={line} />
-              </span>
-            </li>
-          ))}
-          {project.contributions.others?.[locale].map((line) => (
-            <li key={line} className="flex gap-3 text-[13px] text-muted">
-              <span className="shrink-0">[ ]</span>
-              <span>
-                <InlineText text={line} />
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ),
-
-    how: (
-      <section id="how" className="flex scroll-mt-4 flex-col gap-3">
-        <SectionHeading num={sectionNum("how")}>{t.work.whatIDid}</SectionHeading>
-        <RichText className="text-[13px] leading-relaxed text-dim" text={localize(project.how.summary, locale)} />
-        <div className="flex flex-wrap items-stretch gap-2 rounded-[8px] border border-line-soft bg-glass-soft p-4">
-          {(
-            [
-              { label: t.work.inputLabel, value: project.how.diagram.input },
-              { label: t.work.coreLabel, value: project.how.diagram.core },
-              { label: t.work.outputLabel, value: project.how.diagram.output },
-            ] satisfies { label: string; value: Project["title"] }[]
-          ).map((node, i, arr) => (
-            <div key={node.label} className="flex flex-1 items-center gap-2" style={{ minWidth: 140 }}>
-              <div className="flex-1 rounded-[6px] border border-line px-3 py-2 text-center">
-                <div className="text-[10px] text-muted">{node.label}</div>
-                <div className="mt-0.5 text-[12px] text-ink">{localize(node.value, locale)}</div>
-              </div>
-              {i < arr.length - 1 ? <span className="shrink-0 text-muted">──▶</span> : null}
-            </div>
-          ))}
-        </div>
-      </section>
-    ),
-
-    process: (
-      <section id="process" className="flex scroll-mt-4 flex-col gap-2.5">
-        <SectionHeading num={sectionNum("process")}>{t.work.processLabel}</SectionHeading>
-        <ol className="flex flex-col">
-          {steps.map((step, i) => (
-            <li key={i} className="flex gap-4 border-t border-dashed border-line-soft py-3.5 first:border-t-0">
-              <span className="w-[32px] shrink-0 text-[18px] font-bold" style={{ color: AMBER }}>
-                {String(i).padStart(2, "0")}
-              </span>
-              <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                <h3 className="text-[13px] font-semibold text-ink">{localize(step.title, locale)}</h3>
-                <RichText className="text-[12.5px] leading-relaxed text-dim" text={localize(step.body, locale)} />
-                {step.image ? (
-                  <div className="max-w-[320px]">
-                    <FigureBox figure={step.image} locale={locale} ratio="16 / 9" sizes="320px" />
-                  </div>
-                ) : null}
-                {step.beforeAfter ? (
-                  <div className="grid max-w-[460px] grid-cols-2 gap-2.5">
-                    <FigureBox figure={step.beforeAfter.before} locale={locale} ratio="4 / 3" sizes="220px" />
-                    <FigureBox figure={step.beforeAfter.after} locale={locale} ratio="4 / 3" sizes="220px" />
-                  </div>
-                ) : null}
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-    ),
-
-    challenges: (
-      <section id="challenges" className="flex scroll-mt-4 flex-col gap-2.5">
-        <SectionHeading num={sectionNum("challenges")}>{t.work.challengesLabel}</SectionHeading>
-        <div className="flex flex-col gap-2.5">
-          {challenges.map((c, i) => (
-            <div key={i} className="overflow-hidden rounded-[8px] border border-line-soft">
-              <div
-                className="px-3.5 py-2 text-[12.5px]"
-                style={{
-                  background: c.level === "error" ? RED_BG : AMBER_BG,
-                  color: c.level === "error" ? RED : AMBER,
-                }}
-              >
-                {c.level === "error" ? "✗ " : "⚠ "}
-                <InlineText text={localize(c.problem, locale)} />
-              </div>
-              <RichText
-                className="px-3.5 py-2.5 text-[12.5px] leading-relaxed text-ink"
-                text={localize(c.fix, locale)}
-                lead={<span className="font-bold text-accent">✓ {t.work.fixLabel}: </span>}
-              />
-            </div>
-          ))}
-        </div>
-      </section>
-    ),
-
-    outcome: (
-      <section id="outcome" className="flex scroll-mt-4 flex-col gap-3">
-        <SectionHeading num={sectionNum("outcome")}>{t.work.outcomeLabel}</SectionHeading>
-        {metrics.length ? (
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-            {metrics.map((m, i) => (
-              <div key={i} className="rounded-[8px] border border-line-soft px-3.5 py-3">
-                <div className="text-[22px] font-bold text-accent">{m.value}</div>
-                <div className="text-[11px] text-muted">{localize(m.label, locale)}</div>
-              </div>
-            ))}
-          </div>
-        ) : null}
-        <RichText className="text-[13px] leading-relaxed text-ink" text={localize(project.outcome.summary, locale)} />
-        {project.outcome.figure ? (
-          <div className="max-w-[420px]">
-            <FigureBox figure={project.outcome.figure} locale={locale} ratio="16 / 9" />
-          </div>
-        ) : null}
-      </section>
-    ),
-  };
+  const hasFacts = project.role || project.timeline || project.team || project.status || project.tags.length > 0;
 
   return (
-    <div className="flex h-full min-h-0 flex-col items-center overflow-y-auto p-4 font-mono md:overflow-hidden md:p-8">
-      <div className="flex w-full max-w-[1800px] flex-col">
-        <div className="flex min-h-0 flex-col overflow-hidden rounded-[24px] border border-line bg-panel [backdrop-filter:blur(22px)_saturate(1.2)] [box-shadow:var(--shadow)] md:max-h-[86vh]">
-          {/* ---------- title bar ---------- */}
-          <div className="flex shrink-0 items-center gap-2 border-b border-line bg-glass-soft px-4 py-2.5">
-            <span className="h-2 w-2 rounded-full bg-line-hot" />
-            <span className="h-2 w-2 rounded-full bg-line" />
-            <span className="ml-1.5 text-[11px] text-muted">
-              marco@portfolio: ~/projects/{project.slug}
-            </span>
+    <article
+      className="flex h-full min-h-0 w-full justify-center overflow-y-auto"
+      style={{ color: INK }}
+    >
+      <div
+        data-project-scroll
+        className="flex h-full min-h-0 w-full flex-col overflow-y-auto px-4 md:px-10"
+        style={{ fontFamily: MONO }}
+      >
+        {/* ---------- top bar ---------- */}
+        <header
+          ref={headerRef}
+          className="sticky top-3 z-20 mx-auto flex w-full max-w-[1100px] flex-wrap items-center justify-between gap-2.5 rounded-[16px] border px-4 py-3 md:px-6"
+          style={{ borderColor: BORDER, background: "rgba(10,26,18,0.92)", backdropFilter: "blur(16px)" }}
+        >
+          <div className="flex items-center gap-2.5">
+            <Link href="/work" onClick={onNav} className={switcherStyles.btn}>
+              {t.work.allWorkBack}
+            </Link>
+
+            <ProjectSwitcher projects={projects} index={index} locale={locale} t={t} onNav={onNav} />
           </div>
 
-          {/* ---------- project tabs ---------- */}
-          {/* overflow-x-auto with a visible scrollbar, not hidden —
-              this is a real nav (more projects will land here later),
-              so it needs the affordance telling you there's more. */}
-          <nav
-            aria-label="Projects"
-            className="flex shrink-0 items-stretch overflow-x-auto border-b border-line bg-glass-soft text-[12px]"
-          >
-            {projects.map((p, i) => {
-              const active = p.slug === project.slug;
-              return (
-                <Link
-                  key={p.slug}
-                  href={`/work/${p.slug}`}
-                  onClick={() => playClick("nav")}
-                  aria-current={active ? "page" : undefined}
-                  className="flex shrink-0 items-center gap-2 border-r border-line px-4 py-2.5 whitespace-nowrap transition-colors"
-                  style={{
-                    color: active ? "var(--accent)" : "var(--dim)",
-                    borderTop: active ? "2px solid var(--accent)" : "2px solid transparent",
-                  }}
-                >
-                  <span style={{ color: active ? AMBER : "var(--muted)" }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  {p.slug}
-                </Link>
-              );
-            })}
+          <div className="flex items-center gap-2">
             <Link
-              href="/work"
-              onClick={() => playClick("nav")}
-              className="ml-auto flex shrink-0 items-center gap-1.5 border-l border-line px-4 py-2.5 whitespace-nowrap text-muted transition-colors hover:text-accent"
+              href={`/work/${prevProject.slug}`}
+              onClick={onNav}
+              aria-label={`${t.work.prevProjectLabel}: ${prevProject.slug}`}
+              className={switcherStyles.btn}
             >
-              cd ../ ← {t.work.allProjects}
+              ←
             </Link>
-          </nav>
+            <Link href={`/work/${nextProject.slug}`} onClick={onNav} className={switcherStyles.btn}>
+              {t.work.nextProjectLabel}: {nextProject.slug} →
+            </Link>
+          </div>
+        </header>
 
-          <div className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto p-6 md:p-10">
-            {/* ---------- header ---------- */}
-            <div className="flex flex-col gap-4">
-              <div className="text-[12px] text-muted">
-                <span style={{ color: "var(--accent)" }}>marco@portfolio</span>:
-                <span style={{ color: BLUE }}>~/projects</span>$ cat ./{project.slug}/README.md
+        <div className="flex w-full max-w-[1100px] flex-1 flex-col gap-7 self-center py-6">
+          {/* ---------- hero ---------- */}
+          <section aria-label={localize(project.title, locale)} className="grid gap-6 md:grid-cols-2 md:items-center">
+            <div className="flex min-w-0 flex-col gap-3.5">
+              <span className="font-mono text-[11px] tracking-[0.08em]" style={{ color: AMBER }}>
+                {String(index + 1).padStart(2, "0")} · {project.slug} · {project.years}
+              </span>
+              <h1
+                className="font-extrabold"
+                style={{
+                  fontFamily: INTER,
+                  fontSize: "clamp(34px, 7vw, 54px)",
+                  fontWeight: 800,
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.05,
+                  color: INK,
+                }}
+              >
+                {localize(project.title, locale)}
+                <span style={{ color: ACCENT }}>.</span>
+              </h1>
+              {project.pitch ? (
+                <p className="max-w-[520px] text-[18px] leading-relaxed" style={{ fontFamily: INTER, color: DIM }}>
+                  {localize(project.pitch, locale)}
+                </p>
+              ) : null}
+              <div className="flex flex-wrap gap-3 pt-1">
+                {project.demoUrl ? (
+                  <HeroButton href={project.demoUrl} primary onClick={onNav}>
+                    {t.work.heroLiveLabel} ↗
+                  </HeroButton>
+                ) : null}
+                {project.url ? (
+                  <HeroButton href={project.url} onClick={onNav}>
+                    {isGithubUrl(project.url) ? <GhIcon className="h-4 w-4" /> : <ExternalLink className="h-4 w-4" />}
+                    {t.work.viewCode}
+                  </HeroButton>
+                ) : null}
               </div>
+            </div>
 
-              <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
-                <div className="flex min-w-0 flex-1 flex-col gap-2.5">
-                  <span className="text-[11px] tracking-[0.08em]" style={{ color: AMBER }}>
-                    {`// ${project.slug} · ${project.years}`}
-                  </span>
-                  <h1
-                    className="uppercase text-accent"
-                    style={{
-                      fontSize: "clamp(28px, 5vw, 48px)",
-                      fontWeight: 800,
-                      letterSpacing: "-0.02em",
-                      lineHeight: 1.05,
-                    }}
-                  >
-                    {localize(project.title, locale)}
-                    <span className="animate-blink text-accent">_</span>
-                  </h1>
-                  <p className="max-w-[560px] text-[14px] leading-relaxed text-dim">
-                    {localize(project.pitch, locale)}
-                  </p>
+            <div
+              className="relative w-full overflow-hidden rounded-[20px] border"
+              style={{ aspectRatio: "4 / 3", borderColor: BORDER, background: PANEL }}
+            >
+              {project.heroImage ? (
+                <Image
+                  src={project.heroImage}
+                  alt={localize(project.title, locale)}
+                  fill
+                  sizes="(max-width: 900px) 100vw, 480px"
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center p-4 text-center font-mono text-[12px]" style={{ color: MUTED }}>
+                  [ hero image ]
                 </div>
+              )}
+            </div>
+          </section>
 
-                {project.url || project.demoUrl ? (
-                  <div className="flex shrink-0 flex-col gap-2 sm:w-[220px]">
-                    {project.url ? (
-                      <ActionButton href={project.url} primary onClick={() => playClick("nav")}>
-                        {isGithubUrl(project.url) ? <GhIcon className="h-4 w-4" /> : <ExternalLink className="h-4 w-4" />}
-                        {isGithubUrl(project.url) ? t.work.viewCode : t.work.viewProject}
-                      </ActionButton>
+          {/* ---------- facts row ---------- */}
+          {hasFacts ? (
+            <dl className="grid grid-cols-2 divide-y divide-dashed divide-[#2b5a3f] rounded-[10px] border border-dashed border-[#3e7a57] sm:grid-cols-5 sm:divide-x sm:divide-y-0">
+              {project.role ? (
+                <FactCell label={t.work.roleLabel} color={AMBER}>
+                  {localize(project.role, locale)}
+                </FactCell>
+              ) : null}
+              {project.timeline ? (
+                <FactCell label={t.work.timelineLabel} color={BLUE}>
+                  {localize(project.timeline, locale)}
+                </FactCell>
+              ) : null}
+              {project.team ? (
+                <FactCell label={t.work.teamLabel} color="#c792ea">
+                  {localize(project.team, locale)}
+                </FactCell>
+              ) : null}
+              {project.status ? (
+                <FactCell label={t.work.statusLabel} color={ACCENT}>
+                  <span style={{ color: ACCENT }}>●</span> {localize(project.status, locale)}
+                </FactCell>
+              ) : null}
+              {project.tags.length ? (
+                <div className="px-3.5 py-3">
+                  <dt className="font-mono text-[10px] tracking-[0.1em] uppercase" style={{ color: MUTED }}>
+                    {t.work.stackLabel}
+                  </dt>
+                  <dd className="mt-1.5 flex flex-wrap gap-1.5">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full px-2 py-0.5 font-mono text-[11px]"
+                        style={{ background: "rgba(125,255,168,0.08)", color: AMBER }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              ) : null}
+            </dl>
+          ) : null}
+
+          {/* ---------- the story in 30 seconds ---------- */}
+          {project.tldr ? (
+            <section aria-labelledby="tldr-heading" className="flex flex-col gap-3">
+              <h2
+                id="tldr-heading"
+                className="font-mono text-[11px] tracking-[0.12em] uppercase"
+                style={{ color: MUTED }}
+              >
+                {t.work.tldrSectionLabel}
+              </h2>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <TldrCard n="1" color={RED} bg={RED_BG} label={t.work.tldrProblemLabel} text={localize(project.tldr.problem, locale)} />
+                <TldrCard n="2" color={BLUE} bg={BLUE_BG} label={t.work.tldrBuiltLabel} text={localize(project.tldr.built, locale)} />
+                <TldrCard n="3" color={ACCENT} bg={ACCENT_BG} label={t.work.tldrResultLabel} text={localize(project.tldr.result, locale)} />
+              </div>
+            </section>
+          ) : null}
+
+          {/* ---------- progress nav + sections ---------- */}
+          <ProgressNav sections={sectionDefs} topOffset={headerH + 20} />
+
+          <div className="flex flex-col gap-8">
+            {project.why ? (
+              <StoryRow
+                id="why"
+                num={sectionNum("why")}
+                label={t.work.sectionWhy}
+                headline={localize(project.why.headline, locale)}
+                image={project.why.image}
+                imageAlt={`${localize(project.title, locale)} — why`}
+                imageOnLeft={false}
+              >
+                <RichText
+                  className="text-[15px] leading-relaxed"
+                  style={{ fontFamily: INTER, color: DIM }}
+                  text={localize(project.why.body, locale)}
+                />
+                {project.why.before || project.why.goal ? (
+                  <div className="overflow-hidden rounded-[10px] border text-[13px]" style={{ borderColor: BORDER }}>
+                    {project.why.before ? (
+                      <div className="px-3.5 py-2.5" style={{ background: RED_BG, color: RED }}>
+                        − {t.work.beforeLabel}: <InlineText text={localize(project.why.before, locale)} />
+                      </div>
                     ) : null}
-                    {project.demoUrl ? (
-                      <ActionButton href={project.demoUrl} onClick={() => playClick("nav")}>
-                        ./run --demo ↗
-                      </ActionButton>
+                    {project.why.goal ? (
+                      <div className="px-3.5 py-2.5" style={{ background: ACCENT_BG, color: ACCENT }}>
+                        + {t.work.goalLabel}: <InlineText text={localize(project.why.goal, locale)} />
+                      </div>
                     ) : null}
                   </div>
                 ) : null}
-              </div>
+              </StoryRow>
+            ) : null}
 
-              {project.backstory && show("backstory") ? (
-                <RichText
-                  className="text-[12px] leading-relaxed text-dim"
-                  text={localize(project.backstory, locale)}
-                  lead={<span className="text-muted">{`// ${t.work.backstoryLabel}: `}</span>}
-                />
-              ) : null}
+            {project.did ? (
+              <StoryRow
+                id="did"
+                num={sectionNum("did")}
+                label={t.work.sectionDid}
+                headline={localize(project.did.headline, locale)}
+                image={project.did.image}
+                imageAlt={`${localize(project.title, locale)} — what I did`}
+                imageOnLeft={true}
+              >
+                <ul className="flex flex-col gap-1.5">
+                  {project.did.bullets[locale].map((line) => (
+                    <li key={line} className="flex gap-2.5 text-[15px]" style={{ fontFamily: INTER, color: INK }}>
+                      <span className="shrink-0" style={{ color: ACCENT }} aria-hidden="true">
+                        ✓
+                      </span>
+                      <span>
+                        <InlineText text={line} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </StoryRow>
+            ) : null}
 
-              {show("meta") ? (
-                <div className="grid grid-cols-2 divide-y divide-dashed divide-line-soft rounded-[8px] border border-dashed border-line-soft sm:grid-cols-4 sm:divide-x sm:divide-y-0">
-                  <MetaCell label={t.work.roleLabel} color={AMBER}>
-                    {localize(project.role, locale)}
-                  </MetaCell>
-                  <MetaCell label={t.work.timelineLabel} color={BLUE}>
-                    {localize(project.timeline, locale)}
-                  </MetaCell>
-                  <MetaCell label={t.work.teamLabel} color={PURPLE}>
-                    {localize(project.team, locale)}
-                  </MetaCell>
-                  <MetaCell label={t.work.statusLabel} color="var(--accent)">
-                    <span style={{ color: "var(--accent)" }}>●</span> {localize(project.status, locale)}
-                  </MetaCell>
-                </div>
-              ) : null}
-
-              {show("stack") ? (
-                <StackTable
-                  stack={project.stack}
-                  label={t.work.stackLabel}
-                  cmdLabel={t.work.cmdLabel}
-                  typeLabel={t.work.typeLabel}
-                  usageLabel={t.work.usageLabel}
-                />
-              ) : null}
-
-              {project.tags.length && show("themes") ? <ThemesBox tags={project.tags} label={t.work.themeLabel} /> : null}
-
-              {project.image && show("cover") ? (
-                <div className="relative overflow-hidden rounded-[10px] border border-line bg-bg" style={{ aspectRatio: "21 / 9" }}>
-                  <Image
-                    src={project.image}
-                    alt={localize(project.title, locale)}
-                    fill
-                    sizes="(max-width: 1200px) 100vw, 1300px"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-              ) : null}
-            </div>
-
-            {/* ---------- body: TOC + sections ---------- */}
-            <div className="flex flex-col gap-8 border-t border-line-soft pt-6 md:flex-row md:items-start md:gap-10">
-              <nav aria-label="Sections" className="flex shrink-0 flex-col gap-1.5 text-[12px] md:sticky md:top-0 md:w-[160px]">
-                <div className="mb-1 text-[10px] tracking-[0.12em] text-muted uppercase">{t.work.tocLabel}</div>
-                <div className="flex flex-col border-l border-line">
-                  {TOC.map(({ id, label }, i) => (
-                    <a key={id} href={`#${id}`} className="px-3 py-1.5 text-dim transition-colors hover:text-accent">
-                      <span style={{ color: AMBER }}>{String(i + 1).padStart(2, "0")}</span> {label}
-                    </a>
+            {project.how ? (
+              <section id="how" aria-labelledby="how-heading" className="scroll-mt-20 flex flex-col gap-3">
+                <SectionLabel id="how" num={sectionNum("how")} label={t.work.sectionHow} />
+                <SectionHeadline id="how">{localize(project.how.headline, locale)}</SectionHeadline>
+                <div className="grid gap-2.5" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))" }}>
+                  {project.how.steps[locale].map((step, i) => (
+                    <div
+                      key={i}
+                      className="flex flex-col gap-1.5 rounded-[12px] border p-3.5"
+                      style={{ borderColor: BORDER, background: PANEL }}
+                    >
+                      <span className="font-mono text-[16px] font-bold" style={{ color: AMBER }}>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <p className="text-[13px] leading-relaxed" style={{ fontFamily: INTER, color: DIM }}>
+                        <InlineText text={step} />
+                      </p>
+                    </div>
                   ))}
                 </div>
-              </nav>
-
-              <div className="flex min-w-0 flex-1 flex-col gap-8">
-                {TOC.map(({ id }) => (
-                  <Fragment key={id}>{sections[id]}</Fragment>
-                ))}
-
-                {/* ---------- prev / next ---------- */}
-                {prev || next ? (
-                  <nav aria-label="More projects" className="grid gap-2.5 border-t border-line-soft pt-6 sm:grid-cols-2">
-                    {prev ? (
-                      <Link
-                        href={`/work/${prev.slug}`}
-                        onClick={() => playClick("nav")}
-                        className="rounded-[8px] border border-line-soft px-4 py-3 transition-colors hover:border-line-hot"
-                      >
-                        <div className="text-[11px] text-muted">← cd ../{prev.slug}</div>
-                        <div className="mt-1 text-[14px] font-semibold text-ink">{localize(prev.title, locale)}</div>
-                        <div className="mt-0.5 text-[12px] text-dim">{localize(prev.pitch, locale)}</div>
-                      </Link>
-                    ) : null}
-                    {next ? (
-                      <Link
-                        href={`/work/${next.slug}`}
-                        onClick={() => playClick("nav")}
-                        className="rounded-[8px] border px-4 py-3 text-right transition-colors"
-                        style={{ borderColor: "var(--accent)" }}
-                      >
-                        <div className="text-[11px]" style={{ color: "var(--accent)" }}>
-                          cd ../{next.slug} →
-                        </div>
-                        <div className="mt-1 text-[14px] font-semibold text-ink">{localize(next.title, locale)}</div>
-                        <div className="mt-0.5 text-[12px] text-dim">{localize(next.pitch, locale)}</div>
-                      </Link>
-                    ) : null}
-                  </nav>
-                ) : null}
-
-                <div className="text-[12px] text-muted">
-                  <span style={{ color: "var(--accent)" }}>marco@portfolio</span>:
-                  <span style={{ color: BLUE }}>~/projects</span>${" "}
-                  <span
-                    className="animate-blink inline-block h-[1em] w-[0.55em] align-middle"
-                    style={{ background: "var(--accent)" }}
-                  />
+                <div
+                  className="relative w-full overflow-hidden rounded-[16px] border"
+                  style={{ aspectRatio: "16 / 9", borderColor: BORDER, background: BG }}
+                >
+                  {project.how.image ? (
+                    <Image
+                      src={project.how.image}
+                      alt={`${localize(project.title, locale)} — how`}
+                      fill
+                      sizes="(max-width: 900px) 100vw, 900px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center p-3 text-center font-mono text-[11px]" style={{ color: MUTED }}>
+                      [ image ]
+                    </div>
+                  )}
                 </div>
-              </div>
-            </div>
+              </section>
+            ) : null}
+
+            {project.challenges && challengeItems.length ? (
+              <section id="challenges" aria-labelledby="challenges-heading" className="scroll-mt-20 flex flex-col gap-3">
+                <SectionLabel id="challenges" num={sectionNum("challenges")} label={t.work.sectionChallenges} />
+                <SectionHeadline id="challenges">{localize(project.challenges.headline, locale)}</SectionHeadline>
+                <div className="flex flex-col gap-2.5">
+                  {challengeItems.map((c, i) => (
+                    <div key={i} className="flex flex-col items-stretch gap-0 sm:flex-row sm:items-stretch">
+                      <div
+                        className="flex-1 rounded-[12px] border px-3.5 py-2.5 sm:rounded-r-none"
+                        style={{ borderColor: RED, background: RED_BG }}
+                      >
+                        <div className="font-mono text-[10px] uppercase tracking-[0.1em]" style={{ color: RED }}>
+                          {t.work.problemLabel}
+                        </div>
+                        <div className="mt-1 text-[14px] leading-relaxed" style={{ color: RED, fontFamily: INTER }}>
+                          <InlineText text={localize(c.problem, locale)} />
+                        </div>
+                      </div>
+                      <span
+                        aria-hidden="true"
+                        className="flex items-center justify-center py-1 sm:px-1"
+                        style={{ color: MUTED }}
+                      >
+                        <span className="sm:hidden">↓</span>
+                        <span className="hidden sm:inline">→</span>
+                      </span>
+                      <div
+                        className="flex-1 rounded-[12px] border px-3.5 py-2.5 sm:rounded-l-none"
+                        style={{ borderColor: ACCENT, background: ACCENT_BG }}
+                      >
+                        <div className="font-mono text-[10px] uppercase tracking-[0.1em]" style={{ color: ACCENT }}>
+                          {t.work.fixLabel}
+                        </div>
+                        <div className="mt-1 text-[14px] leading-relaxed" style={{ color: ACCENT, fontFamily: INTER }}>
+                          <InlineText text={localize(c.fix, locale)} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {project.outcome ? (
+              <section id="outcome" aria-labelledby="outcome-heading" className="scroll-mt-20 flex flex-col gap-2.5">
+                <SectionLabel id="outcome" num={sectionNum("outcome")} label={t.work.sectionOutcome} />
+                <div className="flex flex-col gap-3 rounded-[16px] border p-4" style={{ borderColor: BORDER, background: PANEL }}>
+                  <h2
+                    id="outcome-heading"
+                    className="text-[20px] font-bold"
+                    style={{ fontFamily: INTER, color: INK, lineHeight: 1.2 }}
+                  >
+                    {localize(project.outcome.headline, locale)}
+                  </h2>
+                  <RichText
+                    className="text-[14px] leading-relaxed"
+                    style={{ fontFamily: INTER, color: DIM }}
+                    text={localize(project.outcome.body, locale)}
+                  />
+                  {project.outcome.stats?.length ? (
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                      {project.outcome.stats.map((s, i) => (
+                        <div key={i} className="rounded-[10px] border px-3 py-2.5" style={{ borderColor: BORDER }}>
+                          <div className="text-[22px] font-bold" style={{ color: ACCENT, fontFamily: INTER }}>
+                            {s.value}
+                          </div>
+                          <div className="font-mono text-[11px]" style={{ color: MUTED }}>
+                            {localize(s.label, locale)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
           </div>
+
+          {/* ---------- footer: next project ---------- */}
+          <section aria-label="Next project" className="border-t pt-6" style={{ borderColor: BORDER }}>
+            <Link
+              href={`/work/${nextProject.slug}`}
+              onClick={onNav}
+              className={`group flex flex-col gap-1.5 rounded-[16px] border p-5 transition-colors ${FOCUS_RING}`}
+              style={{ borderColor: BORDER }}
+            >
+              <span className="font-mono text-[11px] tracking-[0.1em] uppercase" style={{ color: MUTED }}>
+                {t.work.nextProjectCta} · {String(((index + 1) % total) + 1).padStart(2, "0")}
+              </span>
+              <span className="text-[24px] font-bold" style={{ fontFamily: INTER, color: ACCENT }}>
+                {localize(nextProject.title, locale)}{" "}
+                <span
+                  aria-hidden="true"
+                  className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:transform-none"
+                >
+                  →
+                </span>
+              </span>
+            </Link>
+          </section>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

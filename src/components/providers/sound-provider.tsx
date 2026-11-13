@@ -15,7 +15,8 @@ export type SoundVariant =
   | "themeLight"
   | "themeDark"
   | "pageOpen"
-  | "hover";
+  | "hover"
+  | "projectHover";
 
 type SoundContextValue = {
   muted: boolean;
@@ -27,13 +28,13 @@ const SoundContext = createContext<SoundContextValue | null>(null);
 
 // Single-ramp oscillator tones: frequency sweeps start→end while the
 // volume decays from `gain` to silence over `duration` seconds. The
-// short phrase on each is roughly what it sounds like. (nav / honk /
-// pageOpen / hover are richer and have their own functions below.)
+// short phrase on each is roughly what it sounds like. (nav / pageOpen
+// are richer and have their own function below; toggle / honk / hover /
+// projectHover play real recorded clips instead — see SOUND_FILES.)
 const SOUND_VARIANTS: Record<
-  Exclude<SoundVariant, "nav" | "honk" | "pageOpen" | "hover">,
+  Exclude<SoundVariant, "nav" | "toggle" | "honk" | "pageOpen" | "hover" | "projectHover">,
   { type: OscillatorType; start: number; end: number; duration: number; gain: number }
 > = {
-  toggle: { type: "triangle", start: 650, end: 900, duration: 0.06, gain: 0.05 }, // neutral tick
   open: { type: "sine", start: 420, end: 880, duration: 0.1, gain: 0.06 }, // rising pop
   close: { type: "sine", start: 780, end: 260, duration: 0.1, gain: 0.06 }, // falling thud
   maximize: { type: "sawtooth", start: 500, end: 1300, duration: 0.13, gain: 0.05 }, // buzzy expand
@@ -84,24 +85,6 @@ function playTypewriterClick(ctx: AudioContext) {
   osc.stop(now + thockDelay + 0.03);
 }
 
-// Cartoon "honk": a square wave that swoops up in pitch then back down.
-function playPenguinHonk(ctx: AudioContext) {
-  const now = ctx.currentTime;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = "square";
-  osc.frequency.setValueAtTime(220, now);
-  osc.frequency.exponentialRampToValueAtTime(560, now + 0.06);
-  osc.frequency.exponentialRampToValueAtTime(180, now + 0.18);
-  gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(0.09, now + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start(now);
-  osc.stop(now + 0.24);
-}
-
 // Two quick rising sine blips in a row, like a page turning — marks a
 // full-page navigation (opening a project from the work list).
 function playPageOpen(ctx: AudioContext) {
@@ -125,55 +108,43 @@ function playPageOpen(ctx: AudioContext) {
   });
 }
 
-// A thin, papery "flip" (split-flap display) for hovering anything —
-// same shape as playTypewriterClick but higher, narrower and much
-// quieter.
-function playFlipClick(ctx: AudioContext) {
-  const now = ctx.currentTime;
+// Recorded clips for the four variants that got real sound files
+// (everything else above stays synthesized). Cached per-variant so each
+// plays from a single preloaded <audio> element — resetting
+// currentTime before every play() lets a rapid-fire trigger (hovering
+// across several cards fast) retrigger cleanly instead of queuing.
+const SOUND_FILES: Record<"toggle" | "honk" | "hover" | "projectHover", { src: string; volume: number }> = {
+  toggle: { src: "/sounds/mixkit-cool-interface-click-tone-2568.wav", volume: 0.45 },
+  honk: { src: "/sounds/mixkit-modern-technology-select-3124.wav", volume: 0.55 },
+  hover: { src: "/sounds/mixkit-plastic-bubble-click-1124.wav", volume: 0.25 },
+  projectHover: { src: "/sounds/mixkit-interface-click-hover-1127.wav", volume: 0.25 },
+};
 
-  const noiseDuration = 0.022;
-  const noiseBuffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * noiseDuration), ctx.sampleRate);
-  const data = noiseBuffer.getChannelData(0);
-  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-
-  const noise = ctx.createBufferSource();
-  noise.buffer = noiseBuffer;
-  const bandpass = ctx.createBiquadFilter();
-  bandpass.type = "bandpass";
-  bandpass.frequency.value = 4600;
-  bandpass.Q.value = 2.6;
-  const noiseGain = ctx.createGain();
-  noiseGain.gain.setValueAtTime(0.045, now);
-  noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.016);
-  noise.connect(bandpass);
-  bandpass.connect(noiseGain);
-  noiseGain.connect(ctx.destination);
-  noise.start(now);
-  noise.stop(now + noiseDuration);
-
-  const settleDelay = 0.013;
-  const osc = ctx.createOscillator();
-  const oscGain = ctx.createGain();
-  osc.type = "square";
-  osc.frequency.setValueAtTime(320, now + settleDelay);
-  osc.frequency.exponentialRampToValueAtTime(150, now + settleDelay + 0.014);
-  oscGain.gain.setValueAtTime(0.03, now + settleDelay);
-  oscGain.gain.exponentialRampToValueAtTime(0.0001, now + settleDelay + 0.018);
-  osc.connect(oscGain);
-  oscGain.connect(ctx.destination);
-  osc.start(now + settleDelay);
-  osc.stop(now + settleDelay + 0.02);
+function playFile(
+  cache: React.MutableRefObject<Partial<Record<SoundVariant, HTMLAudioElement>>>,
+  variant: keyof typeof SOUND_FILES
+) {
+  const { src, volume } = SOUND_FILES[variant];
+  let el = cache.current[variant];
+  if (!el) {
+    el = new Audio(src);
+    el.volume = volume;
+    cache.current[variant] = el;
+  }
+  el.currentTime = 0;
+  void el.play().catch(() => {});
 }
 
 // Site-wide mute state + playClick(). Mounted at the app root so any
-// button anywhere can make a sound; everything is synthesized, so there
-// are no audio files to load.
+// button anywhere can make a sound — most are synthesized on the fly,
+// a few play a preloaded recorded clip (see SOUND_FILES above).
 export function SoundProvider({ children }: { children: React.ReactNode }) {
   const [muted, setMuted] = useState(false);
 
   // playClick keeps a stable identity (useCallback) but must read the
   // live `muted` value on every call — hence the ref kept in sync.
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const audioElsRef = useRef<Partial<Record<SoundVariant, HTMLAudioElement>>>({});
   const mutedRef = useRef(muted);
   mutedRef.current = muted;
 
@@ -182,13 +153,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     // back on" confirmation.
     if (variant !== "unmute" && mutedRef.current) return;
     try {
+      if (variant === "toggle") return playFile(audioElsRef, "toggle");
+      if (variant === "honk") return playFile(audioElsRef, "honk");
+      if (variant === "hover") return playFile(audioElsRef, "hover");
+      if (variant === "projectHover") return playFile(audioElsRef, "projectHover");
+
       const ctx = audioCtxRef.current ?? new AudioContext();
       audioCtxRef.current = ctx;
 
       if (variant === "nav") return playTypewriterClick(ctx);
-      if (variant === "honk") return playPenguinHonk(ctx);
       if (variant === "pageOpen") return playPageOpen(ctx);
-      if (variant === "hover") return playFlipClick(ctx);
 
       const { type, start, end, duration, gain: peakGain } = SOUND_VARIANTS[variant];
       const osc = ctx.createOscillator();
@@ -203,25 +177,30 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
       osc.start();
       osc.stop(ctx.currentTime + duration);
     } catch {
-      // Web Audio can be blocked (autoplay policy / unsupported) — no-op.
+      // Web Audio / the <audio> element can be blocked (autoplay policy,
+      // unsupported, file missing) — no-op either way.
     }
   }, []);
 
   const toggleMute = useCallback(() => setMuted((m) => !m), []);
 
-  // One delegated listener plays the hover sound for every link/button
-  // on the page. `lastHovered` stops it refiring as the pointer moves
+  // One delegated listener plays a hover sound for every link/button on
+  // the page. `lastHovered` stops it refiring as the pointer moves
   // between a button's children; mouse only, since touch fires
-  // pointerover alongside the tap.
+  // pointerover alongside the tap. A card marked `data-sound-hover` (the
+  // project cards) swaps in its own variant instead of the generic one.
   useEffect(() => {
     let lastHovered: Element | null = null;
     function handlePointerOver(e: PointerEvent) {
       if (e.pointerType !== "mouse") return;
       const target = e.target as Element | null;
-      const interactive = target?.closest('a, button, [role="button"]') ?? null;
+      const interactive = target?.closest('a, button, [role="button"], [data-sound-hover]') ?? null;
       if (interactive === lastHovered) return;
       lastHovered = interactive;
-      if (interactive && !(interactive as HTMLButtonElement).disabled) playClick("hover");
+      if (!interactive || (interactive as HTMLButtonElement).disabled) return;
+      const marked = interactive.closest("[data-sound-hover]");
+      const variant = (marked?.getAttribute("data-sound-hover") as SoundVariant | null) ?? "hover";
+      playClick(variant);
     }
     document.addEventListener("pointerover", handlePointerOver);
     return () => document.removeEventListener("pointerover", handlePointerOver);

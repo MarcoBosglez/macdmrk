@@ -4,8 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
-import { Moon, Sun, Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
@@ -29,7 +28,6 @@ export function ChromeBar() {
   // whole bar is dropped below md; desktop keeps it as-is.
   const hiddenOnMobile = pathname === "/lift";
   const { muted, toggleMute, playClick } = useSound();
-  const { resolvedTheme, setTheme } = useTheme();
   const { locale, setLocale, t } = useLocale();
 
   // Theme / clock both depend on client-only state, so render neutral
@@ -46,6 +44,10 @@ export function ChromeBar() {
     const id = setInterval(tick, 20000);
     return () => clearInterval(id);
   }, []);
+
+  // One-shot flash-ring behind the language toggle on each click — keyed
+  // so remounting it replays the animation instead of looping.
+  const [langPulse, setLangPulse] = useState(0);
 
   // Logo honk easter egg — swap to the open-mouth pose, hold, swap back.
   const [mouthOpen, setMouthOpen] = useState(false);
@@ -157,43 +159,42 @@ export function ChromeBar() {
 
         <button
           onClick={() => {
-            const next = resolvedTheme === "dark" ? "light" : "dark";
-            playClick(next === "light" ? "themeLight" : "themeDark");
-            setTheme(next);
-          }}
-          aria-label="Toggle theme"
-          className="flex h-5 items-center justify-center rounded-[20px] border border-line px-1.5 text-muted transition-colors hover:text-accent sm:h-6 sm:px-2"
-        >
-          {mounted ? (
-            resolvedTheme === "dark" ? (
-              <Sun className="h-3.5 w-3.5" />
-            ) : (
-              <Moon className="h-3.5 w-3.5" />
-            )
-          ) : (
-            <span className="block h-3.5 w-3.5" />
-          )}
-        </button>
-
-        <button
-          onClick={() => {
             playClick(muted ? "unmute" : "mute");
             toggleMute();
           }}
           aria-label={muted ? "Unmute" : "Mute"}
-          className="flex h-5 items-center justify-center rounded-[20px] border border-line px-1.5 text-muted transition-colors hover:text-accent sm:h-6 sm:px-2"
+          className="flex h-5 items-center justify-center rounded-[20px] border border-line px-1.5 text-muted hover:text-accent active:scale-90 sm:h-6 sm:px-2"
+          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
         >
-          {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
+          <span className="relative flex h-3.5 w-3.5 items-center justify-center">
+            <Volume2
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: muted ? 0 : 1 }}
+            />
+            <VolumeX
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: muted ? 1 : 0 }}
+            />
+          </span>
         </button>
 
         <button
           onClick={() => {
             playClick("toggle");
             setLocale(locale === "en" ? "es" : "en");
+            setLangPulse((k) => k + 1);
           }}
           aria-label={`Switch language to ${locale === "en" ? "Español" : "English"}`}
-          className="h-5 rounded-[20px] border border-line px-1.5 font-mono text-[11px] font-bold text-ink transition-colors hover:text-accent sm:h-6 sm:px-2"
+          className="relative isolate h-5 overflow-hidden rounded-[20px] border border-line px-1.5 font-mono text-[11px] font-bold text-ink hover:scale-110 hover:text-accent active:scale-90 sm:h-6 sm:px-2"
+          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
         >
+          {langPulse > 0 ? (
+            <span
+              key={langPulse}
+              aria-hidden="true"
+              className="animate-flash-pulse absolute inset-0 -z-10 rounded-[20px] bg-accent opacity-0"
+            />
+          ) : null}
           {locale === "en" ? "ES" : "EN"}
         </button>
       </div>

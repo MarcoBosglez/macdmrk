@@ -232,6 +232,24 @@ body {
   animation: fade 0.3s ease-out;
 }
 
+/* A quick expanding-and-fading ring behind a control on click — used by
+   the language toggle as one-shot feedback that the switch registered.
+   Keyed to remount on each click (see chrome-bar.tsx) so it always
+   plays from the start rather than looping. */
+@keyframes flash-pulse {
+  from {
+    opacity: 0.4;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+.animate-flash-pulse {
+  animation: flash-pulse 0.4s ease-out;
+}
+
 /* ─── Startup animation ─────────────────────────────────────────────
    A once-per-tab intro (see chrome/startup-animation.tsx): the name
    assembles letter by letter — each glyph snaps from wide+heavy to its

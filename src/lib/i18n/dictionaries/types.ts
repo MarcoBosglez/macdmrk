@@ -72,6 +72,7 @@ export type Dictionary = {
     beforeLabel: string;
     goalLabel: string;
     fixLabel: string;
+    problemLabel: string;
     allProjects: string;
     tocLabel: string;
     cmdLabel: string;
@@ -87,6 +88,23 @@ export type Dictionary = {
     prevPageLabel: string;
     nextPageLabel: string;
     pageLabel: string;
+    // "Story first" case-study redesign (2026-11) — /work/<slug>.
+    allWorkBack: string;
+    switcherAria: string;
+    wipTag: string;
+    heroLiveLabel: string;
+    tldrSectionLabel: string;
+    tldrProblemLabel: string;
+    tldrBuiltLabel: string;
+    tldrResultLabel: string;
+    sectionWhy: string;
+    sectionDid: string;
+    sectionHow: string;
+    sectionChallenges: string;
+    sectionOutcome: string;
+    prevProjectLabel: string;
+    nextProjectLabel: string;
+    nextProjectCta: string;
   };
   gallery: {
     eyebrow: string;

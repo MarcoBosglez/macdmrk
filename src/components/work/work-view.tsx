@@ -10,7 +10,7 @@ import { useLocale } from "@/components/providers/locale-provider";
 import { useSound } from "@/components/providers/sound-provider";
 import { localize, type Locale, type Dictionary } from "@/lib/i18n/dictionaries";
 import { ViewPane } from "@/components/chrome/view-pane";
-import type { Project, ProjectCategory, StackKind } from "@/lib/data/projects";
+import type { Project, ProjectCategory } from "@/lib/data/projects";
 
 export function isGithubUrl(url: string) {
   try {
@@ -34,7 +34,6 @@ const CATEGORY_LABEL_KEY: Record<ProjectCategory, keyof Dictionary["work"]> = {
   academic: "kindAcademic",
   professional: "kindProfessional",
 };
-const STACK_COLOR: Record<StackKind, string> = { lang: BLUE, lib: "#c792ea", tool: "var(--muted)" };
 
 const PER_PAGE = 4;
 
@@ -75,13 +74,13 @@ function Cover({
       className={`relative flex w-full items-center justify-center overflow-hidden rounded-[12px] border bg-bg p-2 text-center font-mono text-[11px] text-muted ${grow ? "min-h-[160px] flex-1" : ""}`}
       style={{
         aspectRatio: grow ? undefined : ratio,
-        borderStyle: project.image ? "solid" : "dashed",
+        borderStyle: project.heroImage ? "solid" : "dashed",
         borderColor: "var(--line)",
       }}
     >
-      {project.image ? (
+      {project.heroImage ? (
         <Image
-          src={project.image}
+          src={project.heroImage}
           alt=""
           fill
           sizes={sizes}
@@ -117,12 +116,15 @@ function CodeLink({
 
 function LeadCard({ project, locale, t, onNav }: { project: Project; locale: Locale; t: Dictionary; onNav: () => void }) {
   return (
-    <article className="group flex flex-col gap-3 rounded-[20px] border border-line bg-panel p-2.5 transition-colors md:flex-[2_1_520px] hover:border-line-hot">
+    <article
+      data-sound-hover="projectHover"
+      className="group flex flex-col gap-3 rounded-[20px] border border-line bg-panel p-2.5 transition-colors md:flex-[2_1_520px] hover:border-line-hot"
+    >
       <Cover project={project} grow sizes="(max-width: 900px) 100vw, 680px" priority />
       <div className="flex shrink-0 flex-col gap-2 px-2 pb-1">
         <div className="flex flex-wrap items-center gap-2.5 font-mono text-[11px] text-muted">
           <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
-          <span className="text-accent">{localize(project.role, locale)}</span>
+          {project.role ? <span className="text-accent">{localize(project.role, locale)}</span> : null}
           <span>{project.years}</span>
         </div>
         <h3
@@ -131,11 +133,13 @@ function LeadCard({ project, locale, t, onNav }: { project: Project; locale: Loc
         >
           {localize(project.title, locale)}
         </h3>
-        <p className="text-[14px] leading-relaxed text-dim">{localize(project.pitch, locale)}</p>
+        {project.pitch ? (
+          <p className="text-[14px] leading-relaxed text-dim">{localize(project.pitch, locale)}</p>
+        ) : null}
         <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
-          {project.stack.slice(0, 5).map((it) => (
-            <span key={it.name} className="rounded-full bg-wash px-2.5 py-1" style={{ color: STACK_COLOR[it.kind] }}>
-              {it.name}
+          {project.tags.slice(0, 5).map((tag) => (
+            <span key={tag} className="rounded-full bg-wash px-2.5 py-1 text-accent">
+              {tag}
             </span>
           ))}
         </div>
@@ -162,7 +166,10 @@ function LeadCard({ project, locale, t, onNav }: { project: Project; locale: Loc
 
 function SideCard({ project, locale, t, onNav }: { project: Project; locale: Locale; t: Dictionary; onNav: () => void }) {
   return (
-    <article className="group flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot">
+    <article
+      data-sound-hover="projectHover"
+      className="group flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot"
+    >
       <Cover project={project} ratio="3 / 1" sizes="(max-width: 900px) 100vw, 340px" />
       <div className="flex flex-1 flex-col gap-1 px-1.5">
         <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
@@ -172,7 +179,9 @@ function SideCard({ project, locale, t, onNav }: { project: Project; locale: Loc
         <h3 className="text-[16px] leading-tight font-bold text-ink" style={{ letterSpacing: "-0.02em" }}>
           {localize(project.title, locale)}
         </h3>
-        <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
+        {project.pitch ? (
+          <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
+        ) : null}
       </div>
       <Link
         href={`/work/${project.slug}`}
@@ -187,7 +196,10 @@ function SideCard({ project, locale, t, onNav }: { project: Project; locale: Loc
 
 function GridCard({ project, locale, t, onNav }: { project: Project; locale: Locale; t: Dictionary; onNav: () => void }) {
   return (
-    <article className="group flex flex-col gap-1.5 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot">
+    <article
+      data-sound-hover="projectHover"
+      className="group flex flex-col gap-1.5 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot"
+    >
       <Cover project={project} ratio="16 / 8" sizes="(max-width: 700px) 100vw, 340px" />
       <div className="flex flex-1 flex-col gap-1 px-1.5">
         <div className="flex min-h-[46px] flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
@@ -204,8 +216,14 @@ function GridCard({ project, locale, t, onNav }: { project: Project; locale: Loc
         >
           {localize(project.title, locale)}
         </h3>
-        <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
-        <div className="mt-auto truncate font-mono text-[11px] text-muted">{project.stack.map((it) => it.name).join(" · ")}</div>
+        {project.pitch ? (
+          <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
+        ) : null}
+        {project.tags.length ? (
+          <div className="mt-auto truncate font-mono text-[11px] text-muted">
+            {project.tags.join(" · ")}
+          </div>
+        ) : null}
       </div>
       <div className="flex gap-2 px-0.5">
         <CodeLink

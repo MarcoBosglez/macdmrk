@@ -7,7 +7,7 @@ import { AboutContent } from "@/components/about/about-content";
 // use node:fs itself.
 function hasCoverPhoto() {
   try {
-    return fs.existsSync(path.join(process.cwd(), "public", "images", "marco-cutout.png"));
+    return fs.existsSync(path.join(process.cwd(), "public", "images", "marco-cutout.webp"));
   } catch {
     return false;
   }

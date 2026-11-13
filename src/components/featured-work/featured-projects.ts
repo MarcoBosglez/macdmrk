@@ -1,7 +1,10 @@
-// Content for the homepage "Featured" card. Edit freely.
-// Order = display order (01, 02, 03). Mirrors the same 3 projects
-// marked `featured: true` in src/lib/data/projects.ts, so the two
-// "featured" picks stay in sync — update both if you change one.
+// Content for the homepage "Featured" card — derived from PROJECTS in
+// src/lib/data/projects.ts, not edited by hand. To change what shows
+// up here, mark a project `featured: true` (or unmark one) there; the
+// first 3 featured projects (in PROJECTS order) show up here
+// automatically, in sync with the ★ Featured row on /work.
+
+import { PROJECTS } from "@/lib/data/projects";
 
 export type FeaturedCategory = "personal" | "academic" | "professional";
 
@@ -12,50 +15,20 @@ export interface FeaturedProject {
   year: string;
   /** One or two sentences — shown in full, no line clamp. */
   description: string;
-  /** Where "learn more" goes */
+  /** Where the (fully clickable) card links to. */
   href: string;
-  /** GitHub link. Omit to hide the code button. */
-  repoUrl?: string;
   /** Path under /public. Omit to show a placeholder box. */
   image?: { src: string; alt: string };
-  /** Shown as a joined "a · b · c" line. Omit to hide it. */
-  stack?: string[];
 }
 
-export const featuredProjects: FeaturedProject[] = [
-  {
-    slug: "web-portfolio",
-    name: "Web Portfolio",
-    category: "personal",
-    year: "2026",
-    description:
-      "An interactive personal platform built to show both my Computer Science background and my digital art in one place.",
-    href: "/work/web-portfolio",
-    repoUrl: "https://github.com/MarcoBosglez/macdmrk",
-    image: { src: "/work/web-portfolio.webp", alt: "Web Portfolio" },
-    stack: ["Next.js", "TypeScript", "Tailwind CSS"],
-  },
-  {
-    slug: "aws-rsh",
-    name: "Amazon Recorder System Helper",
-    category: "academic",
-    year: "2022",
-    description:
-      "A full-stack extension for Amazon Connect that recorded call-center interactions between agents and customers, for audit, training and performance metrics.",
-    href: "/work/aws-rsh",
-    image: { src: "/work/aws-rsh-cover.webp", alt: "Amazon Recorder System Helper" },
-    stack: ["Java", "Spring", "Docker", "React"],
-  },
-  {
-    slug: "sentiment-analysis",
-    name: "ML Sentiment Analysis",
-    category: "academic",
-    year: "2023",
-    description:
-      "An NLP study on mental-health tweets: multiclass and multi-label classification of 625 hand-labeled tweets to measure the accuracy of a negative-sentiment model.",
-    href: "/work/sentiment-analysis",
-    // Published paper, not a repo — omitted on purpose.
-    image: { src: "/work/sentiment-analysis-cover.webp", alt: "ML Sentiment Analysis" },
-    stack: ["Python", "NLTK"],
-  },
-];
+export const featuredProjects: FeaturedProject[] = PROJECTS.filter((p) => p.featured)
+  .slice(0, 3)
+  .map((p) => ({
+    slug: p.slug,
+    name: p.title.en,
+    category: p.category,
+    year: p.years,
+    description: p.pitch?.en ?? "",
+    href: `/work/${p.slug}`,
+    image: p.heroImage ? { src: p.heroImage, alt: p.title.en } : undefined,
+  }));
