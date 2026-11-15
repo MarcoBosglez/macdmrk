@@ -5,3 +5,8 @@
 5. Theme button with 4 design inspirations
 6. Improve ask_marco.sh pingu
 7. Modify site logo
+
+Make main hub eye animation with a natural feel
+Blinking, perlin noise expressions to not feel static
+
+Make it feel alive by floating around like water
