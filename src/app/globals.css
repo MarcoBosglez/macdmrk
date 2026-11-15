@@ -141,6 +141,15 @@ body {
     color: var(--accent);
     text-decoration: none;
   }
+
+  /* <button> defaults to a plain arrow cursor in every browser — only
+     <a> gets a pointer for free. Most buttons across the site (the work
+     filter pills, ask_marco.sh's suggested questions, etc.) never set
+     this themselves, so without it they silently lose the "this is
+     clickable" cue on hover. */
+  button:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 /* ─── The glass recipe ───────────────────────────────────────────────

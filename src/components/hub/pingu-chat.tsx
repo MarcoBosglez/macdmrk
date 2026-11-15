@@ -147,11 +147,11 @@ export function PinguChat({ height }: { height?: number }) {
             type="button"
             disabled={busy}
             onClick={() => ask(q)}
-            className="rounded-full border px-2.5 py-1.5 font-mono text-[9px] text-dim transition-colors disabled:cursor-default disabled:opacity-60"
-            style={{
-              borderColor: activeQ === q ? "var(--accent)" : "var(--line)",
-              background: activeQ === q ? "var(--wash)" : "transparent",
-            }}
+            className={`rounded-full border px-2.5 py-1.5 font-mono text-[9px] transition-colors disabled:cursor-default disabled:opacity-60 ${
+              activeQ === q
+                ? "border-accent bg-wash text-dim"
+                : "border-line bg-transparent text-dim hover:border-line-hot hover:bg-wash hover:text-ink"
+            }`}
           >
             {q}
           </button>

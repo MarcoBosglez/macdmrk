@@ -345,12 +345,11 @@ export function WorkView({ projects }: { projects: Project[] }) {
                     setFilter(f);
                     setPage(0);
                   }}
-                  className="flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors"
-                  style={{
-                    background: active ? "var(--accent)" : "transparent",
-                    color: active ? "var(--bg)" : "var(--dim)",
-                    borderColor: active ? "var(--accent)" : "var(--line)",
-                  }}
+                  className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors ${
+                    active
+                      ? "border-accent bg-accent text-bg hover:opacity-90"
+                      : "border-line bg-transparent text-dim hover:border-line-hot hover:bg-wash hover:text-ink"
+                  }`}
                 >
                   {f === "all" ? t.work.filterAll : t.work[CATEGORY_LABEL_KEY[f]]}
                   <span style={{ opacity: 0.7 }}>{countFor(f)}</span>

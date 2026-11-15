@@ -31,6 +31,14 @@ export type Dictionary = {
     chips: string[];
     // The "→ ..." line in the start_here.txt note
     note: string;
+    switchEye: {
+      ariaLabel: string;
+      none: string;
+      one: string;
+      unlocked: string;
+      resumeLabel: string;
+      reset: string;
+    };
   };
   work: {
     eyebrow: string;

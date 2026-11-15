@@ -18,6 +18,14 @@ export const en: Dictionary = {
     bio: "",
     chips: ["4 Years Back-End Experience", "LLM integrations", "M.S. CS @ DigiPen", "Digital Illustration"],
     note: "→ new design! hover anything. i made this site to be interactive and fun to use",
+    switchEye: {
+      ariaLabel: "Eye switch",
+      none: "click both eyes",
+      one: "one more…",
+      unlocked: "unlocked:",
+      resumeLabel: "résumé.pdf ↓",
+      reset: "↺ reset",
+    },
   },
   work: {
     eyebrow: "selected work",

@@ -18,6 +18,14 @@ export const es: Dictionary = {
     bio: "",
     chips: ["4 Años de Experiencia Back-End", "Integraciones LLM", "M.S. CS @ DigiPen", "Ilustración Digital"],
     note: "→ nuevo diseño! el sitio es interactivo, pasa el cursor por todas partes",
+    switchEye: {
+      ariaLabel: "Interruptor de ojo",
+      none: "haz clic en ambos ojos",
+      one: "uno más…",
+      unlocked: "desbloqueado:",
+      resumeLabel: "currículum.pdf ↓",
+      reset: "↺ reiniciar",
+    },
   },
   work: {
     eyebrow: "trabajo seleccionado",

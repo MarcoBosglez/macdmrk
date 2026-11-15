@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { useLocale } from "@/components/providers/locale-provider";
 import { ViewPane } from "@/components/chrome/view-pane";
-import { KineticName } from "@/components/hub/kinetic-name";
+import { SwitchEyeName, SwitchEyeProvider, SwitchEyeReset } from "@/components/hub/switch-eye";
 import { SocialBar } from "@/components/hub/social-bar";
 import { PinguChat } from "@/components/hub/pingu-chat";
 import FeaturedWork from "@/components/featured-work/FeaturedWork";
@@ -56,30 +56,33 @@ export function Hero() {
               stretched by the grid row (which would otherwise feed back
               into the ResizeObserver measurement below). */}
           <div ref={leftRef} className="flex @container flex-col gap-3.5 self-start">
-            <div className={`flex flex-col gap-3.5 p-6 ${PANEL_GLASS}`}>
-              <div>
-                <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
-                  {t.hub.eyebrow}
-                </span>
-                <div className="mt-1">
-                  <KineticName />
-                  <div className="mt-3 font-mono text-[15px] text-dim">{t.hub.role}</div>
-                  <div className="mt-1.5 font-mono text-[13px] text-muted">{t.hub.location}</div>
+            <SwitchEyeProvider>
+              <div className={`relative flex flex-col gap-3.5 p-6 ${PANEL_GLASS}`}>
+                <SwitchEyeReset className="absolute top-4 right-4" />
+                <div>
+                  <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
+                    {t.hub.eyebrow}
+                  </span>
+                  <div className="mt-1">
+                    <SwitchEyeName />
+                    <div className="mt-3 font-mono text-[15px] text-dim">{t.hub.role}</div>
+                    <div className="mt-1.5 font-mono text-[13px] text-muted">{t.hub.location}</div>
+                  </div>
+                </div>
+                <div className="h-px" style={{ background: "var(--line-hot)", opacity: 0.7 }} />
+                {t.hub.bio ? <p className="text-[13px] leading-relaxed text-dim">{t.hub.bio}</p> : null}
+                <div className="mt-auto flex flex-wrap gap-2">
+                  {t.hub.chips.map((chip) => (
+                    <span
+                      key={chip}
+                      className="rounded-full border border-line px-2.5 py-1.5 font-mono text-[11px] text-dim transition-[transform,background] duration-200 hover:-translate-y-0.5 hover:bg-wash"
+                    >
+                      {chip}
+                    </span>
+                  ))}
                 </div>
               </div>
-              <div className="h-px" style={{ background: "var(--line-hot)", opacity: 0.7 }} />
-              {t.hub.bio ? <p className="text-[13px] leading-relaxed text-dim">{t.hub.bio}</p> : null}
-              <div className="mt-auto flex flex-wrap gap-2">
-                {t.hub.chips.map((chip) => (
-                  <span
-                    key={chip}
-                    className="rounded-full border border-line px-2.5 py-1.5 font-mono text-[11px] text-dim transition-[transform,background] duration-200 hover:-translate-y-0.5 hover:bg-wash"
-                  >
-                    {chip}
-                  </span>
-                ))}
-              </div>
-            </div>
+            </SwitchEyeProvider>
             <SocialBar />
           </div>
 
