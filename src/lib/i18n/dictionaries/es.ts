@@ -20,10 +20,6 @@ export const es: Dictionary = {
     note: "→ nuevo diseño! el sitio es interactivo, pasa el cursor por todas partes",
     switchEye: {
       ariaLabel: "Interruptor de ojo",
-      none: "haz clic en ambos ojos",
-      one: "uno más…",
-      unlocked: "desbloqueado:",
-      resumeLabel: "currículum.pdf ↓",
       reset: "↺ reiniciar",
     },
   },
@@ -37,7 +33,6 @@ export const es: Dictionary = {
     linkHint: "abre el proyecto en una pestaña nueva",
     viewProject: "ver proyecto",
     viewCode: "ver código",
-    learnMore: "saber más",
     backToWork: "← volver a trabajo",
     note: "→ todos mis proyectos personales, pasados y actuales, en una lista",
     contributionsLabel: "contribuciones",

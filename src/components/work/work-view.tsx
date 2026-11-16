@@ -118,46 +118,49 @@ function LeadCard({ project, locale, t, onNav }: { project: Project; locale: Loc
   return (
     <article
       data-sound-hover="projectHover"
-      className="group flex flex-col gap-3 rounded-[20px] border border-line bg-panel p-2.5 transition-colors md:flex-[2_1_520px] hover:border-line-hot"
+      className="group relative flex flex-col gap-3 rounded-[20px] border border-line bg-panel p-2.5 transition-colors md:flex-[2_1_520px] hover:border-line-hot"
     >
-      <Cover project={project} grow sizes="(max-width: 900px) 100vw, 680px" priority />
-      <div className="flex shrink-0 flex-col gap-2 px-2 pb-1">
-        <div className="flex flex-wrap items-center gap-2.5 font-mono text-[11px] text-muted">
-          <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
-          {project.role ? <span className="text-accent">{localize(project.role, locale)}</span> : null}
-          <span>{project.years}</span>
-        </div>
-        <h3
-          className="text-accent"
-          style={{ fontSize: "clamp(24px, 3.1vw, 33px)", lineHeight: 1.08, fontWeight: 700, letterSpacing: "-0.03em" }}
-        >
-          {localize(project.title, locale)}
-        </h3>
-        {project.pitch ? (
-          <p className="text-[14px] leading-relaxed text-dim">{localize(project.pitch, locale)}</p>
-        ) : null}
-        <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
-          {project.tags.slice(0, 5).map((tag) => (
-            <span key={tag} className="rounded-full bg-wash px-2.5 py-1 text-accent">
-              {tag}
-            </span>
-          ))}
-        </div>
-        <div className="mt-auto flex flex-wrap gap-2.5 pt-1">
-          <Link
-            href={`/work/${project.slug}`}
-            onClick={onNav}
-            className="flex h-10 flex-1 basis-[160px] items-center justify-center gap-2 rounded-[14px] bg-accent px-4 font-mono text-[13px] font-bold text-bg transition-[filter] hover:brightness-110"
+      <Link
+        href={`/work/${project.slug}`}
+        onClick={onNav}
+        aria-label={localize(project.title, locale)}
+        className="absolute inset-0 z-0 rounded-[20px] focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+      />
+      <div className="pointer-events-none contents">
+        <Cover project={project} grow sizes="(max-width: 900px) 100vw, 680px" priority />
+        <div className="flex shrink-0 flex-col gap-2 px-2 pb-1">
+          <div className="flex flex-wrap items-center gap-2.5 font-mono text-[11px] text-muted">
+            <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
+            {project.role ? <span className="text-accent">{localize(project.role, locale)}</span> : null}
+            <span>{project.years}</span>
+          </div>
+          <h3
+            className="text-accent"
+            style={{ fontSize: "clamp(24px, 3.1vw, 33px)", lineHeight: 1.08, fontWeight: 700, letterSpacing: "-0.03em" }}
           >
-            {t.work.learnMore} <span aria-hidden="true">→</span>
-          </Link>
-          <CodeLink
-            project={project}
-            onClick={onNav}
-            className="flex h-10 flex-1 basis-[160px] items-center justify-center gap-2 rounded-[14px] border border-line px-4 font-mono text-[13px] text-ink transition-colors hover:border-line-hot"
-          >
-            {isGithubUrl(project.url!) ? t.work.viewCode : t.work.viewProject}
-          </CodeLink>
+            {localize(project.title, locale)}
+          </h3>
+          {project.pitch ? (
+            <p className="text-[14px] leading-relaxed text-dim">{localize(project.pitch, locale)}</p>
+          ) : null}
+          <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
+            {project.tags.slice(0, 5).map((tag) => (
+              <span key={tag} className="rounded-full bg-wash px-2.5 py-1 text-accent">
+                {tag}
+              </span>
+            ))}
+          </div>
+          {project.url ? (
+            <div className="pointer-events-auto relative z-10 mt-auto flex flex-wrap gap-2.5 pt-1">
+              <CodeLink
+                project={project}
+                onClick={onNav}
+                className="flex h-10 items-center justify-center gap-2 rounded-[14px] border border-line px-4 font-mono text-[13px] text-ink transition-colors hover:border-line-hot"
+              >
+                {isGithubUrl(project.url) ? t.work.viewCode : t.work.viewProject}
+              </CodeLink>
+            </div>
+          ) : null}
         </div>
       </div>
     </article>
@@ -168,28 +171,38 @@ function SideCard({ project, locale, t, onNav }: { project: Project; locale: Loc
   return (
     <article
       data-sound-hover="projectHover"
-      className="group flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot"
+      className="group relative flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot"
     >
-      <Cover project={project} ratio="3 / 1" sizes="(max-width: 900px) 100vw, 340px" />
-      <div className="flex flex-1 flex-col gap-1 px-1.5">
-        <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
-          <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
-          <span>{project.years}</span>
-        </div>
-        <h3 className="text-[16px] leading-tight font-bold text-ink" style={{ letterSpacing: "-0.02em" }}>
-          {localize(project.title, locale)}
-        </h3>
-        {project.pitch ? (
-          <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
-        ) : null}
-      </div>
       <Link
         href={`/work/${project.slug}`}
         onClick={onNav}
-        className="flex h-9 items-center justify-between rounded-[10px] bg-wash px-3 font-mono text-[12px] font-bold text-accent"
-      >
-        {t.work.learnMore} <span aria-hidden="true">→</span>
-      </Link>
+        aria-label={localize(project.title, locale)}
+        className="absolute inset-0 z-0 rounded-[20px] focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+      />
+      <div className="pointer-events-none contents">
+        <Cover project={project} ratio="3 / 1" sizes="(max-width: 900px) 100vw, 340px" />
+        <div className="flex flex-1 flex-col gap-1 px-1.5">
+          <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
+            <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
+            <span>{project.years}</span>
+          </div>
+          <h3 className="text-[16px] leading-tight font-bold text-ink" style={{ letterSpacing: "-0.02em" }}>
+            {localize(project.title, locale)}
+          </h3>
+          {project.pitch ? (
+            <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
+          ) : null}
+        </div>
+      </div>
+      {project.url ? (
+        <CodeLink
+          project={project}
+          onClick={onNav}
+          className="pointer-events-auto relative z-10 flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-[10px] border border-line text-ink transition-colors hover:border-line-hot"
+        >
+          {""}
+        </CodeLink>
+      ) : null}
     </article>
   );
 }
@@ -198,49 +211,52 @@ function GridCard({ project, locale, t, onNav }: { project: Project; locale: Loc
   return (
     <article
       data-sound-hover="projectHover"
-      className="group flex flex-col gap-1.5 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot"
+      className="group relative flex flex-col gap-1.5 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot"
     >
-      <Cover project={project} ratio="16 / 8" sizes="(max-width: 700px) 100vw, 340px" />
-      <div className="flex flex-1 flex-col gap-1 px-1.5">
-        <div className="flex min-h-[46px] flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
-          <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
-          <span>{localize(project.kindLabel, locale)}</span>
-          <span>{project.years}</span>
-          {project.featured ? (
-            <span style={{ color: AMBER }} aria-label="Featured">★</span>
+      <Link
+        href={`/work/${project.slug}`}
+        onClick={onNav}
+        aria-label={localize(project.title, locale)}
+        className="absolute inset-0 z-0 rounded-[20px] focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+      />
+      <div className="pointer-events-none contents">
+        <Cover project={project} ratio="16 / 8" sizes="(max-width: 700px) 100vw, 340px" />
+        <div className="flex flex-1 flex-col gap-1 px-1.5">
+          <div className="flex min-h-[46px] flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
+            <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
+            <span>{localize(project.kindLabel, locale)}</span>
+            <span>{project.years}</span>
+            {project.featured ? (
+              <span style={{ color: AMBER }} aria-label="Featured">★</span>
+            ) : null}
+          </div>
+          <h3
+            className="line-clamp-2 min-h-[38px] text-[15px] leading-tight font-bold text-ink"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+            {localize(project.title, locale)}
+          </h3>
+          {project.pitch ? (
+            <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
+          ) : null}
+          {project.tags.length ? (
+            <div className="mt-auto truncate font-mono text-[11px] text-muted">
+              {project.tags.join(" · ")}
+            </div>
           ) : null}
         </div>
-        <h3
-          className="line-clamp-2 min-h-[38px] text-[15px] leading-tight font-bold text-ink"
-          style={{ letterSpacing: "-0.02em" }}
-        >
-          {localize(project.title, locale)}
-        </h3>
-        {project.pitch ? (
-          <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
-        ) : null}
-        {project.tags.length ? (
-          <div className="mt-auto truncate font-mono text-[11px] text-muted">
-            {project.tags.join(" · ")}
-          </div>
-        ) : null}
       </div>
-      <div className="flex gap-2 px-0.5">
-        <CodeLink
-          project={project}
-          onClick={onNav}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-line text-ink transition-colors hover:border-line-hot"
-        >
-          {""}
-        </CodeLink>
-        <Link
-          href={`/work/${project.slug}`}
-          onClick={onNav}
-          className="flex h-9 flex-1 items-center justify-between rounded-[10px] bg-wash px-3 font-mono text-[12px] font-bold text-accent"
-        >
-          {t.work.learnMore} <span aria-hidden="true">→</span>
-        </Link>
-      </div>
+      {project.url ? (
+        <div className="pointer-events-auto relative z-10 flex gap-2 px-0.5">
+          <CodeLink
+            project={project}
+            onClick={onNav}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-line text-ink transition-colors hover:border-line-hot"
+          >
+            {""}
+          </CodeLink>
+        </div>
+      ) : null}
     </article>
   );
 }
@@ -290,6 +306,7 @@ export function WorkView({ projects }: { projects: Project[] }) {
 
   const onNav = () => playClick("nav");
   const goToPage = (n: number) => {
+    playClick("nav");
     setDirection(n >= current ? 1 : -1);
     setPage(n);
   };
@@ -425,7 +442,7 @@ export function WorkView({ projects }: { projects: Project[] }) {
                 type="button"
                 aria-label={t.work.nextPageLabel}
                 disabled={current >= pageCount - 1}
-                onClick={() => setPage(current + 1)}
+                onClick={() => goToPage(current + 1)}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-line-hot disabled:cursor-default disabled:opacity-35"
               >
                 →

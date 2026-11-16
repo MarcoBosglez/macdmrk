@@ -16,7 +16,8 @@ export type SoundVariant =
   | "themeDark"
   | "pageOpen"
   | "hover"
-  | "projectHover";
+  | "projectHover"
+  | "eye";
 
 type SoundContextValue = {
   muted: boolean;
@@ -28,11 +29,12 @@ const SoundContext = createContext<SoundContextValue | null>(null);
 
 // Single-ramp oscillator tones: frequency sweeps start→end while the
 // volume decays from `gain` to silence over `duration` seconds. The
-// short phrase on each is roughly what it sounds like. (nav / pageOpen
-// are richer and have their own function below; toggle / honk / hover /
-// projectHover play real recorded clips instead — see SOUND_FILES.)
+// short phrase on each is roughly what it sounds like. (pageOpen is
+// richer and has its own function below; nav / toggle / honk / hover /
+// projectHover / eye play real recorded clips instead — see
+// SOUND_FILES.)
 const SOUND_VARIANTS: Record<
-  Exclude<SoundVariant, "nav" | "toggle" | "honk" | "pageOpen" | "hover" | "projectHover">,
+  Exclude<SoundVariant, "nav" | "toggle" | "honk" | "pageOpen" | "hover" | "projectHover" | "eye">,
   { type: OscillatorType; start: number; end: number; duration: number; gain: number }
 > = {
   open: { type: "sine", start: 420, end: 880, duration: 0.1, gain: 0.06 }, // rising pop
@@ -44,46 +46,6 @@ const SOUND_VARIANTS: Record<
   themeLight: { type: "triangle", start: 380, end: 840, duration: 0.12, gain: 0.05 }, // bright rise
   themeDark: { type: "triangle", start: 700, end: 300, duration: 0.12, gain: 0.045 }, // dim fall
 };
-
-// A mechanical keyboard "clack": a filtered noise burst (the key
-// striking) plus a brief low square-wave blip a few ms later (the
-// mechanism bottoming out). Used for nav clicks.
-function playTypewriterClick(ctx: AudioContext) {
-  const now = ctx.currentTime;
-
-  const noiseDuration = 0.03;
-  const noiseBuffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * noiseDuration), ctx.sampleRate);
-  const data = noiseBuffer.getChannelData(0);
-  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-
-  const noise = ctx.createBufferSource();
-  noise.buffer = noiseBuffer;
-  const bandpass = ctx.createBiquadFilter();
-  bandpass.type = "bandpass";
-  bandpass.frequency.value = 3200;
-  bandpass.Q.value = 1.8;
-  const noiseGain = ctx.createGain();
-  noiseGain.gain.setValueAtTime(0.12, now);
-  noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.018);
-  noise.connect(bandpass);
-  bandpass.connect(noiseGain);
-  noiseGain.connect(ctx.destination);
-  noise.start(now);
-  noise.stop(now + noiseDuration);
-
-  const thockDelay = 0.004;
-  const osc = ctx.createOscillator();
-  const oscGain = ctx.createGain();
-  osc.type = "square";
-  osc.frequency.setValueAtTime(200, now + thockDelay);
-  osc.frequency.exponentialRampToValueAtTime(100, now + thockDelay + 0.02);
-  oscGain.gain.setValueAtTime(0.05, now + thockDelay);
-  oscGain.gain.exponentialRampToValueAtTime(0.0001, now + thockDelay + 0.025);
-  osc.connect(oscGain);
-  oscGain.connect(ctx.destination);
-  osc.start(now + thockDelay);
-  osc.stop(now + thockDelay + 0.03);
-}
 
 // Two quick rising sine blips in a row, like a page turning — marks a
 // full-page navigation (opening a project from the work list).
@@ -108,16 +70,21 @@ function playPageOpen(ctx: AudioContext) {
   });
 }
 
-// Recorded clips for the four variants that got real sound files
-// (everything else above stays synthesized). Cached per-variant so each
-// plays from a single preloaded <audio> element — resetting
-// currentTime before every play() lets a rapid-fire trigger (hovering
-// across several cards fast) retrigger cleanly instead of queuing.
-const SOUND_FILES: Record<"toggle" | "honk" | "hover" | "projectHover", { src: string; volume: number }> = {
+// Recorded clips for the variants that got real sound files (everything
+// else above stays synthesized). Cached per-variant so each plays from
+// a single preloaded <audio> element — resetting currentTime before
+// every play() lets a rapid-fire trigger (hovering across several cards
+// fast) retrigger cleanly instead of queuing.
+const SOUND_FILES: Record<
+  "toggle" | "honk" | "hover" | "projectHover" | "nav" | "eye",
+  { src: string; volume: number }
+> = {
   toggle: { src: "/sounds/mixkit-cool-interface-click-tone-2568.wav", volume: 0.45 },
   honk: { src: "/sounds/mixkit-modern-technology-select-3124.wav", volume: 0.55 },
   hover: { src: "/sounds/mixkit-plastic-bubble-click-1124.wav", volume: 0.25 },
   projectHover: { src: "/sounds/mixkit-interface-click-hover-1127.wav", volume: 0.25 },
+  nav: { src: "/sounds/mixkit-gate-latch-click-1924.wav", volume: 0.4 },
+  eye: { src: "/sounds/mixkit-typewriter-soft-click-1125.wav", volume: 0.4 },
 };
 
 function playFile(
@@ -157,11 +124,12 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
       if (variant === "honk") return playFile(audioElsRef, "honk");
       if (variant === "hover") return playFile(audioElsRef, "hover");
       if (variant === "projectHover") return playFile(audioElsRef, "projectHover");
+      if (variant === "nav") return playFile(audioElsRef, "nav");
+      if (variant === "eye") return playFile(audioElsRef, "eye");
 
       const ctx = audioCtxRef.current ?? new AudioContext();
       audioCtxRef.current = ctx;
 
-      if (variant === "nav") return playTypewriterClick(ctx);
       if (variant === "pageOpen") return playPageOpen(ctx);
 
       const { type, start, end, duration, gain: peakGain } = SOUND_VARIANTS[variant];

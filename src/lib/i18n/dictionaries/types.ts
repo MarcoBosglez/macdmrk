@@ -33,10 +33,6 @@ export type Dictionary = {
     note: string;
     switchEye: {
       ariaLabel: string;
-      none: string;
-      one: string;
-      unlocked: string;
-      resumeLabel: string;
       reset: string;
     };
   };
@@ -50,7 +46,6 @@ export type Dictionary = {
     linkHint: string;
     viewProject: string;
     viewCode: string;
-    learnMore: string;
     backToWork: string;
     note: string;
     // TODO: these are new (project-work revamp from advisor feedback) —

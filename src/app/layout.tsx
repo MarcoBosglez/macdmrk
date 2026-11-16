@@ -14,6 +14,7 @@ import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
 import { PrivateToolsButton } from "@/components/chrome/private-tools-button";
 import { CopyrightMark } from "@/components/chrome/copyright-mark";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
+import { PageGuide } from "@/components/page-guide/PageGuide";
 
 // Archivo as a variable font (wdth + wght axes live) — the kinetic type
 // animates font-variation-settings, not size. JetBrains Mono is the
@@ -36,7 +37,7 @@ const jetBrainsMono = JetBrains_Mono({
 // not used anywhere else, so it's scoped to its own variable.
 const interTight = Inter_Tight({
   subsets: ["latin"],
-  weight: ["800"],
+  weight: ["400", "800"],
   variable: "--font-inter-tight",
   display: "swap",
 });
@@ -88,6 +89,7 @@ export default function RootLayout({
                   <MobileNavBubbles />
                   <PrivateToolsButton />
                   <CopyrightMark />
+                  <PageGuide />
                 </div>
               </CursorProvider>
             </LocaleProvider>

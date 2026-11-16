@@ -100,15 +100,15 @@ export const PROJECTS: Project[] = [
     },
     tldr: {
       problem: {
-        en: "I'm a software engineer who also makes digital art, and most portfolio formats make you pick one identity to lead with.",
+        en: "Started this project in 2024 in order to showcase my projects and reflect my personality!",
         es: "",
       },
       built: {
-        en: "A hand-built Next.js site — bilingual, theme-switching, with draggable gallery windows and custom UI sounds — that I designed, illustrated, and developed solo.",
+        en: "An interactive and fun web-portfolio made with Next.js and React",
         es: "",
       },
       result: {
-        en: "One link for the engineering and the art — and a site recruiters and advisors actually read closely enough to give detailed feedback on.",
+        en: "A personal hub, presentation card, and project repository",
         es: "",
       },
     },
@@ -118,7 +118,7 @@ export const PROJECTS: Project[] = [
     status: { en: "shipped, iterating", es: "lanzado, en iteración" },
     why: {
       headline: {
-        en: "I wanted one place that showed both my engineering career and my art, without picking a side.",
+        en: "I wanted a personal hub that reflects my personality, a project archive, and a presentation card for recruiters.",
         es: "",
       },
       body: {
@@ -126,6 +126,7 @@ export const PROJECTS: Project[] = [
         es: "",
       },
       goal: { en: "Creating a web hub that represented my personality.", es: "" },
+      image: "/work/web-portfolio-why.jpg",
     },
     did: {
       headline: {
@@ -140,42 +141,29 @@ export const PROJECTS: Project[] = [
         ],
         es: [],
       },
+      image: "/work/web-portfolio-did.png",
     },
     how: {
       headline: {
-        en: "Typed content flows through a Next.js App Router site, styled with Tailwind and animated with Framer Motion.",
+        en: "Project Timeline",
         es: "",
       },
       steps: {
         en: [
           "Started in 2020 as a static HTML/CSS copy of my résumé, with very few features or animations.",
-          "In 2025, started exploring a modern redesign after a YouTube video by @shar on her own portfolio's design decisions — I especially liked her presentation-card layout.",
-          "Built a mood board from similar portfolios, then listed the features I actually wanted: 5 sections, dark/light modes, draggable windows, custom sounds, bilingual copy, a glass-card look.",
-          "Still actively adding ideas on the fly — new sections and small, fun experiments as they come.",
+          "In 2025, started exploring a modern redesign after a YouTube video by @shar on her own portfolio's design. I especially liked her presentation-card layout.",
+          "Built a mood board from similar portfolios, then listed the features I actually wanted: 5 sections, color modes, draggable windows, custom sounds, bilingual copy, a glass-card look.",
+          "Still actively adding ideas on the fly, new sections and small, fun experiments as they come.",
         ],
         es: [],
       },
-    },
-    challenges: {
-      headline: { en: "What broke, and how I fixed it.", es: "Qué se rompió, y cómo lo resolví." },
-      items: [
-        {
-          problem: {
-            en: "Keeping EN/ES copy in sync without the i18n layer feeling bolted on.",
-            es: "Mantener el copy EN/ES sincronizado sin que la capa de i18n se sintiera forzada.",
-          },
-          fix: {
-            en: "[TODO: write the real explanation of how the i18n system evolved and what was painful about it]",
-            es: "[TODO: escribir la explicación real de cómo evolucionó el sistema de i18n y qué fue doloroso de resolver]",
-          },
-        },
-      ],
+      image: "/work/web-portfolio-how.png",
     },
     outcome: {
-      headline: { en: "One link for the engineering and the art.", es: "" },
+      headline: { en: "A site that works as a presentation card with fast links, a project archive, an illustrations showcase, and a personal hub", es: "" },
       body: {
-        en: "One link for the engineering and the art — and a site recruiters and advisors actually read closely enough to give detailed feedback on.",
-        es: "Un solo enlace para la ingeniería y el arte — un sitio que reclutadores y asesores han leído con suficiente detalle como para dar retroalimentación específica.",
+        en: "I will be adding more content as time goes. Currently thinking of adding more fun features and color themes!",
+        es: ".",
       },
       stats: [
         { value: "2", label: { en: "languages, fully parallel", es: "idiomas, en paralelo" } },

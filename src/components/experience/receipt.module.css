@@ -28,14 +28,14 @@
   position: relative;
   z-index: 0;
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
   margin-top: -2px;
-  padding: 24px 20px 18px;
+  padding: 26px 22px 20px;
   background: #f2f5f0;
   color: #13261b;
   font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
-  font-size: 12.5px;
-  line-height: 1.45;
+  font-size: 14.5px;
+  line-height: 1.55;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
   clip-path: inset(0 0 100% 0);
 }
@@ -91,14 +91,14 @@
 
 .tagline {
   margin-top: 2px;
-  font-size: 12px;
+  font-size: 13.5px;
   letter-spacing: 0.03em;
 }
 
 .orderLine {
   margin-top: 6px;
   color: #3c5a48;
-  font-size: 11px;
+  font-size: 12.5px;
 }
 
 .divider {
@@ -111,15 +111,17 @@
   justify-content: space-between;
   margin-bottom: 6px;
   color: #3c5a48;
-  font-size: 11px;
+  font-size: 12.5px;
   letter-spacing: 0.08em;
 }
 
 /* Fixed height, regardless of which item (if any) is open — so
    expanding a row's notes scrolls inside this window instead of
-   growing the paper and shifting everything around it. */
+   growing the paper and shifting everything around it. Taller than
+   the font bump alone needs, so roughly the same number of rows still
+   show before scrolling kicks in. */
 .itemsScroll {
-  height: 260px;
+  height: 320px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #8a9a90 transparent;
@@ -155,7 +157,7 @@
   width: 100%;
   border: none;
   background: none;
-  padding: 6px 0;
+  padding: 8px 0;
   color: inherit;
   font: inherit;
   text-align: left;
@@ -174,7 +176,7 @@
 }
 
 .sign {
-  width: 12px;
+  width: 14px;
   flex: none;
   font-weight: 700;
 }
@@ -197,44 +199,44 @@
 
 .orgLine {
   display: block;
-  margin-top: 2px;
+  margin-top: 3px;
   padding-left: 18px;
   color: #3c5a48;
-  font-size: 12px;
+  font-size: 13.5px;
 }
 
 .notes {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin: 0 0 8px;
+  gap: 4px;
+  margin: 4px 0 10px;
   padding: 0 0 0 18px;
   color: #1d3326;
-  font-size: 12px;
+  font-size: 13.5px;
 }
 
 .totals {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 .totalRow {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  font-size: 12.5px;
+  font-size: 14px;
 }
 
 .totalFinal {
   margin-top: 4px;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
 }
 
 .tearOff {
   display: flex;
-  min-height: 44px;
+  min-height: 46px;
   align-items: center;
   justify-content: center;
   margin-top: 4px;
@@ -242,7 +244,7 @@
   border-radius: 10px;
   color: #13261b;
   font-family: inherit;
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;

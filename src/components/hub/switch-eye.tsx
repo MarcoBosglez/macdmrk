@@ -115,7 +115,7 @@ function Eye({ id, refs }: { id: EyeId; refs: EyeRefs }) {
       aria-hidden="false"
       aria-label={t.hub.switchEye.ariaLabel}
       onClick={() => {
-        playClick("toggle");
+        playClick("eye");
         toggle(id);
       }}
       className={s.eyeBtn}
@@ -163,7 +163,7 @@ const NAME_STYLE: React.CSSProperties = {
   lineHeight: 0.86,
   letterSpacing: "-0.055em",
   textTransform: "uppercase",
-  color: "var(--accent)",
+  color: "#ffffff",
   margin: 0,
 };
 
@@ -204,7 +204,6 @@ const WAVE_NOISE_AMPLITUDE = 0.8;
 
 export function SwitchEyeName() {
   const { lit } = useSwitchEye();
-  const { t } = useLocale();
   const marcoRefs = useMemo(createEyeRefs, []);
   const bosquezRefs = useMemo(createEyeRefs, []);
   const waveRefs = useMemo(
@@ -369,8 +368,6 @@ export function SwitchEyeName() {
     };
   }, [marcoRefs, bosquezRefs]);
 
-  const litCount = Number(lit.marco) + Number(lit.bosquez);
-
   let tokenIndex = 0;
   function renderToken(token: Token) {
     const i = tokenIndex++;
@@ -401,18 +398,6 @@ export function SwitchEyeName() {
           {ROW2_TOKENS.map(renderToken)}
         </div>
       </h1>
-      <div aria-live="polite" className="mt-1.5 font-mono text-[12px] text-dim">
-        {litCount === 0 && t.hub.switchEye.none}
-        {litCount === 1 && t.hub.switchEye.one}
-        {litCount === 2 && (
-          <>
-            {t.hub.switchEye.unlocked}{" "}
-            <a href="/resume.pdf" download className={s.resumeLink}>
-              {t.hub.switchEye.resumeLabel}
-            </a>
-          </>
-        )}
-      </div>
     </div>
   );
 }

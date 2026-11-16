@@ -34,23 +34,3 @@
   transform: scaleY(0);
   transition: transform 0.14s ease-in-out;
 }
-
-.resumeLink {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 6px;
-  background: #7dffa8;
-  color: #062012;
-  font-weight: 700;
-  text-decoration: none;
-  transition: background-color 0.15s ease, transform 0.15s ease;
-}
-
-.resumeLink:hover {
-  background: #9dffc0;
-  transform: translateY(-1px);
-}
-
-.resumeLink:active {
-  transform: translateY(0);
-}
