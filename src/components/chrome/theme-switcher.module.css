@@ -1,0 +1,70 @@
+.panel {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 16px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.option {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font: 500 11px var(--font-jetbrains-mono), monospace;
+  cursor: pointer;
+}
+
+.option:hover {
+  border-color: var(--acc);
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+
+.on {
+  background: var(--acc);
+  color: var(--accink);
+  border-color: var(--acc);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+  border: 1px solid rgba(127, 127, 127, 0.5);
+}
+
+/* Aurora: frosted dark-indigo panel instead of the plain card
+   background, and the selected option is a white pill rather than the
+   theme's orange accent. */
+:global([data-theme="aurora"]) .panel {
+  background: rgba(18, 19, 58, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+:global([data-theme="aurora"]) .on {
+  background: #ffffff;
+  color: #0a0b26;
+  border-color: #ffffff;
+}

@@ -13,9 +13,9 @@
   min-height: 40px;
   padding: 0 12px;
   border-radius: 10px;
-  border: 1px solid #2c5c42;
-  background: #0f2419;
-  color: #cfe3d6;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink2);
   font: 500 12px var(--font-jetbrains-mono, "JetBrains Mono"), monospace;
   cursor: pointer;
   text-decoration: none;
@@ -23,22 +23,22 @@
 }
 
 .btn:hover {
-  border-color: #7dffa8;
-  color: #e3f5ea;
+  border-color: var(--acc);
+  color: var(--ink);
 }
 
 .btn:focus-visible,
 .item:focus-visible {
-  outline: 2px solid #7dffa8;
+  outline: 2px solid var(--acc);
   outline-offset: 2px;
 }
 
 .num {
-  color: #7dffa8;
+  color: var(--acc);
 }
 
 .sep {
-  color: #8fb7a0;
+  color: var(--ink2);
 }
 
 .toggleSlug {
@@ -69,8 +69,8 @@
   gap: 2px;
   padding: 8px;
   border-radius: 16px;
-  border: 1px solid #2c5c42;
-  background: #0b1c13;
+  border: 1px solid var(--line);
+  background: var(--tbg);
   box-shadow: 0 24px 50px rgba(0, 0, 0, 0.55);
 }
 
@@ -89,7 +89,7 @@
   padding: 0 10px;
   border-radius: 10px;
   background: transparent;
-  color: #cfe3d6;
+  color: var(--tfg);
   font: 500 12px var(--font-jetbrains-mono, "JetBrains Mono"), monospace;
   text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease;
@@ -97,8 +97,8 @@
 
 .item:hover,
 .item:focus-visible {
-  background: #143023;
-  color: #e3f5ea;
+  background: color-mix(in srgb, var(--tp) 16%, transparent);
+  color: var(--tp);
 }
 
 .itemNum {
@@ -115,12 +115,12 @@
 
 .wip {
   font-size: 10px;
-  color: #ffb347;
+  color: var(--amber);
 }
 
 .current,
 .current:hover,
 .current:focus-visible {
-  background: #7dffa8;
-  color: #062012;
+  background: var(--acc);
+  color: var(--accink);
 }

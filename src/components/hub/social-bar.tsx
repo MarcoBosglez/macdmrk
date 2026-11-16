@@ -8,7 +8,7 @@ import { QrCodeButton } from "@/components/hub/qr-code";
 
 // One shared hover for every button here — lift + border-hot + wash.
 const GLASS_BTN =
-  "rounded-[16px] bg-glass [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]";
+  "rounded-[14px] bg-glass [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]";
 
 function SocialButton({
   href,

@@ -16,7 +16,7 @@ export const en: Dictionary = {
     role: "Software Engineer",
     location: "Based in Seattle, WA · from Mexico City <3",
     bio: "",
-    chips: ["4 Years Back-End Experience", "LLM integrations", "M.S. CS @ DigiPen", "Digital Illustration"],
+    chips: ["4 Years Back-End", "LLM Integrations", "M.S.CS", "Digital Art"],
     note: "→ new design! hover anything. i made this site to be interactive and fun to use",
     switchEye: {
       ariaLabel: "Eye switch",

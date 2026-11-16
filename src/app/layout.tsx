@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Archivo, JetBrains_Mono, Inter_Tight } from "next/font/google";
+import { Archivo, JetBrains_Mono, Inter_Tight, Silkscreen } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -15,6 +15,7 @@ import { PrivateToolsButton } from "@/components/chrome/private-tools-button";
 import { CopyrightMark } from "@/components/chrome/copyright-mark";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
 import { PageGuide } from "@/components/page-guide/PageGuide";
+import { ThemeSwitcher } from "@/components/chrome/theme-switcher";
 
 // Archivo as a variable font (wdth + wght axes live) — the kinetic type
 // animates font-variation-settings, not size. JetBrains Mono is the
@@ -33,12 +34,22 @@ const jetBrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-// Condensed display weight for the About page's magazine-cover hero —
-// not used anywhere else, so it's scoped to its own variable.
+// Used for the About page's magazine-cover hero (800) and, since the
+// 4-theme system, as the mint/dark/aurora themes' display font for the
+// hub name, nav pills, etc. (--disp/--hlfont) — hence the wider weight
+// range now.
 const interTight = Inter_Tight({
   subsets: ["latin"],
-  weight: ["400", "800"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--font-inter-tight",
+  display: "swap",
+});
+
+// Mint theme's highlight-letter font (--hlfont), used nowhere else.
+const silkscreen = Silkscreen({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-silkscreen",
   display: "swap",
 });
 
@@ -63,7 +74,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`no-js ${archivo.variable} ${jetBrainsMono.variable} ${interTight.variable}`}
+      className={`no-js ${archivo.variable} ${jetBrainsMono.variable} ${interTight.variable} ${silkscreen.variable}`}
     >
       <body>
         {/* Runs before paint: drop the no-js guard, and if the startup
@@ -78,7 +89,11 @@ export default function RootLayout({
               }
             } catch (e) {}`}
         </Script>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider
+          attribute={["class", "data-theme"]}
+          themes={["dark", "mint", "aurora", "electric"]}
+          defaultTheme="dark"
+        >
           <SoundProvider>
             <LocaleProvider>
               <CursorProvider>
@@ -90,6 +105,7 @@ export default function RootLayout({
                   <PrivateToolsButton />
                   <CopyrightMark />
                   <PageGuide />
+                  <ThemeSwitcher />
                 </div>
               </CursorProvider>
             </LocaleProvider>

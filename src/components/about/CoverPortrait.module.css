@@ -1,7 +1,7 @@
 /* "Magazine cover" hero for the About section — a cutout photo
-   standing in front of the name set in huge type, on the same dark
-   green terminal card recipe used by the homepage featured-work
-   cards (#143023 → #0f2419 gradient, #2b5a3f border, #7dffa8 accent).
+   standing in front of the name set in huge type, on the same themed
+   card recipe used sitewide (var(--card) background, var(--line)
+   border, var(--acc) accent) — reskins per the active theme.
 
    Hover slides the front (name + photo) out to the left and the back
    (the actual about info) in from the right — same sliding-panel
@@ -14,8 +14,8 @@
   overflow: hidden;
   height: 560px;
   border-radius: 22px;
-  border: 1px solid #2b5a3f;
-  background: linear-gradient(160deg, #143023, #0f2419);
+  border: 1px solid var(--line);
+  background: var(--card);
 }
 
 @media (max-width: 760px) {
@@ -67,11 +67,11 @@
 
 .nameLine1 {
   color: transparent;
-  -webkit-text-stroke: 1.5px #7dffa8;
+  -webkit-text-stroke: 1.5px var(--acc);
 }
 
 .nameLine2 {
-  color: #7dffa8;
+  color: var(--acc);
 }
 
 .photoWrap,
@@ -96,9 +96,9 @@
   justify-content: center;
   padding: 16px;
   border-radius: 14px;
-  border: 1px dashed #2b5a3f;
-  background: rgba(6, 18, 11, 0.4);
-  color: #9fb8ac;
+  border: 1px dashed var(--line);
+  background: color-mix(in srgb, var(--bg) 40%, transparent);
+  color: var(--ink2);
   font-family: var(--font-jetbrains-mono, monospace);
   font-size: 11px;
   line-height: 1.5;
@@ -116,12 +116,12 @@
   display: inline-flex;
   white-space: nowrap;
   border-radius: 999px;
-  background: rgba(6, 18, 11, 0.8);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
   padding: 6px 12px;
   font-family: var(--font-jetbrains-mono, monospace);
   font-size: 11px;
   letter-spacing: 0.04em;
-  color: #cfe3d6;
+  color: var(--ink2);
 }
 
 /* ── back face: the actual about info ──────────────────────── */
@@ -140,7 +140,7 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #ffb347;
+  color: var(--amber);
 }
 
 .backGreeting {
@@ -149,7 +149,7 @@
   font-size: clamp(22px, 3vw, 28px);
   font-weight: 800;
   line-height: 1.15;
-  color: #e3f5ea;
+  color: var(--ink);
 }
 
 .backMeta {
@@ -161,12 +161,12 @@
 .backMetaTag {
   white-space: nowrap;
   border-radius: 999px;
-  background: rgba(6, 18, 11, 0.8);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
   padding: 4px 10px;
   font-family: var(--font-jetbrains-mono, monospace);
   font-size: 10.5px;
   letter-spacing: 0.04em;
-  color: #cfe3d6;
+  color: var(--ink2);
 }
 
 .backLead {
@@ -174,11 +174,11 @@
   font-family: var(--font-jetbrains-mono, monospace);
   font-size: 13px;
   line-height: 1.6;
-  color: #cfe3d6;
+  color: var(--ink2);
 }
 
 .backAccent {
-  color: #7dffa8;
+  color: var(--acc);
 }
 
 .backSection {
@@ -186,7 +186,7 @@
   flex-direction: column;
   gap: 6px;
   padding-top: 10px;
-  border-top: 1px dashed #2c5c42;
+  border-top: 1px dashed var(--line);
 }
 
 .backLabel {
@@ -194,21 +194,21 @@
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #9fb8ac;
+  color: var(--ink2);
 }
 
 .backInterests {
   margin: 0;
   font-family: var(--font-jetbrains-mono, monospace);
   font-size: 12.5px;
-  color: #cfe3d6;
+  color: var(--ink2);
 }
 
 .backQuirk {
   margin: 0;
   font-family: var(--font-jetbrains-mono, monospace);
   font-size: 12px;
-  color: #7dffa8;
+  color: var(--acc);
 }
 
 .backLinks {
@@ -224,16 +224,16 @@
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  border: 1px solid #2c5c42;
-  color: #cfe3d6;
+  border: 1px solid var(--line);
+  color: var(--ink2);
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 
 .backLinkBtn:hover,
 .backLinkBtn:focus-visible {
-  border-color: #7dffa8;
-  background: #143023;
-  color: #7dffa8;
+  border-color: var(--acc);
+  background: var(--card);
+  color: var(--acc);
   outline: none;
 }
 

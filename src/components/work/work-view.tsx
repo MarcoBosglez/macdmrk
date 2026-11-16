@@ -21,9 +21,10 @@ export function isGithubUrl(url: string) {
 }
 
 // Same small candy-colour accents used on the project's own page, kept
-// consistent across both — personal projects just use the site accent.
+// consistent across both — personal/professional ride the theme's own
+// accent tokens, academic stays a fixed blue (no theme token for it).
 const BLUE = "#7fb2ff";
-const AMBER = "#ffb347";
+const AMBER = "var(--amber)";
 const CATEGORY_COLOR: Record<ProjectCategory, string> = {
   personal: "var(--accent)",
   academic: BLUE,

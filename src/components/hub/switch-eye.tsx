@@ -129,7 +129,7 @@ function Eye({ id, refs }: { id: EyeId; refs: EyeRefs }) {
           margin: "0 0.03em",
           overflow: "visible",
           filter: isLit
-            ? "drop-shadow(0 0 10px rgba(125,255,168,.9)) drop-shadow(0 0 24px rgba(125,255,168,.45))"
+            ? "drop-shadow(0 0 10px color-mix(in srgb, var(--acc) 90%, transparent)) drop-shadow(0 0 24px color-mix(in srgb, var(--acc) 45%, transparent))"
             : "none",
           transition: "filter .3s",
         }}
@@ -142,13 +142,20 @@ function Eye({ id, refs }: { id: EyeId; refs: EyeRefs }) {
         <path d={ALMOND} fill="#effff4" />
         <g clipPath={`url(#${clipId})`}>
           <g ref={refs.iris}>
-            <circle cx={50} cy={32} r={19} fill="#7dffa8" stroke="#1f9a55" strokeWidth={3} />
+            <circle
+              cx={50}
+              cy={32}
+              r={19}
+              fill="var(--acc)"
+              stroke="color-mix(in srgb, var(--acc) 65%, black)"
+              strokeWidth={3}
+            />
             <circle ref={refs.pupil} className={s.pupil} cx={50} cy={32} r={9} />
             <circle cx={56} cy={25} r={4} fill="#fff" />
           </g>
           <rect ref={refs.lid} x={-2} y={-4} width={104} height={72} className={s.lid} />
         </g>
-        <path d={ALMOND} fill="none" stroke="#7dffa8" strokeWidth={5} strokeLinejoin="round" />
+        <path d={ALMOND} fill="none" stroke="var(--acc)" strokeWidth={5} strokeLinejoin="round" />
       </svg>
     </button>
   );
@@ -156,14 +163,13 @@ function Eye({ id, refs }: { id: EyeId; refs: EyeRefs }) {
 
 // ─── The name, with both eyes wired to one shared motion loop ───────
 const NAME_STYLE: React.CSSProperties = {
-  fontFamily: "var(--font-archivo)",
-  fontWeight: 900,
-  fontVariationSettings: "'wght' 900",
-  fontSize: "clamp(44px, 12vw, 64px)",
-  lineHeight: 0.86,
-  letterSpacing: "-0.055em",
+  fontFamily: "var(--disp)",
+  fontWeight: "var(--namew)" as unknown as number,
+  fontSize: "clamp(36px, 7.5vw, var(--name-size))",
+  lineHeight: "var(--name-lh)",
+  letterSpacing: "var(--name-ls)",
   textTransform: "uppercase",
-  color: "#ffffff",
+  color: "var(--aboutink)",
   margin: 0,
 };
 

@@ -2,14 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-// Same fixed literal palette as project-page.tsx — this page always
-// reads as the dark green terminal regardless of the site's own
-// light/dark toggle, so it can't lean on the adaptive --accent/--line
-// tokens (those flip to light-mode values and would clash here).
-const BORDER = "#2b5a3f";
-const DIM = "#c7d6cd";
-const MUTED = "#8fae9c";
-const ACCENT = "#7dffa8";
+// Same tokens as project-page.tsx — reads the active 4-theme palette.
+const BORDER = "var(--line)";
+const DIM = "var(--ink2)";
+const MUTED = "var(--ink2)";
+const ACCENT = "var(--acc)";
 
 // Scroll-spy for the case-study sections, drawn as a segmented
 // progress bar — each section gets an equal-width tick that fills in
@@ -58,7 +55,12 @@ export function ProgressNav({
     <nav
       aria-label="Section progress"
       className="sticky z-10 mx-auto flex w-full max-w-[1100px] rounded-[16px] border px-4 py-3 md:px-6"
-      style={{ top: topOffset, borderColor: BORDER, background: "rgba(10,26,18,0.92)", backdropFilter: "blur(16px)" }}
+      style={{
+        top: topOffset,
+        borderColor: BORDER,
+        background: "color-mix(in srgb, var(--bg) 92%, transparent)",
+        backdropFilter: "blur(16px)",
+      }}
     >
       {sections.map((s, i) => {
         const passed = i <= activeIndex;

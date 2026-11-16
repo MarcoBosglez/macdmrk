@@ -1,0 +1,40 @@
+.logo {
+  min-height: 46px;
+  border-radius: 14px;
+}
+
+.logoText {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.navCard {
+  padding: 4px;
+  border-radius: 16px;
+  gap: 2px;
+}
+
+.pill {
+  min-height: 34px;
+  padding: 0 12px;
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.statusPill {
+  font-size: 11px;
+}
+
+.lang {
+  width: 32px;
+  height: 32px;
+  min-height: 0;
+  padding: 0;
+}
+
+:global([data-theme="aurora"]) .statusPill {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}

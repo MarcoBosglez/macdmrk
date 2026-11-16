@@ -1,0 +1,91 @@
+.header {
+  font-size: 11px;
+}
+
+/* The message log gets its own surface (var(--tbg)/var(--tfg)) rather
+   than inheriting the outer card's background — matches the mockup's
+   terminal screen, which is visually distinct from the card frame
+   around it (most visible in aurora, where tbg/tfg flip to a light
+   panel inside a dark card). */
+.log {
+  background: var(--tbg);
+  color: var(--tfg);
+}
+
+/* Both bubbles live on the log's own --tbg/--tfg surface (not the
+   card's --bg/--ink pair, which can be a totally different contrast
+   relationship — e.g. electric's --ink is near-black while its --tbg
+   is near-black too, so pairing a bubble with --ink/--wash made text
+   disappear). Tints are mixed from --tfg/--tp so they always read
+   against whatever --tbg resolves to. */
+.bubbleBot {
+  background: color-mix(in srgb, var(--tfg) 10%, transparent);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--tfg);
+}
+
+.bubbleUser {
+  background: color-mix(in srgb, var(--tp) 18%, transparent);
+  border-color: var(--tp);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--tfg);
+}
+
+.dot {
+  background: var(--tp);
+}
+
+.cursor {
+  color: var(--tp);
+}
+
+.avatar {
+  background: color-mix(in srgb, var(--tp) 14%, transparent);
+  border-color: var(--tp);
+  color: var(--tp);
+}
+
+/* The header's second dot is a hollow ring, not a filled dot. */
+.headerRing {
+  border: 1.5px solid var(--acc);
+  background: transparent;
+}
+
+.chipsRow {
+  gap: 5px;
+}
+
+.chip {
+  min-height: 28px;
+  padding: 0 9px;
+  font-size: 11px;
+}
+
+/* Aurora: a sunrise strip across the top of the terminal, echoing the
+   standalone reference's "dome" header above the chat screen. */
+.sunrise {
+  display: none;
+}
+
+:global([data-theme="aurora"]) .sunrise {
+  display: block;
+  position: relative;
+  height: 48px;
+  overflow: hidden;
+  background: repeating-conic-gradient(from 180deg at 50% 100%, rgba(255, 255, 255, 0.07) 0 0.4deg, transparent 0.4deg 12deg);
+}
+
+:global([data-theme="aurora"]) .sunrise::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -150px;
+  width: 260px;
+  height: 180px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 60%, #ffb36b 0%, #ff7a4c 18%, #b05cff 42%, #3b4bff 62%, transparent 75%);
+  filter: blur(4px);
+}
