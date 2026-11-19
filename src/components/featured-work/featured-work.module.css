@@ -13,10 +13,16 @@
   --fw-border-hover: var(--acc);
   --fw-control: var(--card);
   --fw-soft: color-mix(in srgb, var(--ink) 10%, transparent);
-  --fw-soft-hover: color-mix(in srgb, var(--acc) 18%, transparent);
   --fw-rule: var(--line);
   --fw-pill-bg: var(--tbg);
   --fw-pill-text: var(--tfg);
+  /* The "all work" pill sits on --tbg, not the card/--bg surface the
+     rest of this component uses — so its hover state needs --tp (the
+     accent paired with --tbg) instead of --acc. In electric, --acc and
+     --tbg happen to be the same black, which made the hover text (and
+     the fill tinted from it) disappear into the pill's own background. */
+  --fw-pill-hot: var(--tp);
+  --fw-soft-hover: color-mix(in srgb, var(--tp) 18%, transparent);
   --fw-text: var(--ink);
   --fw-dim: var(--ink2);
 
@@ -90,8 +96,8 @@
 
 .allWork:hover,
 .allWork:focus-visible {
-  border-color: var(--fw-accent);
-  color: var(--fw-accent);
+  border-color: var(--fw-pill-hot);
+  color: var(--fw-pill-hot);
 }
 
 .allWork:hover::before,
@@ -107,8 +113,10 @@
   justify-content: center;
   padding: 0 5px;
   border-radius: 999px;
-  background: var(--fw-soft);
-  color: var(--fw-accent);
+  /* Also on the pill's --tbg surface, not the card/--bg one — same
+     reason as --fw-pill-hot above. */
+  background: color-mix(in srgb, var(--tp) 16%, transparent);
+  color: var(--fw-pill-hot);
   font-size: 10px;
 }
 

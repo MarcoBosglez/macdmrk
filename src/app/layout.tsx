@@ -15,7 +15,8 @@ import { PrivateToolsButton } from "@/components/chrome/private-tools-button";
 import { CopyrightMark } from "@/components/chrome/copyright-mark";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
 import { PageGuide } from "@/components/page-guide/PageGuide";
-import { ThemeSwitcher } from "@/components/chrome/theme-switcher";
+import { MintAmbientMusic } from "@/components/chrome/mint-ambient-music";
+import { SwitchEyeProvider } from "@/components/hub/switch-eye";
 
 // Archivo as a variable font (wdth + wght axes live) — the kinetic type
 // animates font-variation-settings, not size. JetBrains Mono is the
@@ -97,16 +98,18 @@ export default function RootLayout({
           <SoundProvider>
             <LocaleProvider>
               <CursorProvider>
-                <div className="relative flex h-dvh w-screen flex-col overflow-hidden">
-                  <AuroraField />
-                  <ChromeBar />
-                  <MainShell>{children}</MainShell>
-                  <MobileNavBubbles />
-                  <PrivateToolsButton />
-                  <CopyrightMark />
-                  <PageGuide />
-                  <ThemeSwitcher />
-                </div>
+                <SwitchEyeProvider>
+                  <div className="relative flex h-dvh w-screen flex-col overflow-hidden">
+                    <AuroraField />
+                    <ChromeBar />
+                    <MainShell>{children}</MainShell>
+                    <MobileNavBubbles />
+                    <PrivateToolsButton />
+                    <CopyrightMark />
+                    <PageGuide />
+                    <MintAmbientMusic />
+                  </div>
+                </SwitchEyeProvider>
               </CursorProvider>
             </LocaleProvider>
           </SoundProvider>

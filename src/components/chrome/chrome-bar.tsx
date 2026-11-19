@@ -4,10 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
-import { Volume2, VolumeX } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Volume2, VolumeX, Sun, Moon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
+import { useSwitchEye } from "@/components/hub/switch-eye";
 import { NAV_ITEMS, isMinimalChromePage } from "@/lib/data/nav";
 import s from "./chrome-bar.module.css";
 
@@ -30,6 +32,8 @@ export function ChromeBar() {
   const hiddenOnMobile = pathname === "/lift";
   const { muted, toggleMute, playClick } = useSound();
   const { locale, setLocale, t } = useLocale();
+  const { resolvedTheme, setTheme } = useTheme();
+  const { reset: resetEyes } = useSwitchEye();
 
   // Theme / clock both depend on client-only state, so render neutral
   // until mounted to avoid a hydration mismatch.
@@ -62,6 +66,19 @@ export function ChromeBar() {
     setMouthOpen(true);
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setMouthOpen(false), HONK_POSE_MS);
+  }
+
+  // Light/dark toggle. Dark is the only "dark" state; everything else
+  // (including mint, reached via the eyes) reads as "light" here and
+  // flips back to electric → dark. Always wins over the eyes — forcing
+  // a theme this way un-lights both of them so the two controls don't
+  // fight each other.
+  const isLight = mounted && resolvedTheme === "electric";
+  function handleThemeToggle() {
+    const next = isLight ? "dark" : "electric";
+    playClick(next === "electric" ? "themeLight" : "themeDark");
+    resetEyes();
+    setTheme(next);
   }
 
   return (
@@ -157,6 +174,24 @@ export function ChromeBar() {
         <span className="font-mono whitespace-nowrap text-muted tabular-nums">
           {mounted ? clock : "--:--"}
         </span>
+
+        <button
+          onClick={handleThemeToggle}
+          aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
+          className="flex h-5 items-center justify-center rounded-[20px] border border-line px-1.5 text-muted hover:text-accent active:scale-90 sm:h-6 sm:px-2"
+          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
+        >
+          <span className="relative flex h-3.5 w-3.5 items-center justify-center">
+            <Moon
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: isLight ? 0 : 1 }}
+            />
+            <Sun
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: isLight ? 1 : 0 }}
+            />
+          </span>
+        </button>
 
         <button
           onClick={() => {

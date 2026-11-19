@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, createRef, useContext, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 import { useLocale } from "@/components/providers/locale-provider";
 import { useSound } from "@/components/providers/sound-provider";
 import s from "./switch-eye.module.css";
@@ -32,10 +33,35 @@ export function useSwitchEye() {
   return ctx;
 }
 
+// Lighting both eyes is also the mint theme's secret switch: once both
+// are lit, the site flips to "mint" (restored to whatever was active
+// before once either eye goes back off). The light/dark icon in the
+// chrome bar always wins over this — it force-resets both eyes when
+// clicked, so the two controls never fight (see ChromeBar).
 export function SwitchEyeProvider({ children }: { children: React.ReactNode }) {
   const [lit, setLit] = useState<Record<EyeId, boolean>>({ marco: false, bosquez: false });
   const toggle = (id: EyeId) => setLit((prev) => ({ ...prev, [id]: !prev[id] }));
   const reset = () => setLit({ marco: false, bosquez: false });
+
+  const { theme, setTheme } = useTheme();
+  const bothLit = lit.marco && lit.bosquez;
+  const wasBothLitRef = useRef(false);
+  const prevThemeRef = useRef("dark");
+
+  // No sound here — each eye's own click already plays the switch tap
+  // (see Eye's onClick below), including the second click that
+  // completes the pair, so adding another play on this transition
+  // would double it up.
+  useEffect(() => {
+    if (bothLit && !wasBothLitRef.current) {
+      if (theme && theme !== "mint") prevThemeRef.current = theme;
+      setTheme("mint");
+    } else if (!bothLit && wasBothLitRef.current) {
+      setTheme(prevThemeRef.current);
+    }
+    wasBothLitRef.current = bothLit;
+  }, [bothLit, theme, setTheme]);
+
   return <SwitchEyeContext.Provider value={{ lit, toggle, reset }}>{children}</SwitchEyeContext.Provider>;
 }
 
@@ -115,7 +141,7 @@ function Eye({ id, refs }: { id: EyeId; refs: EyeRefs }) {
       aria-hidden="false"
       aria-label={t.hub.switchEye.ariaLabel}
       onClick={() => {
-        playClick("eye");
+        playClick("mintSwitch");
         toggle(id);
       }}
       className={s.eyeBtn}
@@ -163,7 +189,7 @@ function Eye({ id, refs }: { id: EyeId; refs: EyeRefs }) {
 
 // ─── The name, with both eyes wired to one shared motion loop ───────
 const NAME_STYLE: React.CSSProperties = {
-  fontFamily: "var(--disp)",
+  fontFamily: "var(--name-font)",
   fontWeight: "var(--namew)" as unknown as number,
   fontSize: "clamp(36px, 7.5vw, var(--name-size))",
   lineHeight: "var(--name-lh)",

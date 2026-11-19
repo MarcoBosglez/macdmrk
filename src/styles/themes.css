@@ -33,7 +33,8 @@
   --hl: #7dffa8;
   --hlfont: "Inter Tight", sans-serif;
   --disp: "Inter Tight", sans-serif;
-  --namew: 700;
+  --name-font: "Archivo", sans-serif;
+  --namew: 900;
   --shadow: none;
   --tbg: #0b1c13;
   --tfg: #cfe3d6;
@@ -70,7 +71,8 @@
   --hl: #141414;
   --hlfont: "Silkscreen", monospace;
   --disp: "Inter Tight", sans-serif;
-  --namew: 700;
+  --name-font: "Archivo", sans-serif;
+  --namew: 900;
   --shadow: 4px 4px 0 #141414;
   --tbg: #acfdaa;
   --tfg: #141414;
@@ -109,6 +111,7 @@
   --hl: #12132b;
   --hlfont: "Inter Tight", sans-serif;
   --disp: "Inter Tight", sans-serif;
+  --name-font: "Inter Tight", sans-serif;
   --namew: 600;
   --shadow: none;
   --tbg: #f4f4f8;
@@ -155,6 +158,7 @@
   --hl: #ffffff;
   --hlfont: "Archivo", sans-serif;
   --disp: "Archivo", sans-serif;
+  --name-font: "Archivo", sans-serif;
   --namew: 900;
   --shadow: none;
   --tbg: #111111;
