@@ -1,0 +1,140 @@
+.switcher {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid #2c5c42;
+  background: #0f2419;
+  color: #cfe3d6;
+  font: 500 12px var(--font-jetbrains-mono, "JetBrains Mono"), monospace;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn:hover {
+  border-color: #7dffa8;
+  color: #e3f5ea;
+}
+
+.btn:focus-visible,
+.item:focus-visible {
+  outline: 2px solid #7dffa8;
+  outline-offset: 2px;
+}
+
+.num {
+  color: #7dffa8;
+}
+
+.sep {
+  color: #8fb7a0;
+}
+
+.toggleSlug {
+  max-width: 220px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Keep the top bar's nav row on one line on phones: the switcher's
+   button is the only flexible piece, so its slug gives up the room. */
+.switcher .btn {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 480px) {
+  .toggleSlug {
+    max-width: 96px;
+  }
+}
+
+.chevron {
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.menu {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  z-index: 50;
+  box-sizing: border-box;
+  display: grid;
+  width: min(520px, 92vw);
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 16px;
+  border: 1px solid #2c5c42;
+  background: #0b1c13;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 760px) {
+  .menu {
+    grid-template-columns: 1fr;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: transparent;
+  color: #cfe3d6;
+  font: 500 12px var(--font-jetbrains-mono, "JetBrains Mono"), monospace;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.item:hover,
+.item:focus-visible {
+  background: #143023;
+  color: #e3f5ea;
+}
+
+.itemNum {
+  opacity: 0.7;
+}
+
+.itemSlug {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.wip {
+  font-size: 10px;
+  color: #ffb347;
+}
+
+.current,
+.current:hover,
+.current:focus-visible {
+  background: #7dffa8;
+  color: #062012;
+}

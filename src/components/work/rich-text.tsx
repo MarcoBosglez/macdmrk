@@ -97,12 +97,22 @@ function parseBlocks(text: string) {
  * paragraphs and lists. `lead` is inline markup placed at the start of
  * the first paragraph, e.g. a "fix:" label.
  */
-export function RichText({ text, className = "", lead }: { text: string; className?: string; lead?: ReactNode }) {
+export function RichText({
+  text,
+  className = "",
+  style,
+  lead,
+}: {
+  text: string;
+  className?: string;
+  style?: React.CSSProperties;
+  lead?: ReactNode;
+}) {
   const blocks = parseBlocks(text);
   if (lead && blocks[0]?.kind !== "paragraph") blocks.unshift({ kind: "paragraph", text: "" });
 
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
+    <div className={`flex flex-col gap-2 ${className}`} style={style}>
       {blocks.map((block, i) =>
         block.kind === "paragraph" ? (
           <p key={i}>

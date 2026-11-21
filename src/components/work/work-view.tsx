@@ -3,13 +3,14 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { AnimatePresence, motion } from "motion/react";
 import { ExternalLink } from "lucide-react";
 import { GhIcon } from "@/components/chrome/link-icons";
 import { useLocale } from "@/components/providers/locale-provider";
 import { useSound } from "@/components/providers/sound-provider";
 import { localize, type Locale, type Dictionary } from "@/lib/i18n/dictionaries";
 import { ViewPane } from "@/components/chrome/view-pane";
-import type { Project, ProjectCategory, StackKind } from "@/lib/data/projects";
+import type { Project, ProjectCategory } from "@/lib/data/projects";
 
 export function isGithubUrl(url: string) {
   try {
@@ -33,7 +34,6 @@ const CATEGORY_LABEL_KEY: Record<ProjectCategory, keyof Dictionary["work"]> = {
   academic: "kindAcademic",
   professional: "kindProfessional",
 };
-const STACK_COLOR: Record<StackKind, string> = { lang: BLUE, lib: "#c792ea", tool: "var(--muted)" };
 
 const PER_PAGE = 4;
 
@@ -74,13 +74,13 @@ function Cover({
       className={`relative flex w-full items-center justify-center overflow-hidden rounded-[12px] border bg-bg p-2 text-center font-mono text-[11px] text-muted ${grow ? "min-h-[160px] flex-1" : ""}`}
       style={{
         aspectRatio: grow ? undefined : ratio,
-        borderStyle: project.image ? "solid" : "dashed",
+        borderStyle: project.heroImage ? "solid" : "dashed",
         borderColor: "var(--line)",
       }}
     >
-      {project.image ? (
+      {project.heroImage ? (
         <Image
-          src={project.image}
+          src={project.heroImage}
           alt=""
           fill
           sizes={sizes}
@@ -116,43 +116,51 @@ function CodeLink({
 
 function LeadCard({ project, locale, t, onNav }: { project: Project; locale: Locale; t: Dictionary; onNav: () => void }) {
   return (
-    <article className="group flex flex-col gap-3 rounded-[20px] border border-line bg-panel p-2.5 transition-colors md:flex-[2_1_520px] hover:border-line-hot">
-      <Cover project={project} grow sizes="(max-width: 900px) 100vw, 680px" priority />
-      <div className="flex shrink-0 flex-col gap-2 px-2 pb-1">
-        <div className="flex flex-wrap items-center gap-2.5 font-mono text-[11px] text-muted">
-          <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
-          <span className="text-accent">{localize(project.role, locale)}</span>
-          <span>{project.years}</span>
-        </div>
-        <h3
-          className="text-accent"
-          style={{ fontSize: "clamp(24px, 3.1vw, 33px)", lineHeight: 1.08, fontWeight: 700, letterSpacing: "-0.03em" }}
-        >
-          {localize(project.title, locale)}
-        </h3>
-        <p className="text-[14px] leading-relaxed text-dim">{localize(project.pitch, locale)}</p>
-        <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
-          {project.stack.slice(0, 5).map((it) => (
-            <span key={it.name} className="rounded-full bg-wash px-2.5 py-1" style={{ color: STACK_COLOR[it.kind] }}>
-              {it.name}
-            </span>
-          ))}
-        </div>
-        <div className="mt-auto flex flex-wrap gap-2.5 pt-1">
-          <Link
-            href={`/work/${project.slug}`}
-            onClick={onNav}
-            className="flex h-10 flex-1 basis-[160px] items-center justify-center gap-2 rounded-[14px] bg-accent px-4 font-mono text-[13px] font-bold text-bg transition-[filter] hover:brightness-110"
+    <article
+      data-sound-hover="projectHover"
+      className="group relative flex flex-col gap-3 rounded-[20px] border border-line bg-panel p-2.5 transition-colors md:flex-[2_1_520px] hover:border-line-hot"
+    >
+      <Link
+        href={`/work/${project.slug}`}
+        onClick={onNav}
+        aria-label={localize(project.title, locale)}
+        className="absolute inset-0 z-0 rounded-[20px] focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+      />
+      <div className="pointer-events-none contents">
+        <Cover project={project} grow sizes="(max-width: 900px) 100vw, 680px" priority />
+        <div className="flex shrink-0 flex-col gap-2 px-2 pb-1">
+          <div className="flex flex-wrap items-center gap-2.5 font-mono text-[11px] text-muted">
+            <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
+            {project.role ? <span className="text-accent">{localize(project.role, locale)}</span> : null}
+            <span>{project.years}</span>
+          </div>
+          <h3
+            className="text-accent"
+            style={{ fontSize: "clamp(24px, 3.1vw, 33px)", lineHeight: 1.08, fontWeight: 700, letterSpacing: "-0.03em" }}
           >
-            {t.work.learnMore} <span aria-hidden="true">→</span>
-          </Link>
-          <CodeLink
-            project={project}
-            onClick={onNav}
-            className="flex h-10 flex-1 basis-[160px] items-center justify-center gap-2 rounded-[14px] border border-line px-4 font-mono text-[13px] text-ink transition-colors hover:border-line-hot"
-          >
-            {isGithubUrl(project.url!) ? t.work.viewCode : t.work.viewProject}
-          </CodeLink>
+            {localize(project.title, locale)}
+          </h3>
+          {project.pitch ? (
+            <p className="text-[14px] leading-relaxed text-dim">{localize(project.pitch, locale)}</p>
+          ) : null}
+          <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
+            {project.tags.slice(0, 5).map((tag) => (
+              <span key={tag} className="rounded-full bg-wash px-2.5 py-1 text-accent">
+                {tag}
+              </span>
+            ))}
+          </div>
+          {project.url ? (
+            <div className="pointer-events-auto relative z-10 mt-auto flex flex-wrap gap-2.5 pt-1">
+              <CodeLink
+                project={project}
+                onClick={onNav}
+                className="flex h-10 items-center justify-center gap-2 rounded-[14px] border border-line px-4 font-mono text-[13px] text-ink transition-colors hover:border-line-hot"
+              >
+                {isGithubUrl(project.url) ? t.work.viewCode : t.work.viewProject}
+              </CodeLink>
+            </div>
+          ) : null}
         </div>
       </div>
     </article>
@@ -161,84 +169,132 @@ function LeadCard({ project, locale, t, onNav }: { project: Project; locale: Loc
 
 function SideCard({ project, locale, t, onNav }: { project: Project; locale: Locale; t: Dictionary; onNav: () => void }) {
   return (
-    <article className="group flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot">
-      <Cover project={project} ratio="3 / 1" sizes="(max-width: 900px) 100vw, 340px" />
-      <div className="flex flex-1 flex-col gap-1 px-1.5">
-        <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
-          <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
-          <span>{project.years}</span>
-        </div>
-        <h3 className="text-[16px] leading-tight font-bold text-ink" style={{ letterSpacing: "-0.02em" }}>
-          {localize(project.title, locale)}
-        </h3>
-        <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
-      </div>
+    <article
+      data-sound-hover="projectHover"
+      className="group relative flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot"
+    >
       <Link
         href={`/work/${project.slug}`}
         onClick={onNav}
-        className="flex h-9 items-center justify-between rounded-[10px] bg-wash px-3 font-mono text-[12px] font-bold text-accent"
-      >
-        {t.work.learnMore} <span aria-hidden="true">→</span>
-      </Link>
+        aria-label={localize(project.title, locale)}
+        className="absolute inset-0 z-0 rounded-[20px] focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+      />
+      <div className="pointer-events-none contents">
+        <Cover project={project} ratio="3 / 1" sizes="(max-width: 900px) 100vw, 340px" />
+        <div className="flex flex-1 flex-col gap-1 px-1.5">
+          <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
+            <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
+            <span>{project.years}</span>
+          </div>
+          <h3 className="text-[16px] leading-tight font-bold text-ink" style={{ letterSpacing: "-0.02em" }}>
+            {localize(project.title, locale)}
+          </h3>
+          {project.pitch ? (
+            <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
+          ) : null}
+        </div>
+      </div>
+      {project.url ? (
+        <CodeLink
+          project={project}
+          onClick={onNav}
+          className="pointer-events-auto relative z-10 flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-[10px] border border-line text-ink transition-colors hover:border-line-hot"
+        >
+          {""}
+        </CodeLink>
+      ) : null}
     </article>
   );
 }
 
 function GridCard({ project, locale, t, onNav }: { project: Project; locale: Locale; t: Dictionary; onNav: () => void }) {
   return (
-    <article className="group animate-fade flex flex-col gap-1.5 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot">
-      <Cover project={project} ratio="16 / 8" sizes="(max-width: 700px) 100vw, 340px" />
-      <div className="flex flex-1 flex-col gap-1 px-1.5">
-        <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
-          <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
-          <span>{localize(project.kindLabel, locale)}</span>
-          <span>{project.years}</span>
-          {project.featured ? (
-            <span style={{ color: AMBER }} aria-label="Featured">★</span>
+    <article
+      data-sound-hover="projectHover"
+      className="group relative flex flex-col gap-1.5 rounded-[20px] border border-line bg-panel p-2.5 transition-colors hover:border-line-hot"
+    >
+      <Link
+        href={`/work/${project.slug}`}
+        onClick={onNav}
+        aria-label={localize(project.title, locale)}
+        className="absolute inset-0 z-0 rounded-[20px] focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+      />
+      <div className="pointer-events-none contents">
+        <Cover project={project} ratio="16 / 8" sizes="(max-width: 700px) 100vw, 340px" />
+        <div className="flex flex-1 flex-col gap-1 px-1.5">
+          <div className="flex min-h-[46px] flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
+            <CategoryPill category={project.category} label={t.work[CATEGORY_LABEL_KEY[project.category]]} />
+            <span>{localize(project.kindLabel, locale)}</span>
+            <span>{project.years}</span>
+            {project.featured ? (
+              <span style={{ color: AMBER }} aria-label="Featured">★</span>
+            ) : null}
+          </div>
+          <h3
+            className="line-clamp-2 min-h-[38px] text-[15px] leading-tight font-bold text-ink"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+            {localize(project.title, locale)}
+          </h3>
+          {project.pitch ? (
+            <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
+          ) : null}
+          {project.tags.length ? (
+            <div className="mt-auto truncate font-mono text-[11px] text-muted">
+              {project.tags.join(" · ")}
+            </div>
           ) : null}
         </div>
-        <h3 className="text-[15px] leading-tight font-bold text-ink" style={{ letterSpacing: "-0.02em" }}>
-          {localize(project.title, locale)}
-        </h3>
-        <p className="line-clamp-2 text-[12.5px] leading-snug text-dim">{localize(project.pitch, locale)}</p>
-        <div className="mt-auto truncate font-mono text-[11px] text-muted">{project.stack.map((it) => it.name).join(" · ")}</div>
       </div>
-      <div className="flex gap-2 px-0.5">
-        <CodeLink
-          project={project}
-          onClick={onNav}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-line text-ink transition-colors hover:border-line-hot"
-        >
-          {""}
-        </CodeLink>
-        <Link
-          href={`/work/${project.slug}`}
-          onClick={onNav}
-          className="flex h-9 flex-1 items-center justify-between rounded-[10px] bg-wash px-3 font-mono text-[12px] font-bold text-accent"
-        >
-          {t.work.learnMore} <span aria-hidden="true">→</span>
-        </Link>
-      </div>
+      {project.url ? (
+        <div className="pointer-events-auto relative z-10 flex gap-2 px-0.5">
+          <CodeLink
+            project={project}
+            onClick={onNav}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-line text-ink transition-colors hover:border-line-hot"
+          >
+            {""}
+          </CodeLink>
+        </div>
+      ) : null}
     </article>
   );
 }
 
+const gridSlideVariants = {
+  enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 48 : -48 }),
+  center: { opacity: 1, x: 0 },
+  exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -48 : 48 }),
+};
+
 // The work browser: a ★ Featured row (big lead card + up to two side
-// cards, in `PROJECTS` order among the featured ones) above a filtered,
-// paginated grid of everything. Ported structurally from the client's
-// own "design I" reference and reskinned onto this site's tokens.
+// cards, newest first among the featured ones) above a filtered,
+// paginated grid of everything, also newest first. Ported structurally
+// from the client's own "design I" reference and reskinned onto this
+// site's tokens.
 export function WorkView({ projects }: { projects: Project[] }) {
   const { locale, t } = useLocale();
   const { playClick } = useSound();
   const [filter, setFilter] = useState<"all" | ProjectCategory>("all");
   const [page, setPage] = useState(0);
+  // +1 slides the incoming grid in from the right (moving forward),
+  // -1 from the left (moving back) — set right before every page/filter
+  // change so the very next render's enter animation picks it up.
+  const [direction, setDirection] = useState(1);
 
-  const featured = useMemo(() => projects.filter((p) => p.featured), [projects]);
+  // Newest startYear first; ties (e.g. several WIPs sharing a year) keep
+  // their original array order since Array#sort is stable.
+  const sorted = useMemo(
+    () => [...projects].sort((a, b) => b.startYear - a.startYear),
+    [projects]
+  );
+
+  const featured = useMemo(() => sorted.filter((p) => p.featured), [sorted]);
   const [lead, ...side] = featured;
 
   const matching = useMemo(
-    () => (filter === "all" ? projects : projects.filter((p) => p.category === filter)),
-    [projects, filter]
+    () => (filter === "all" ? sorted : sorted.filter((p) => p.category === filter)),
+    [sorted, filter]
   );
   const pageCount = Math.max(1, Math.ceil(matching.length / PER_PAGE));
   const current = Math.min(page, pageCount - 1);
@@ -249,6 +305,11 @@ export function WorkView({ projects }: { projects: Project[] }) {
     f === "all" ? projects.length : projects.filter((p) => p.category === f).length;
 
   const onNav = () => playClick("nav");
+  const goToPage = (n: number) => {
+    playClick("nav");
+    setDirection(n >= current ? 1 : -1);
+    setPage(n);
+  };
 
   return (
     <ViewPane>
@@ -297,15 +358,15 @@ export function WorkView({ projects }: { projects: Project[] }) {
                   aria-pressed={active}
                   onClick={() => {
                     onNav();
+                    setDirection(1);
                     setFilter(f);
                     setPage(0);
                   }}
-                  className="flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors"
-                  style={{
-                    background: active ? "var(--accent)" : "transparent",
-                    color: active ? "var(--bg)" : "var(--dim)",
-                    borderColor: active ? "var(--accent)" : "var(--line)",
-                  }}
+                  className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors ${
+                    active
+                      ? "border-accent bg-accent text-bg hover:opacity-90"
+                      : "border-line bg-transparent text-dim hover:border-line-hot hover:bg-wash hover:text-ink"
+                  }`}
                 >
                   {f === "all" ? t.work.filterAll : t.work[CATEGORY_LABEL_KEY[f]]}
                   <span style={{ opacity: 0.7 }}>{countFor(f)}</span>
@@ -314,34 +375,59 @@ export function WorkView({ projects }: { projects: Project[] }) {
             })}
           </div>
 
-          <div
-            key={`${filter}-${current}`}
-            className="grid gap-4"
-            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
-          >
-            {visible.map((p) => (
-              <GridCard key={p.slug} project={p} locale={locale} t={t} onNav={onNav} />
-            ))}
+          <div className="relative overflow-hidden">
+            <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+              <motion.div
+                key={`${filter}-${current}`}
+                custom={direction}
+                variants={gridSlideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                className="grid gap-4"
+                style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
+              >
+                {visible.map((p) => (
+                  <GridCard key={p.slug} project={p} locale={locale} t={t} onNav={onNav} />
+                ))}
+                {/* Invisible filler cards pad the grid out to a full page
+                    of rows, so a filter that leaves only a handful of
+                    results doesn't collapse the section's height — the
+                    page stays the same size whether 1 or PER_PAGE match. */}
+                {visible.length > 0
+                  ? Array.from({ length: Math.max(0, PER_PAGE - visible.length) }, (_, i) => (
+                      <div key={`filler-${i}`} aria-hidden="true" className="invisible">
+                        <GridCard project={visible[0]} locale={locale} t={t} onNav={() => {}} />
+                      </div>
+                    ))
+                  : null}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          {pageCount > 1 ? (
-            <nav aria-label="Project pages" className="mt-3 flex flex-wrap justify-center gap-1.5 font-mono text-[12px]">
+          {matching.length > 0 ? (
+            <nav
+              aria-label="Project pages"
+              aria-hidden={pageCount <= 1 ? "true" : undefined}
+              className={`mt-3 flex flex-wrap justify-center gap-1.5 font-mono text-[12px] ${pageCount <= 1 ? "invisible" : ""}`}
+            >
               <button
                 type="button"
                 aria-label={t.work.prevPageLabel}
                 disabled={current === 0}
-                onClick={() => setPage(current - 1)}
+                onClick={() => goToPage(current - 1)}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-line-hot disabled:cursor-default disabled:opacity-35"
               >
                 ←
               </button>
-              {Array.from({ length: pageCount }, (_, n) => (
+              {Array.from({ length: Math.max(pageCount, 1) }, (_, n) => (
                 <button
                   key={n}
                   type="button"
                   aria-label={`${t.work.pageLabel} ${n + 1}`}
                   aria-current={n === current ? "page" : undefined}
-                  onClick={() => setPage(n)}
+                  onClick={() => goToPage(n)}
                   className="flex h-9 w-9 items-center justify-center rounded-full border font-bold transition-colors"
                   style={{
                     background: n === current ? "var(--accent)" : "var(--panel)",
@@ -356,7 +442,7 @@ export function WorkView({ projects }: { projects: Project[] }) {
                 type="button"
                 aria-label={t.work.nextPageLabel}
                 disabled={current >= pageCount - 1}
-                onClick={() => setPage(current + 1)}
+                onClick={() => goToPage(current + 1)}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-line-hot disabled:cursor-default disabled:opacity-35"
               >
                 →

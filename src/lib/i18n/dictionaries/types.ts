@@ -31,6 +31,10 @@ export type Dictionary = {
     chips: string[];
     // The "→ ..." line in the start_here.txt note
     note: string;
+    switchEye: {
+      ariaLabel: string;
+      reset: string;
+    };
   };
   work: {
     eyebrow: string;
@@ -42,7 +46,6 @@ export type Dictionary = {
     linkHint: string;
     viewProject: string;
     viewCode: string;
-    learnMore: string;
     backToWork: string;
     note: string;
     // TODO: these are new (project-work revamp from advisor feedback) —
@@ -71,7 +74,11 @@ export type Dictionary = {
     outputLabel: string;
     beforeLabel: string;
     goalLabel: string;
+    goalsLabel: string;
+    enlargeLabel: string;
+    closeLabel: string;
     fixLabel: string;
+    problemLabel: string;
     allProjects: string;
     tocLabel: string;
     cmdLabel: string;
@@ -87,6 +94,18 @@ export type Dictionary = {
     prevPageLabel: string;
     nextPageLabel: string;
     pageLabel: string;
+    // "Story first" case-study redesign (2026-11) — /work/<slug>.
+    allWorkBack: string;
+    switcherAria: string;
+    wipTag: string;
+    heroLiveLabel: string;
+    tldrSectionLabel: string;
+    tldrProblemLabel: string;
+    tldrBuiltLabel: string;
+    tldrResultLabel: string;
+    prevProjectLabel: string;
+    nextProjectLabel: string;
+    nextProjectCta: string;
   };
   gallery: {
     eyebrow: string;

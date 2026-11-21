@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Archivo, JetBrains_Mono } from "next/font/google";
+import { Archivo, JetBrains_Mono, Inter_Tight } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -12,7 +12,9 @@ import { ChromeBar } from "@/components/chrome/chrome-bar";
 import { MainShell } from "@/components/chrome/main-shell";
 import { MobileNavBubbles } from "@/components/chrome/mobile-nav-bubbles";
 import { PrivateToolsButton } from "@/components/chrome/private-tools-button";
+import { CopyrightMark } from "@/components/chrome/copyright-mark";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
+import { PageGuide } from "@/components/page-guide/PageGuide";
 
 // Archivo as a variable font (wdth + wght axes live) — the kinetic type
 // animates font-variation-settings, not size. JetBrains Mono is the
@@ -28,6 +30,15 @@ const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
   variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+// Condensed display weight for the About page's magazine-cover hero —
+// not used anywhere else, so it's scoped to its own variable.
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  weight: ["400", "800"],
+  variable: "--font-inter-tight",
   display: "swap",
 });
 
@@ -52,7 +63,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`no-js ${archivo.variable} ${jetBrainsMono.variable}`}
+      className={`no-js ${archivo.variable} ${jetBrainsMono.variable} ${interTight.variable}`}
     >
       <body>
         {/* Runs before paint: drop the no-js guard, and if the startup
@@ -77,6 +88,8 @@ export default function RootLayout({
                   <MainShell>{children}</MainShell>
                   <MobileNavBubbles />
                   <PrivateToolsButton />
+                  <CopyrightMark />
+                  <PageGuide />
                 </div>
               </CursorProvider>
             </LocaleProvider>

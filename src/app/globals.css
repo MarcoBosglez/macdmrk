@@ -141,6 +141,15 @@ body {
     color: var(--accent);
     text-decoration: none;
   }
+
+  /* <button> defaults to a plain arrow cursor in every browser — only
+     <a> gets a pointer for free. Most buttons across the site (the work
+     filter pills, ask_marco.sh's suggested questions, etc.) never set
+     this themselves, so without it they silently lose the "this is
+     clickable" cue on hover. */
+  button:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 /* ─── The glass recipe ───────────────────────────────────────────────
@@ -230,6 +239,24 @@ body {
 }
 .animate-fade {
   animation: fade 0.3s ease-out;
+}
+
+/* A quick expanding-and-fading ring behind a control on click — used by
+   the language toggle as one-shot feedback that the switch registered.
+   Keyed to remount on each click (see chrome-bar.tsx) so it always
+   plays from the start rather than looping. */
+@keyframes flash-pulse {
+  from {
+    opacity: 0.4;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+.animate-flash-pulse {
+  animation: flash-pulse 0.4s ease-out;
 }
 
 /* ─── Startup animation ─────────────────────────────────────────────

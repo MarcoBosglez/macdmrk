@@ -1,0 +1,150 @@
+/* Fixed colors, not theme tokens — this bubble is always the same
+   dark terminal green regardless of the site's light/dark toggle. */
+.wrap {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 40;
+}
+
+.bubble {
+  max-width: min(340px, calc(100vw - 40px));
+  background: #0b1c13;
+  border: 1px solid #2c5c42;
+  border-radius: 16px 16px 16px 4px;
+  padding: 12px 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.enter {
+  animation: pg-fade-in 0.25s ease-out both;
+}
+
+@keyframes pg-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter {
+    animation: none;
+  }
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--font-jetbrains-mono, "JetBrains Mono", monospace);
+  font-size: 10.5px;
+}
+
+.tag {
+  font-weight: 500;
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.counter {
+  color: #8fb7a0;
+}
+
+.closeBtn,
+.nextBtn,
+.reopenBtn {
+  all: unset;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin: -6px -6px -6px 0;
+  color: #8fb7a0;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.closeBtn:hover {
+  color: #e3f5ea;
+}
+
+.text {
+  margin: 6px 0 0;
+  font-family: var(--font-inter-tight, "Inter Tight", sans-serif);
+  font-size: 14px;
+  line-height: 1.5;
+  color: #e3f5ea;
+}
+
+.nextBtn {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: var(--font-jetbrains-mono, "JetBrains Mono", monospace);
+  font-size: 11px;
+  color: #7dffa8;
+}
+
+.nextBtn:hover {
+  color: #9dffc0;
+}
+
+.closeBtn:focus-visible,
+.nextBtn:focus-visible,
+.reopenBtn:focus-visible {
+  outline: 2px solid #7dffa8;
+  outline-offset: 2px;
+}
+
+.reopenBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #0f2419;
+  border: 1px solid #2c5c42;
+  border-radius: 50%;
+  color: #8fb7a0;
+  font-family: var(--font-jetbrains-mono, "JetBrains Mono", monospace);
+  font-size: 15px;
+  transition: border-color 0.15s ease;
+}
+
+.reopenBtn:hover {
+  border-color: #7dffa8;
+}
+
+/* The mobile nav bubble button also lives bottom-left (fixed bottom-6
+   left-6, 48px) below the md breakpoint — sit above it instead of on
+   top of it. */
+@media (max-width: 767px) {
+  .wrap {
+    bottom: 84px;
+  }
+}
+
+@media (max-width: 639px) {
+  .bubble {
+    max-width: calc(100vw - 32px);
+  }
+}
+
+.hiddenForInput {
+  display: none;
+}
