@@ -74,6 +74,9 @@ export type Dictionary = {
     outputLabel: string;
     beforeLabel: string;
     goalLabel: string;
+    goalsLabel: string;
+    enlargeLabel: string;
+    closeLabel: string;
     fixLabel: string;
     problemLabel: string;
     allProjects: string;
@@ -100,11 +103,6 @@ export type Dictionary = {
     tldrProblemLabel: string;
     tldrBuiltLabel: string;
     tldrResultLabel: string;
-    sectionWhy: string;
-    sectionDid: string;
-    sectionHow: string;
-    sectionChallenges: string;
-    sectionOutcome: string;
     prevProjectLabel: string;
     nextProjectLabel: string;
     nextProjectCta: string;

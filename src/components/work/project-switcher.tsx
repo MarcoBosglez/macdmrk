@@ -7,11 +7,11 @@ import type { Project } from "@/lib/data/projects";
 import type { Dictionary, Locale } from "@/lib/i18n/dictionaries";
 import s from "./switcher.module.css";
 
-// A project reads as "wip" once at least 3 of its 4 core sections are
-// still just "[TODO: …]" placeholders — a simple, self-contained
-// heuristic so this doesn't need its own field on Project.
+// A project reads as "wip" while fewer than 2 of its sections have a
+// real headline (not missing, not a "[TODO: …]" placeholder) — a
+// simple, self-contained heuristic so this doesn't need its own field.
 function isWip(p: Project) {
-  const heads = [p.why?.headline.en, p.did?.headline.en, p.how?.headline.en, p.outcome?.headline.en];
+  const heads = (p.sections ?? []).filter((s) => !s.hidden).map((s) => s.headline?.en);
   const filled = heads.filter((h) => h && !h.startsWith("[TODO")).length;
   return filled < 2;
 }

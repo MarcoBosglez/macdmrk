@@ -20,6 +20,16 @@ const HONK_POSE_MS = 480;
 const CAPSULE =
   "flex items-center gap-1.5 rounded-[14px] border border-line bg-glass px-2.5 py-1.5 [backdrop-filter:blur(16px)_saturate(1.3)] sm:gap-2.5 sm:px-3.5 sm:py-2";
 
+// The combined bar on a project page reads the same live theme tokens
+// as everywhere else now (project pages used to pin a fixed dark-green
+// palette regardless of the site's theme — that's gone now that every
+// theme needs to reach this page too).
+const PROJECT_BOX = {
+  borderColor: "var(--line)",
+  background: "color-mix(in srgb, var(--bg) 92%, transparent)",
+  backdropFilter: "blur(16px)",
+} as React.CSSProperties;
+
 // The one bar on top of every view: identity capsule (left), the nav
 // pill group (centre, desktop only), and a status/controls capsule
 // (right — clock, theme, mute, language).
@@ -30,6 +40,14 @@ export function ChromeBar() {
   // capsule just eat room there and have nowhere useful to go, so the
   // whole bar is dropped below md; desktop keeps it as-is.
   const hiddenOnMobile = pathname === "/lift";
+  // A project's own page (/work/<slug>) folds everything into one box:
+  // logo, the project's nav (portalled in by ProjectNavBar) and the
+  // clock/sound/language controls, with section progress along the
+  // bottom edge, instead of separate capsules plus a second bar.
+  const projectPage = /^\/work\/[^/]+$/.test(pathname);
+  // Small pills normally; full-size buttons inside the project box so
+  // they line up with the project nav's 36px buttons.
+  const ctl = projectPage ? "h-9 rounded-[10px] px-2.5" : "h-5 rounded-[20px] px-1.5 sm:h-6 sm:px-2";
   const { muted, toggleMute, playClick } = useSound();
   const { locale, setLocale, t } = useLocale();
   const { resolvedTheme, setTheme } = useTheme();
@@ -81,17 +99,17 @@ export function ChromeBar() {
     setTheme(next);
   }
 
-  return (
-    <div
-      id="site-chrome-bar"
-      className={`relative z-[5] ${hiddenOnMobile ? "hidden md:flex" : "flex"} shrink-0 flex-nowrap items-center justify-between gap-2 px-3 py-2.5 sm:flex-wrap sm:gap-3 sm:px-4 sm:py-3 md:px-[26px] md:py-4`}
-    >
-      {/* Left — identity. Simple squash on press. */}
+  // Left — identity. Simple squash on press.
+  const logo = (
       <Link
         href="/"
         onClick={handleLogoClick}
         aria-label="Home"
-        className={`${CAPSULE} ${s.logo} active:scale-90`}
+        className={
+          projectPage
+            ? "flex shrink-0 items-center gap-1.5 rounded-[10px] px-2 py-1 active:scale-90"
+            : `${CAPSULE} ${s.logo} active:scale-90`
+        }
         style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1)" }}
       >
         <Image
@@ -108,6 +126,115 @@ export function ChromeBar() {
           <span className="animate-blink text-accent">▌</span>
         </span>
       </Link>
+  );
+
+  // Right — status + controls. Font size cascades from the wrapper
+  // (not set per-span) so the aurora-only statusPill override below
+  // still reaches it in the normal (non-project) case.
+  const status = (
+      <div className={projectPage ? "flex items-center gap-1.5 px-1 text-[11px] sm:gap-2" : `${CAPSULE} ${s.statusPill}`}>
+        <span className="animate-pulse-dot h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+        <span className={`hidden font-mono whitespace-nowrap text-accent ${projectPage ? "xl:inline" : "sm:inline"}`}>
+          {t.chrome.openToWork}
+        </span>
+        <span className="font-mono whitespace-nowrap text-muted tabular-nums">
+          {mounted ? clock : "--:--"}
+        </span>
+
+        <button
+          onClick={handleThemeToggle}
+          aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
+          className={`flex ${ctl} items-center justify-center border border-line text-muted hover:text-accent active:scale-90`}
+          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
+        >
+          <span className="relative flex h-3.5 w-3.5 items-center justify-center">
+            <Moon
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: isLight ? 0 : 1 }}
+            />
+            <Sun
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: isLight ? 1 : 0 }}
+            />
+          </span>
+        </button>
+
+        <button
+          onClick={() => {
+            playClick(muted ? "unmute" : "mute");
+            toggleMute();
+          }}
+          aria-label={muted ? "Unmute" : "Mute"}
+          className={`flex ${ctl} items-center justify-center border border-line text-muted hover:text-accent active:scale-90`}
+          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
+        >
+          <span className="relative flex h-3.5 w-3.5 items-center justify-center">
+            <Volume2
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: muted ? 0 : 1 }}
+            />
+            <VolumeX
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: muted ? 1 : 0 }}
+            />
+          </span>
+        </button>
+
+        <button
+          onClick={() => {
+            playClick("toggle");
+            setLocale(locale === "en" ? "es" : "en");
+            setLangPulse((k) => k + 1);
+          }}
+          aria-label={`Switch language to ${locale === "en" ? "Español" : "English"}`}
+          className={
+            projectPage
+              ? `relative isolate flex ${ctl} items-center justify-center overflow-hidden border border-line font-mono text-[11px] font-bold text-ink hover:scale-110 hover:text-accent active:scale-90`
+              : `relative isolate flex items-center justify-center overflow-hidden rounded-[20px] border border-line font-mono text-[11px] font-bold text-ink hover:scale-110 hover:text-accent active:scale-90 ${s.lang}`
+          }
+          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
+        >
+          {langPulse > 0 ? (
+            <span
+              key={langPulse}
+              aria-hidden="true"
+              className="animate-flash-pulse absolute inset-0 -z-10 rounded-[inherit] bg-accent opacity-0"
+            />
+          ) : null}
+          {locale === "en" ? "ES" : "EN"}
+        </button>
+      </div>
+  );
+
+  if (projectPage) {
+    return (
+      <div id="site-chrome-bar" className="relative z-[5] flex shrink-0 px-3 py-2.5 sm:px-4 sm:py-3 md:px-[26px] md:py-4">
+        <div
+          className="mx-auto flex w-full min-w-0 max-w-[1100px] flex-col gap-1 rounded-[16px] border p-1.5"
+          style={PROJECT_BOX}
+        >
+          {/* One line on wide screens; below lg the project nav wraps
+              to a second line inside the same box. */}
+          <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+            {logo}
+            <div
+              id="chrome-project-slot"
+              className="flex min-w-0 items-center gap-1.5 max-lg:order-last max-lg:basis-full lg:flex-1"
+            />
+            <div className="ml-auto">{status}</div>
+          </div>
+          <div id="chrome-project-progress" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      id="site-chrome-bar"
+      className={`relative z-[5] ${hiddenOnMobile ? "hidden md:flex" : "flex"} shrink-0 flex-wrap items-center justify-between gap-2 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3 md:px-[26px] md:py-4`}
+    >
+      {logo}
 
       {/* Centre — nav pills (desktop; mobile uses MobileNavBubbles).
           Dropped entirely on a project's own page — reduced chrome. */}
@@ -165,75 +292,7 @@ export function ChromeBar() {
         })}
       </nav>
 
-      {/* Right — status + controls */}
-      <div className={`${CAPSULE} ${s.statusPill}`}>
-        <span className="animate-pulse-dot h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-        <span className="hidden font-mono whitespace-nowrap text-accent sm:inline">
-          {t.chrome.openToWork}
-        </span>
-        <span className="font-mono whitespace-nowrap text-muted tabular-nums">
-          {mounted ? clock : "--:--"}
-        </span>
-
-        <button
-          onClick={handleThemeToggle}
-          aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
-          className="flex h-5 items-center justify-center rounded-[20px] border border-line px-1.5 text-muted hover:text-accent active:scale-90 sm:h-6 sm:px-2"
-          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
-        >
-          <span className="relative flex h-3.5 w-3.5 items-center justify-center">
-            <Moon
-              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
-              style={{ opacity: isLight ? 0 : 1 }}
-            />
-            <Sun
-              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
-              style={{ opacity: isLight ? 1 : 0 }}
-            />
-          </span>
-        </button>
-
-        <button
-          onClick={() => {
-            playClick(muted ? "unmute" : "mute");
-            toggleMute();
-          }}
-          aria-label={muted ? "Unmute" : "Mute"}
-          className="flex h-5 items-center justify-center rounded-[20px] border border-line px-1.5 text-muted hover:text-accent active:scale-90 sm:h-6 sm:px-2"
-          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
-        >
-          <span className="relative flex h-3.5 w-3.5 items-center justify-center">
-            <Volume2
-              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
-              style={{ opacity: muted ? 0 : 1 }}
-            />
-            <VolumeX
-              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
-              style={{ opacity: muted ? 1 : 0 }}
-            />
-          </span>
-        </button>
-
-        <button
-          onClick={() => {
-            playClick("toggle");
-            setLocale(locale === "en" ? "es" : "en");
-            setLangPulse((k) => k + 1);
-          }}
-          aria-label={`Switch language to ${locale === "en" ? "Español" : "English"}`}
-          className={`relative isolate flex items-center justify-center overflow-hidden rounded-[20px] border border-line font-mono text-[11px] font-bold text-ink hover:scale-110 hover:text-accent active:scale-90 ${s.lang}`}
-          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
-        >
-          {langPulse > 0 ? (
-            <span
-              key={langPulse}
-              aria-hidden="true"
-              className="animate-flash-pulse absolute inset-0 -z-10 rounded-[20px] bg-accent opacity-0"
-            />
-          ) : null}
-          {locale === "en" ? "ES" : "EN"}
-        </button>
-      </div>
+      {status}
     </div>
   );
 }
