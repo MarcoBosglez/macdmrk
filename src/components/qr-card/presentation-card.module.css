@@ -1,0 +1,508 @@
+/* The hub's main "who am I" presentation card — an inline, permanent
+   part of the page (not a modal). Ported 1:1 from
+   card-reference/qr-presentation-cards.html — the "L · ELECTRIC FLIP
+   CARD + SOCIALS ALWAYS THERE" / "K · ON A PHONE" / "K + L IN EVERY
+   THEME" sections. The .scope element below carries one theme's whole
+   set of card/text/back/socials variables (copied verbatim from that
+   file's .tc-dark/.tc-mint/.tc-aurora/.tc-electric blocks); the card,
+   its back face, and the socials row all just read from it. */
+
+.scope {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: min(500px, 100%);
+  /* The reused SwitchEye component's eyelid reads --glass; scoped here
+     to the card's own background (its --lid) instead of the site's
+     global glass tone. */
+  --glass: var(--lid);
+}
+
+/* ─── The flip card ──────────────────────────────────────────────── */
+
+.flipWrap {
+  perspective: 1400px;
+  width: 100%;
+}
+
+/* Height comes from .front's own content (it's the only in-flow
+   child — see .front below), not a fixed aspect-ratio: the chips row
+   now adds a third grid row to the front face, and a ratio sized for
+   the original two-column-only layout doesn't have room for it. .back
+   still matches exactly, since position:absolute + inset:0 sizes to
+   whatever height that ends up being, fixed or content-driven alike. */
+.flip {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 1fr 168px;
+  gap: 18px;
+  background: var(--cbg);
+  color: var(--cfg);
+  border-radius: var(--cr);
+  box-shadow: var(--csh);
+  font: 400 13px "JetBrains Mono", monospace;
+  text-align: left;
+  cursor: pointer;
+}
+
+.front {
+  position: relative;
+}
+
+.back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bbg);
+  color: var(--bfg);
+}
+
+/* front — left column */
+
+.frontLeft {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ck);
+}
+
+.nameWrap {
+  margin-top: auto;
+  padding-top: 26px;
+  /* Scopes the reused SwitchEyeName component to this card's own
+     typography instead of the hub's — the reference's card uses a
+     different size/weight/tracking per theme than the hub name does. */
+  --name-font: var(--nf);
+  --namew: var(--nw);
+  /* Exact fixed size, not responsive — --name-vw: 0vw collapses the
+     clamp's preferred term to 0, so it always returns --name-min. */
+  --name-min: 46px;
+  --name-vw: 0vw;
+  --name-lh: 0.86;
+  --name-ls: var(--nls);
+  --aboutink: var(--nc);
+}
+
+.role {
+  margin-top: 10px;
+  font: 700 13px var(--rf);
+}
+
+/* Spans the full card width (both grid columns), below the name/QR
+   row — bigger than the reference's own chip row so all four read at
+   a glance without scrolling. Still guarded with overflow-x:auto as a
+   fallback for anything narrower than expected. */
+.chipsRow {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 8px;
+  scrollbar-width: thin;
+}
+
+.chip {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: 7px 14px;
+  border-radius: var(--tr);
+  border: 1.5px solid var(--tb);
+  color: var(--tc);
+  background: var(--tbg);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+}
+
+.chipSolid {
+  background: var(--ts);
+  color: var(--tsf);
+  border-color: var(--ts);
+}
+
+/* front — right column (QR) */
+
+.qrCol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.qrBox {
+  display: block;
+  background: #fff;
+  padding: 6px;
+  border-radius: var(--qr);
+  box-shadow: var(--qsh);
+}
+
+/* back face */
+
+.sm {
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bk);
+}
+
+.intro {
+  font: var(--iw) 21px/1.22 var(--nf);
+  letter-spacing: -0.02em;
+}
+
+.stats {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--bl);
+  border: 1px solid var(--bl);
+}
+
+.statCell {
+  background: var(--bcell);
+  padding: 10px;
+}
+
+.statValue {
+  display: block;
+  font: 800 13px var(--rf);
+}
+
+.statAccent {
+  color: var(--bacc);
+}
+
+@media (max-width: 560px) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+  .qrCol {
+    order: -1;
+  }
+  .nameWrap {
+    --name-min: 52px;
+  }
+}
+
+/* ─── Socials (always visible, never flips) ─────────────────────── */
+
+.socBar {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.soc {
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1.5px solid var(--sb);
+  background: var(--sbg);
+  color: var(--si);
+  box-shadow: var(--ssh);
+  text-decoration: none;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.soc svg {
+  width: 20px;
+  height: 20px;
+}
+
+.soc:hover,
+.soc:focus-visible {
+  background: var(--shbg);
+  color: var(--shi);
+  border-color: var(--shbg);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.socMore {
+  flex: 1 1 160px;
+  height: 52px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border-radius: 14px;
+  border: 1.5px solid var(--sb);
+  background: var(--sbg);
+  color: var(--sm);
+  box-shadow: var(--ssh);
+  text-decoration: none;
+  font: 500 11px "JetBrains Mono", monospace;
+  letter-spacing: 0.18em;
+}
+
+.socMore .arr {
+  color: var(--si);
+  font-size: 18px;
+  letter-spacing: 0;
+  transition: transform 0.3s cubic-bezier(0.3, 1.7, 0.5, 1);
+}
+
+.socMore:hover,
+.socMore:focus-visible {
+  background: var(--shbg);
+  color: var(--shi);
+  outline: none;
+}
+
+.socMore:hover .arr,
+.socMore:focus-visible .arr {
+  color: var(--shi);
+  transform: translateX(5px);
+}
+
+/* ─── Mobile share button ────────────────────────────────────────── */
+
+.shareBtn {
+  flex: 1;
+  min-height: 46px;
+  border-radius: 12px;
+  border: 0;
+  background: var(--shbg);
+  color: var(--shi);
+  font: 800 13px var(--rf);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.shareBtn:focus-visible {
+  outline: 2px solid var(--nc);
+  outline-offset: 2px;
+}
+
+.shareRow {
+  display: none;
+  gap: 8px;
+  width: 100%;
+}
+
+@media (max-width: 560px) {
+  .shareRow {
+    display: flex;
+  }
+}
+
+/* ─── Theme variable blocks — copied 1:1 from the reference's
+   .tc-dark / .tc-mint / .tc-aurora / .tc-electric. One extra token,
+   --bk, is added beyond the reference: the back face's small labels
+   ((02) in one breath / status / local time / reply) need their own
+   color per theme — the reference expresses this as per-theme
+   `.tc-mint .tc-back .tc-sm{...}` overrides layered on top of a shared
+   default; --bk folds that into the same variable block instead. ──── */
+
+/* Card bg is the dark theme's own accent green (#7dffa8), not the old
+   dark gradient — everything else on the front (ink, chip, and social
+   colors) was re-paired for contrast against it, the same recipe mint
+   already uses for its light-green card (dark ink on the bright
+   surface, inverted on hover). The back face is untouched — every
+   theme's back deliberately contrasts with its own front. */
+:global([data-theme="dark"]) .scope {
+  --cbg: #7dffa8;
+  --cfg: #062012;
+  --cr: 22px;
+  --csh: 0 0 0 1.5px #062012, 0 26px 60px rgba(0, 0, 0, 0.5);
+  --ck: #0d3a22;
+  --bk: #8fb7a0;
+  --nf: "Inter Tight", sans-serif;
+  --nw: 800;
+  --nls: -0.045em;
+  --nc: #062012;
+  --rf: "Inter Tight", sans-serif;
+  --tr: 999px;
+  --tb: #062012;
+  --tc: #062012;
+  --tbg: transparent;
+  --ts: #062012;
+  --tsf: #7dffa8;
+  --qr: 12px;
+  --qsh: none;
+  --lid: #7dffa8;
+  /* The eyes' own structural color (outline + iris) and pupil color —
+     separate from the site's --acc/--accink (used everywhere else,
+     including this card's "lit" glow), because --acc now equals this
+     theme's --cbg: left alone, the eye's outline and focus ring would
+     vanish into the card background it sits on. Inverted — dark
+     outline, bright pupil — same pairing as the chips/socials above. */
+  --eye-ink: #062012;
+  --eye-pupil-ink: #7dffa8;
+  --bbg: #0b1c13;
+  --bfg: #e3f5ea;
+  --iw: 700;
+  --bl: #2b5a3f;
+  --bcell: #0f2419;
+  --bacc: #7dffa8;
+  --sb: #062012;
+  --sbg: #7dffa8;
+  --si: #062012;
+  --sm: #062012;
+  --ssh: 3px 3px 0 #062012;
+  --shbg: #062012;
+  --shi: #7dffa8;
+}
+
+:global([data-theme="mint"]) .scope {
+  --cbg: #acfdaa;
+  --cfg: #141414;
+  --cr: 22px;
+  --csh: 0 0 0 1.5px #141414, 5px 5px 0 1.5px #141414;
+  --ck: #2c4a2d;
+  --bk: #9afb98;
+  --nf: "Inter Tight", sans-serif;
+  --nw: 800;
+  --nls: -0.045em;
+  --nc: #141414;
+  --rf: "Inter Tight", sans-serif;
+  --tr: 999px;
+  --tb: #141414;
+  --tc: #141414;
+  --tbg: transparent;
+  --ts: #141414;
+  --tsf: #9afb98;
+  --qr: 12px;
+  --qsh: 0 0 0 1.5px #141414;
+  --lid: #acfdaa;
+  --bbg: #141414;
+  --bfg: #9afb98;
+  --iw: 800;
+  --bl: #2c4a2d;
+  --bcell: #141414;
+  --bacc: #9afb98;
+  --sb: #141414;
+  --sbg: #acfdaa;
+  --si: #141414;
+  --sm: #141414;
+  --ssh: 3px 3px 0 #141414;
+  --shbg: #141414;
+  --shi: #9afb98;
+}
+
+:global([data-theme="aurora"]) .scope {
+  --cbg:
+    radial-gradient(circle at 18% 120%, #ffb36b 0%, #ff7a4c 14%, rgba(176, 92, 255, 0.75) 34%, transparent 58%),
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px) 0 0 / 28px 28px,
+    #0d0e2e;
+  --cfg: #e8e9ff;
+  --cr: 22px;
+  --csh: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 26px 60px rgba(0, 0, 0, 0.55);
+  --ck: #c9cbf2;
+  --bk: #6b6e99;
+  --nf: "Inter Tight", sans-serif;
+  --nw: 600;
+  --nls: -0.05em;
+  --nc: #ffffff;
+  --rf: "Inter Tight", sans-serif;
+  --tr: 999px;
+  --tb: rgba(255, 255, 255, 0.28);
+  --tc: #e8e9ff;
+  --tbg: rgba(255, 255, 255, 0.06);
+  --ts: #ffffff;
+  --tsf: #0a0b26;
+  --qr: 14px;
+  --qsh: none;
+  --lid: #0d0e2e;
+  --bbg: #f4f4f8;
+  --bfg: #12132b;
+  --iw: 600;
+  --bl: #e3e4ee;
+  --bcell: #ffffff;
+  --bacc: #4b5bff;
+  --sb: rgba(255, 255, 255, 0.14);
+  --sbg: rgba(255, 255, 255, 0.04);
+  --si: #ff8a4c;
+  --sm: #c9cbf2;
+  --ssh: none;
+  --shbg: #ffffff;
+  --shi: #0a0b26;
+}
+
+:global([data-theme="electric"]) .scope {
+  --cbg: #2440ff;
+  --cfg: #ffffff;
+  --cr: 6px;
+  --csh: 0 26px 60px rgba(0, 0, 0, 0.5), 0 0 0 1.5px #2440ff, 0 0 0 6px #f3f2ee;
+  --ck: #ffffff;
+  --bk: #6b6a64;
+  --nf: "Archivo", sans-serif;
+  --nw: 900;
+  --nls: -0.055em;
+  --nc: #ffffff;
+  --rf: "Archivo", sans-serif;
+  --tr: 999px;
+  --tb: rgba(255, 255, 255, 0.6);
+  --tc: #ffffff;
+  --tbg: transparent;
+  --ts: #ffffff;
+  --tsf: #2440ff;
+  --qr: 4px;
+  --qsh: none;
+  --lid: #2440ff;
+  --bbg: #f3f2ee;
+  --bfg: #111111;
+  --iw: 800;
+  --bl: #e1dfd7;
+  --bcell: #ffffff;
+  --bacc: #2440ff;
+  --sb: rgba(255, 255, 255, 0.55);
+  --sbg: #2440ff;
+  --si: #ffffff;
+  --sm: #ffffff;
+  --ssh: none;
+  --shbg: #ffffff;
+  --shi: #2440ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip {
+    transition: none !important;
+  }
+}

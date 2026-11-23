@@ -15,7 +15,6 @@ import { PrivateToolsButton } from "@/components/chrome/private-tools-button";
 import { CopyrightMark } from "@/components/chrome/copyright-mark";
 import { StartupAnimation } from "@/components/chrome/startup-animation";
 import { PageGuide } from "@/components/page-guide/PageGuide";
-import { MintAmbientMusic } from "@/components/chrome/mint-ambient-music";
 import { SwitchEyeProvider } from "@/components/hub/switch-eye";
 
 // Archivo as a variable font (wdth + wght axes live) — the kinetic type
@@ -107,7 +106,6 @@ export default function RootLayout({
                     <PrivateToolsButton />
                     <CopyrightMark />
                     <PageGuide />
-                    <MintAmbientMusic />
                   </div>
                 </SwitchEyeProvider>
               </CursorProvider>
