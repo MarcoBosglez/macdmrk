@@ -6,6 +6,7 @@
 // click, so dense screenshots (design canvases, dashboards) stay legible.
 
 import { useRef } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
 import { Maximize2, X } from "lucide-react";
 
@@ -18,38 +19,40 @@ const MONO = "var(--font-jetbrains-mono, ui-monospace, monospace)";
 const FOCUS_RING =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--acc)]";
 
-export function ProjectFigure({
+/**
+ * Any image that opens full size on click: an "enlarge" chip on hover and
+ * a native <dialog> lightbox (closes on Esc, the backdrop, or the X).
+ * `children` is the image as it appears on the page, cropped or not.
+ */
+export function Enlargeable({
   src,
   alt,
-  num,
-  caption,
-  sizes,
   enlargeLabel,
   closeLabel,
+  className = "",
+  style,
+  children,
 }: {
   src: string;
   alt: string;
-  /** Figure number shown before the caption, e.g. "02". */
-  num: string;
-  caption?: string;
-  sizes: string;
   enlargeLabel: string;
   closeLabel: string;
+  className?: string;
+  style?: CSSProperties;
+  children: ReactNode;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
-    <figure className="flex w-full flex-col gap-2">
+    <>
       <button
         type="button"
         onClick={() => dialogRef.current?.showModal()}
         aria-label={`${enlargeLabel}: ${alt}`}
-        className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-[14px] border transition-colors hover:border-[var(--acc)] ${FOCUS_RING}`}
-        style={{ borderColor: BORDER, background: BG }}
+        className={`group relative block w-full cursor-zoom-in overflow-hidden border transition-colors hover:border-[var(--acc)] ${FOCUS_RING} ${className}`}
+        style={{ borderColor: BORDER, background: BG, ...style }}
       >
-        {/* width/height 0 + width:100%/height:auto = render at the file's
-            own aspect ratio instead of cropping into a fixed box. */}
-        <Image src={src} alt={alt} width={0} height={0} sizes={sizes} className="block h-auto w-full" />
+        {children}
         <span
           className="pointer-events-none absolute right-2 top-2 flex items-center gap-1 rounded-full border px-2 py-1 font-mono text-[10px] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
           style={{ borderColor: BORDER_HOT, background: "color-mix(in srgb, var(--bg) 85%, transparent)", color: MUTED }}
@@ -58,11 +61,6 @@ export function ProjectFigure({
           <Maximize2 size={11} /> {enlargeLabel}
         </span>
       </button>
-
-      <figcaption className="text-[12px] leading-relaxed" style={{ fontFamily: MONO, color: MUTED }}>
-        <span style={{ color: AMBER }}>fig. {num}</span>
-        {caption ? <> — {caption}</> : null}
-      </figcaption>
 
       <dialog
         ref={dialogRef}
@@ -95,6 +93,40 @@ export function ProjectFigure({
           </button>
         </div>
       </dialog>
+    </>
+  );
+}
+
+export function ProjectFigure({
+  src,
+  alt,
+  num,
+  caption,
+  sizes,
+  enlargeLabel,
+  closeLabel,
+}: {
+  src: string;
+  alt: string;
+  /** Figure number shown before the caption, e.g. "02". */
+  num: string;
+  caption?: string;
+  sizes: string;
+  enlargeLabel: string;
+  closeLabel: string;
+}) {
+  return (
+    <figure className="flex w-full flex-col gap-2">
+      <Enlargeable src={src} alt={alt} enlargeLabel={enlargeLabel} closeLabel={closeLabel} className="rounded-[14px]">
+        {/* width/height 0 + width:100%/height:auto = render at the file's
+            own aspect ratio instead of cropping into a fixed box. */}
+        <Image src={src} alt={alt} width={0} height={0} sizes={sizes} className="block h-auto w-full" />
+      </Enlargeable>
+
+      <figcaption className="text-[12px] leading-relaxed" style={{ fontFamily: MONO, color: MUTED }}>
+        <span style={{ color: AMBER }}>fig. {num}</span>
+        {caption ? <> — {caption}</> : null}
+      </figcaption>
     </figure>
   );
 }

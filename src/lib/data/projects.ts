@@ -61,7 +61,9 @@ export type ProjectBlock = { hidden?: boolean } & (
   /** Big numbers with a small label each. */
   | { type: "stats"; items: { value: string; label: Copy }[] }
   /** A full-width image (see ProjectFigure). */
-  | ({ type: "figure" } & ProjectFigure)
+  // `size` caps the width: "full" (default) for wide screenshots,
+  // "medium" / "small" for square or tall ones that would fill the screen.
+  | ({ type: "figure"; size?: "full" | "medium" | "small" } & ProjectFigure)
   /** A highlighted note. `tone`: "note" (blue, default), "win" (green), "warn" (amber). */
   | { type: "callout"; text: Copy; title?: Copy; tone?: "note" | "win" | "warn" }
   /** A code snippet, shown as-is. `file` is a small label above it, e.g. "src/lib/sound.ts". */
@@ -97,6 +99,10 @@ export type Project = {
   // Shows in the ★ Featured row at the top of /work (first featured
   // project gets the big lead card, the next two get the side cards).
   featured?: boolean;
+  // true = left out of the site entirely (/work, featured cards, the
+  // project switcher, and its own /work/<slug> page). The entry stays
+  // here so it's ready to flip back on.
+  hidden?: boolean;
   title: Localized;
   // Short type label shown on /work's grid cards, e.g. "AWS Tooling".
   kindLabel: Localized;
@@ -131,7 +137,7 @@ export type Project = {
   sections?: ProjectSection[];
 };
 
-export const PROJECTS: Project[] = [
+const ALL_PROJECTS: Project[] = [
   {
     slug: "web-portfolio",
     category: "personal",
@@ -311,15 +317,15 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "why it existed", es: "por qué existió" },
         headline: {
-          en: "Release campaigns needed pixel-perfect promo banners fast, and redoing them from scratch every time didn't scale.",
-          es: "Las campañas de lanzamiento necesitaban banners promocionales al pixel y con rapidez, y rehacerlos desde cero cada vez no escalaba.",
+          en: "Client Contact",
+          es: "",
         },
         blocks: [
           {
             type: "text",
             text: {
-              en: "Release campaigns needed pixel-perfect promo banners fast, and regenerating them by hand for every release didn't scale.",
-              es: "Las campañas de lanzamiento necesitaban banners promocionales al pixel y con rapidez, y regenerarlos a mano en cada lanzamiento no escalaba.",
+              en: "Music Distribution company [OneRPM](https://onerpm.com/) approached me to work to design and implement an HTML/CSS/JS banner for one of their recent Spotify campagins. The purpose was to allow Spotify users to interact with the banner in a way they could select an optiom from the custom banner and redirect them to a Spotify custom playlist made by OneRPM.",
+              es: ".",
             },
           },
           {
@@ -338,8 +344,8 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "what i did", es: "qué hice" },
         headline: {
-          en: "I owned the banner design end to end, from campaign brief to final assets.",
-          es: "Estuve a cargo del diseño del banner de punta a punta, desde el brief de campaña hasta los assets finales.",
+          en: "Design & Implementation",
+          es: "",
         },
         blocks: [
           {
@@ -362,7 +368,7 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "how", es: "cómo" },
         headline: {
-          en: "Hand-written HTML/CSS templates, parameterized by a small JS script.",
+          en: "Shipped Product",
           es: "",
         },
         blocks: [
@@ -406,147 +412,167 @@ export const PROJECTS: Project[] = [
     category: "academic",
     featured: true,
     heroImage: "/work/aws-rsh-cover.webp",
-    tags: ["Java", "Spring", "Docker", "React"],
+    tags: ["React", "Material UI", "Java", "Spring", "Docker"],
     title: { en: "Amazon Recorder System Helper", es: "Amazon Recorder System Helper" },
     kindLabel: { en: "AWS Tooling", es: "Herramientas AWS" },
     url: "https://www.linkedin.com/feed/update/urn:li:activity:6943381454940753920/",
     years: "2022",
     startYear: 2022,
     pitch: {
-      en: "A full-stack Amazon Connect extension for capturing call-center interactions to support auditing, coaching, and performance reviews.",
-      es: "Una extensión full-stack para Amazon Connect para registrar interacciones de call center y apoyar auditoría, capacitación y revisión de desempeño.",
+      en: "A full-stack Amazon Connect extension my whole class built for Amazon Mexico, so call centers could keep track of every call.",
+      es: "",
     },
     tldr: {
       problem: {
-        en: "Agent-customer call-center interactions lacked a searchable, auditable record, making quality review and agent coaching guesswork.",
-        es: "Las interacciones entre agentes y clientes en el call center no tenían un historial consultable ni auditable, haciendo que la capacitación y revisión fueran a ciegas.",
+        en: "Amazon Mexico brought a real brief to our class: find new ideas for Amazon Connect, the platform call centers use to handle their calls.",
+        es: "",
       },
       built: {
-        en: "A Spring and Docker recording service integrated with Amazon Connect alongside a React review console—with me leading the front-end team.",
-        es: "Un servicio de grabación en Spring y Docker integrado con Amazon Connect junto a una consola de revisión en React, liderando el equipo de front-end.",
+        en: "A full-stack extension to make, record and review calls, plus an FAQ that agents could check mid-call. I led the 5-person front-end team.",
+        es: "",
       },
       result: {
-        en: "A searchable call-review console and auditable interaction history that teams could use for training and evaluation.",
-        es: "Una consola consultable de revisión de llamadas e historial auditable usable para capacitación y evaluación.",
+        en: "We delivered it, Amazon Mexico really liked it, and we filmed a commercial-style demo of the product.",
+        es: "",
       },
     },
     role: { en: "front-end team lead", es: "líder de equipo front-end" },
-    timeline: { en: "Fall 2022", es: "otoño 2022" },
-    team: { en: "4 people", es: "4 personas" },
-    status: { en: "shipped", es: "lanzado" },
+    timeline: { en: "2022", es: "2022" },
+    team: { en: "~25-person class (5 on front-end)", es: "" },
+    status: { en: "delivered", es: "" },
     sections: [
       {
-        label: { en: "why it existed", es: "por qué existió" },
-        headline: {
-          en: "Without an auditable record of call-center interactions, coaching and performance reviews relied on guesswork.",
-          es: "Sin un registro auditable de las interacciones del call center, la capacitación y la evaluación de desempeño dependían de conjeturas.",
-        },
+        label: { en: "Needs (Why)" },
+        headline: { en: "A Real Client in a Classroom" },
         blocks: [
           {
             type: "text",
             text: {
-              en: "Call-center interactions between agents and customers weren't captured in a searchable, auditable way, making training and review harder than they needed to be.",
-              es: "Las interacciones entre agentes y clientes del call center no se guardaban de forma consultable ni auditable, complicando la capacitación y el seguimiento.",
+              en: "In 2022, during one of my last semesters of undergrad at **Tec de Monterrey (ITESM)** in Mexico City, people from Amazon Mexico came to one of my classes to assign us a project. They were looking for fresh ideas for **Amazon Connect**, the platform call centers use to handle all of their calls, recordings, etc.\nThe twist was that the whole class was the team. We simulated a real company: every group owned its own part of the product and we had to communicate constantly to deliver it. Looking back, it was pretty close to the project pipelines I later worked in on real teams.",
             },
           },
           {
             type: "beforeAfter",
-            before: { en: "no searchable call history", es: "sin historial de llamadas consultable" },
             goal: {
-              en: "auditable call history for review and coaching",
-              es: "historial de llamadas auditable para revisión y capacitación",
+              en: [
+                "Give Amazon Mexico new ideas for Amazon Connect",
+                "Build a full-stack product as one class-sized company",
+                "Practice working across teams like on a real project",
+              ],
             },
           },
         ],
       },
       {
-        label: { en: "what i did", es: "qué hice" },
-        headline: {
-          en: "I led the front-end team and helped guide key architecture and containerized deployment decisions.",
-          es: "Lideré al equipo de front-end y participé en decisiones clave de arquitectura y despliegue con Docker.",
-        },
+        label: { en: "Idea" },
+        headline: { en: "Keeping Track of Every Call" },
         blocks: [
+          {
+            type: "text",
+            text: {
+              en: "As a class, we decided to build a full-stack extension that captures call-center interactions, so a call center can actually keep track of its calls and use them for audits, coaching and performance reviews.\nWe looked at other products in the space for reference and pitched our own ideas on top. Basically: what features would a product like this need to feel complete?",
+            },
+          },
           {
             type: "bullets",
+            title: { en: "What it could do" },
+            style: "check",
             items: {
               en: [
-                "Led the front-end sub-team—breaking down tasks, unblocking teammates, and running regular progress check-ins",
-                "Reviewed pull requests to keep React components, UI patterns, and code quality consistent across contributors",
-                "Coordinated front-end architecture and Docker-based deployment workflows with the team",
-              ],
-              es: [
-                "Lideré al equipo de front-end: dividí tareas, destrabé bloqueos y revisé el avance de forma constante",
-                "Revisé pull requests para mantener consistencia en componentes React, UI y calidad de código",
-                "Coordiné decisiones de arquitectura front-end y el despliegue basado en Docker con el equipo",
+                "Make and record calls through an API",
+                "Keep a history of calls for audits, coaching and performance reviews",
+                "An FAQ section backed by a database, so agents could quickly answer the questions callers asked",
               ],
             },
           },
         ],
       },
       {
-        label: { en: "how", es: "cómo" },
-        headline: {
-          en: "Amazon Connect call events feed a Spring backend service while a React console handles search and playback.",
-          es: "Los eventos de llamada de Amazon Connect alimentan un servicio en Spring mientras una consola en React gestiona búsqueda y reproducción.",
-        },
+        label: { en: "Team" },
+        headline: { en: "A Whole Class as One Company" },
         blocks: [
           {
-            type: "steps",
-            items: {
-              en: [
-                "Scoped the end-to-end flow across Amazon Connect events, the Spring service, and the React console",
-                "Split front-end features across team members and integrated them against backend endpoints",
-                "Packaged and shipped the application for call search, review, and auditing",
-              ],
-              es: [
-                "Definimos el flujo completo entre eventos de Amazon Connect, el servicio en Spring y la consola en React",
-                "Repartimos módulos del front-end entre el equipo y los integramos con los endpoints del backend",
-                "Empaquetamos y lanzamos la aplicación para búsqueda, revisión y auditoría de llamadas",
-              ],
+            type: "text",
+            text: {
+              en: "The class, about 25 of us, was split into a **database** team, a **backend** team and a **front-end** team. I was assigned to the front-end group, five of us, though in practice we worked as a front-end/back-end mix to get things connected.\nAlong the way my teammates agreed to make me the leader of the group. Being responsible came naturally to me and I had the skills to keep the team moving, so I took it on.",
+            },
+          },
+          {
+            type: "callout",
+            tone: "note",
+            title: { en: "My role" },
+            text: {
+              en: "Front-end team lead: assigning tasks and keeping our group in sync with the database and backend teams. On the code side, I personally built the app's layout and navigation, the main page and the FAQ page.",
             },
           },
         ],
       },
       {
-        label: { en: "hard parts", es: "lo difícil" },
-        headline: { en: "Stepping into a lead role while still shipping code.", es: "Asumir un rol de liderazgo mientras seguía programando." },
+        label: { en: "Process (How)" },
+        headline: { en: "Execution & Teamwork" },
         blocks: [
+          {
+            type: "text",
+            text: {
+              en: "**1. Aligning With the Other Teams**\n - Worked with people from the database and backend groups to agree on what the project needed and to put together its architecture before building.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**2. Picking the Layout**\n - We had a lot of ideas for how the app should be laid out. In the end I made the call to go forward with my design: the style that was popular at the time, a big navigation menu on the left, where clicking a section swaps the main panel on the right to that section.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**3. Building the UI**\n - Used **Material UI** for **React** as our base of components, so we started from pieces that already worked and followed modern UI patterns.\n - I personally built that layout and its navigation, plus the **main page** and the **FAQ page**. The rest of the team built their sections on top of it.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**4. Leading the Front-end Team**\n - Split the work into tasks and assigned them across the five of us, then kept checking in until everything was connected to the backend and database.",
+            },
+          },
           {
             type: "challenges",
             items: [
               {
                 problem: {
-                  en: "Balancing hands-on implementation with team coordination, code reviews, and keeping everyone aligned for the first time as a lead.",
-                  es: "Equilibrar el desarrollo hands-on con coordinación de equipo, code reviews y alineación general por primera vez como líder.",
+                  en: "The hardest part wasn't the code. It was keeping a whole class aligned, and coming up with ideas that would actually give users a better experience.",
                 },
                 fix: {
-                  en: "Used clear task splits, regular check-ins, and early PR reviews to catch integration mismatches before crunch time. [TODO: add one specific blocker you resolved]",
-                  es: "Usé repartos claros de tareas, check-ins frecuentes y revisiones tempranas de PRs para detectar desajustes a tiempo. [TODO: agrega un bloqueo específico que resolviste]",
+                  en: "We kept talking with the other teams constantly and looked at how other products solved the same problems before deciding on our own approach.",
                 },
               },
             ],
+          },
+          {
+            type: "steps",
+            items: {
+              en: ["Brief from Amazon Mexico", "Architecture across teams", "Layout & UI", "Demo"],
+            },
           },
         ],
       },
       {
         label: { en: "outcome", es: "resultado" },
-        headline: {
-          en: "A searchable call-review console and auditable history ready for training and evaluation.",
-          es: "Una consola consultable e historial auditable listos para capacitación y evaluación.",
-        },
+        headline: { en: "Amazon Mexico Liked It!" },
         panel: true,
         blocks: [
           {
             type: "text",
             text: {
-              en: "Delivered a working React console backed by Spring and Docker around Amazon Connect so call records could be searched and reviewed reliably.",
-              es: "Entregamos una consola funcional en React respaldada por Spring y Docker sobre Amazon Connect para buscar y revisar registros de llamadas.",
+              en: "We finished it! The end product looked like a real, simple platform where users could make and record calls, with an FAQ for agents to lean on during calls. Amazon Mexico really liked it, and we filmed a demo that works like a commercial for the product. It's on my LinkedIn.",
             },
           },
           {
             type: "stats",
             items: [
-              { value: "4", label: { en: "person team led", es: "personas en el equipo" } },
+              { value: "~25", label: { en: "Classmates working as one company" } },
+              { value: "3", label: { en: "Teams (database, backend, front-end)" } },
+              { value: "5", label: { en: "Person front-end team I led" } },
             ],
           },
         ],
@@ -559,122 +585,142 @@ export const PROJECTS: Project[] = [
     category: "academic",
     featured: true,
     heroImage: "/work/sentiment-analysis-cover.webp",
-    tags: ["Machine Learning", "Python", "NLTK", "NLP"],
+    tags: ["Python", "NLTK", "NLP", "Bag of Words"],
     title: { en: "ML Sentiment Analysis", es: "Análisis de Sentimiento con ML" },
-    kindLabel: { en: "ML Paper", es: "Artículo de ML" },
-    url: "https://rcs.cic.ipn.mx/2023_152_12/Development%20of%20a%20Front-End%20with%20Dynamic%20Searches%20for%20Chatbot%20Retraining%20Using%20ReactJS.pdf",
+    kindLabel: { en: "NLP Study", es: "Estudio de PLN" },
     years: "2023",
     startYear: 2023,
     pitch: {
-      en: "An NLP study on mental-health tweets using multiclass and multi-label classification across 625 hand-labeled posts to evaluate negative-sentiment detection.",
-      es: "Un estudio de PLN sobre tuits de salud mental con clasificación multiclase y multietiqueta en 625 publicaciones etiquetadas a mano para evaluar detección de sentimiento negativo.",
+      en: "A university NLP study on mental-health tweets: 625 hand-labeled tweets and a model trained to tell positive from negative.",
+      es: "",
     },
     tldr: {
       problem: {
-        en: "Sentiment models on mental-health text often lack ground-truth labels that capture real social-media phrasing around distress.",
-        es: "Los modelos de sentimiento en salud mental suelen carecer de etiquetas verificadas que reflejen cómo se expresa el malestar en redes sociales.",
+        en: "How many people talk about mental health on social media, and is that conversation more positive or negative?",
+        es: "",
       },
       built: {
-        en: "A hand-labeled dataset of 625 tweets and a Python/NLTK classification workflow evaluated and published as an academic paper.",
-        es: "Un dataset de 625 tuits etiquetados a mano y un flujo de clasificación en Python/NLTK evaluado y publicado en artículo académico.",
+        en: "A hand-labeled set of 625 mental-health tweets and a bag-of-words model (Python/NLTK) trained to classify them, benchmarked against another model.",
+        es: "",
       },
       result: {
-        en: "A published NLP study measuring classification behavior on hand-labeled mental-health tweets.",
-        es: "Un estudio de PLN publicado que mide el comportamiento de clasificación en tuits de salud mental etiquetados a mano.",
+        en: "Roughly 70–80% accuracy for such a small dataset, and a clear lesson: more and better data would have made it better.",
+        es: "",
       },
     },
-    role: { en: "researcher + developer", es: "investigador + desarrollador" },
+    role: { en: "developer + data collection", es: "desarrollador + recolección de datos" },
     timeline: { en: "2023", es: "2023" },
-    team: { en: "solo", es: "en solitario" },
-    status: { en: "published", es: "publicado" },
+    team: { en: "5 people", es: "5 personas" },
+    status: { en: "completed", es: "completado" },
     sections: [
       {
-        label: { en: "why it existed", es: "por qué existió" },
-        headline: {
-          en: "Evaluating negative sentiment in mental-health text requires ground truth that reflects how people actually write online.",
-          es: "Evaluar sentimiento negativo en salud mental exige etiquetas base que reflejen cómo escribe realmente la gente en línea.",
-        },
+        label: { en: "Needs (Why)" },
+        headline: { en: "Why Mental Health Tweets?" },
         blocks: [
           {
             type: "text",
             text: {
-              en: "Social media language around mental health is nuanced and informal, so I wanted a carefully labeled set of tweets and a clear evaluation pipeline rather than relying on unverified assumptions.",
-              es: "El lenguaje en redes alrededor de la salud mental es informal y con matices, por lo que busqué un conjunto etiquetado con cuidado y una evaluación clara en lugar de suposiciones sin validar.",
+              en: "This was one of the main projects from my time at university, and honestly a fun one. For our class we had to find a big dataset (or scrape one ourselves) and run an NLP study on it.\nWe landed on a dataset with a huge list of tweets from **2018–2019** about pretty much everything: football, news, whatever people were talking about. Out of all those topics, we decided to focus on mental health.",
             },
           },
           {
             type: "beforeAfter",
-            before: {
-              en: "no hand-verified label baseline for the tweet set",
-              es: "sin base de etiquetas verificadas a mano para los tuits",
+            goalLabel: { en: "questions", es: "preguntas" },
+            goal: {
+              en: [
+                "How many people actually talk about mental health?",
+                "Is the sentiment around mental health more positive or negative?",
+                "Can a model detect these tweets and classify them as positive or negative?",
+              ],
             },
-            goal: { en: "published NLP classification study", es: "estudio de clasificación de PLN publicado" },
           },
         ],
       },
       {
-        label: { en: "what i did", es: "qué hice" },
-        headline: {
-          en: "I manually labeled all 625 tweets, built the Python/NLTK pipeline, and wrote up the evaluation.",
-          es: "Etiqueté a mano los 625 tuits, construí el pipeline en Python/NLTK y redacté la evaluación.",
-        },
+        label: { en: "Data" },
+        headline: { en: "From Thousands of Tweets to 625" },
         blocks: [
           {
+            type: "text",
+            text: {
+              en: "First we filtered the dataset for words we could tie to mental health, like **\"health\"**, **\"depression\"**, **\"happiness\"**, **\"meds\"** and others.\nThen came the slow part: we went through the results by hand and ended up with **625 tweets**, each one read and labeled by a person. I personally did a lot of this labeling.",
+            },
+          },
+          {
             type: "bullets",
+            title: { en: "Labels we used" },
+            style: "dot",
             items: {
-              en: [
-                "Hand-labeled 625 tweets across multiclass and multi-label categories",
-                "Implemented text preprocessing and classification experiments in Python using NLTK",
-                "Evaluated model accuracy and documented the methodology and findings for publication",
-              ],
-              es: [
-                "Etiqueté a mano 625 tuits en categorías multiclase y multietiqueta",
-                "Implementé preprocesamiento de texto y experimentos de clasificación en Python con NLTK",
-                "Medí la precisión del modelo y documenté metodología y resultados para publicación",
-              ],
+              en: ["Positive", "Negative", "Depressed", "Happy", "…plus a few other classification labels"],
             },
           },
         ],
       },
       {
-        label: { en: "how", es: "cómo" },
-        headline: {
-          en: "Manual tweet annotation feeds a Python/NLTK classification pipeline scored against ground-truth labels.",
-          es: "La anotación manual de tuits alimenta un pipeline de clasificación en Python/NLTK evaluado contra las etiquetas base.",
-        },
+        label: { en: "Process (How)" },
+        headline: { en: "Building & Training the Model" },
         blocks: [
+          {
+            type: "text",
+            text: {
+              en: "**1. Filtering**\n - Narrowed the full tweet dataset down to tweets with mental-health keywords.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**2. Hand-Labeling**\n - Read and labeled each of the 625 tweets, so the model had real human judgment to learn from.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**3. Training the Model**\n - Used **Python** and **NLTK** with a **bag-of-words** approach: each tweet becomes a count of the words in it, and those words get identified as positive or negative.\n - On top of that, we built and trained a model to classify the tweets.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**4. Benchmarking**\n - Compared our model against another model to see how it held up.",
+            },
+          },
+          {
+            type: "callout",
+            tone: "note",
+            title: { en: "My role" },
+            text: {
+              en: "One of the main developers and data collection people: I did a big part of the labeling and also worked on building and training the model.",
+            },
+          },
           {
             type: "steps",
             items: {
-              en: [
-                "Defined label criteria and manually annotated 625 tweets",
-                "Processed text and ran multiclass / multi-label classification in Python with NLTK",
-                "Measured accuracy and analyzed error patterns for the paper",
-              ],
-              es: [
-                "Definí criterios de etiquetas y anoté manualmente 625 tuits",
-                "Procesé el texto y ejecuté clasificación multiclase / multietiqueta en Python con NLTK",
-                "Medí la precisión y analicé patrones de error para el artículo",
-              ],
+              en: ["Find a dataset", "Filter", "Hand-label", "Train", "Benchmark"],
             },
           },
         ],
       },
       {
-        label: { en: "hard parts", es: "lo difícil" },
-        headline: { en: "Staying consistent across 625 manual labels on my own.", es: "Mantener consistencia en 625 etiquetas manuales en solitario." },
+        label: { en: "Lessons" },
+        headline: { en: "What Held the Model Back" },
         blocks: [
           {
             type: "challenges",
             items: [
               {
                 problem: {
-                  en: "Labeling 625 tweets solo without drifting on subtle wording or overlapping categories.",
-                  es: "Etiquetar 625 tuits en solitario sin perder criterio en matices o categorías cercanas.",
+                  en: "625 tweets was too little. With that few examples, further training didn't push the accuracy very far.",
                 },
                 fix: {
-                  en: "Applied consistent labeling rules and reviewed edge cases carefully during annotation. [TODO: add one specific detail on criteria or model errors]",
-                  es: "Apliqué reglas consistentes de etiquetado y revisé casos ambiguos durante la anotación. [TODO: agrega un detalle concreto de criterios o errores del modelo]",
+                  en: "Next time: a much larger set of tweets to train on.",
+                },
+              },
+              {
+                problem: {
+                  en: "Our data could have been better. Keyword filtering pulls in a lot of noise, and mental-health language is subtle.",
+                },
+                fix: {
+                  en: "Cleaner, more carefully selected data would likely matter as much as the model itself.",
                 },
               },
             ],
@@ -683,21 +729,21 @@ export const PROJECTS: Project[] = [
       },
       {
         label: { en: "outcome", es: "resultado" },
-        headline: { en: "A published NLP study on mental-health tweet classification.", es: "Un estudio de PLN publicado sobre clasificación de tuits de salud mental." },
+        headline: { en: "A Nice Accuracy, With Room to Grow" },
         panel: true,
         blocks: [
           {
             type: "text",
             text: {
-              en: "Completed the labeling, Python/NLTK classification workflow, and write-up resulting in a published paper.",
-              es: "Completé el etiquetado, el flujo de clasificación en Python/NLTK y la redacción que derivó en un artículo publicado.",
+              en: "Even with a small dataset, we got a nice accuracy, somewhere around 70–80%. When we benchmarked it against another model, ours could have been better, but that comparison is exactly what showed us where the data was holding it back.",
             },
           },
           {
             type: "stats",
             items: [
-              { value: "625", label: { en: "tweets hand-labeled", es: "tuits etiquetados a mano" } },
-              { value: "87%", label: { en: "model accuracy", es: "precisión del modelo" } },
+              { value: "625", label: { en: "Tweets labeled by hand" } },
+              { value: "~70–80%", label: { en: "Model accuracy" } },
+              { value: "5", label: { en: "Person team" } },
             ],
           },
         ],
@@ -710,138 +756,162 @@ export const PROJECTS: Project[] = [
     category: "academic",
     featured: false,
     heroImage: "/work/rock-em-cover.webp",
-    tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
+    tags: ["C++", "Behavior Trees", "Game AI", "DirectX", "Blender"],
     title: { en: "Rock 'Em", es: "Rock 'Em" },
     kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
     years: "2026",
     startYear: 2026,
     pitch: {
-      en: "A C++ Game AI boxing simulation inspired by Rock 'Em Sock 'Em, built with behavior trees, blackboards, and template-driven crowd and ring details.",
-      es: "Una simulación de IA de juego de boxeo en C++ inspirada en Rock 'Em Sock 'Em, construida con behavior trees, blackboards y detalles basados en templates.",
+      en: "A boxing match fought entirely by AI: two behavior-tree boxers, a crowd of 96 fans, moving spotlights and cartoon KO birds. Nothing is scripted.",
+      es: "",
     },
     tldr: {
       problem: {
-        en: "Apply game AI techniques in C++ to build responsive NPC combat behavior inside a custom course engine.",
-        es: "Aplicar técnicas de IA de videojuegos en C++ para lograr comportamiento reactivo en NPCs dentro de un motor del curso.",
+        en: "Build a 3D simulation for DigiPen's AI for Games course that puts game AI techniques into practice.",
+        es: "",
       },
       built: {
-        en: "A 3D boxing simulation in C++ using behavior trees, a shared blackboard for state/health/blocking reactions, Blender NPC models, and templated props/crowds.",
-        es: "Una simulación 3D de boxeo en C++ con behavior trees, blackboard para reacciones de bloqueo/vida, modelos de NPCs en Blender y elementos con templates.",
+        en: "A Rock 'Em Sock 'Em-inspired boxing match in C++ where 5 behavior trees drive the boxers, the crowd, the lights and the KO birds.",
+        es: "",
       },
       result: {
-        en: "Voted among the top 'most fun' projects in class and awarded extra credit.",
-        es: "Votado entre los proyectos más divertidos de la clase y ganador de crédito extra.",
+        en: "Voted one of the top 4 most fun projects in the class, winning the extra credit contest.",
+        es: "",
       },
     },
-    role: { en: "researcher + developer", es: "investigador + desarrollador" },
-    timeline: { en: "2026", es: "2026" },
-    team: { en: "solo", es: "en solitario" },
-    status: { en: "published", es: "publicado" },
+    role: { en: "developer", es: "desarrollador" },
+    timeline: { en: "2026 · ~40 hours", es: "2026 · ~40 horas" },
+    team: { en: "solo", es: "solo" },
+    status: { en: "completed", es: "completado" },
     sections: [
       {
-        label: { en: "why it existed", es: "por qué existió" },
-        headline: {
-          en: "Built for DigiPen's MSCS 'AI in Games' course (taught by Steve Rabin) to put game AI concepts into practice.",
-          es: "Creado para el curso 'AI in Games' de la maestría MSCS en DigiPen (impartido por Steve Rabin) para aplicar técnicas de IA en videojuegos.",
-        },
+        label: { en: "Needs (Why)" },
+        headline: { en: "Boxing Robots, Run by AI" },
         blocks: [
           {
             type: "text",
             text: {
-              en: "The assignment asked for a 3D simulation demonstrating game AI techniques, with a class vote for the top four 'most fun' entries earning extra credit.",
-              es: "El proyecto pedía una simulación 3D con técnicas de IA de videojuegos, con una votación en clase para los cuatro juegos más divertidos con premio de crédito extra.",
+              en: "This was a project for the **AI for Games** course in my Master's at DigiPen, taught by Steve Rabin. The assignment: build a 3D simulation that shows off game AI techniques.\nI went with a boxing match inspired by the classic **Rock 'Em Sock 'Em Robots** toy. The catch I gave myself was that nothing is scripted. Every punch, block, retreat and victory dance had to come from the agents' own decisions.",
+            },
+          },
+          {
+            type: "beforeAfter",
+            goal: {
+              en: [
+                "Put behavior trees and blackboards into practice",
+                "Make fights that play out differently every time",
+                "Have the whole arena react to the match, not just the boxers",
+              ],
             },
           },
         ],
       },
       {
-        label: { en: "what i did", es: "qué hice" },
-        headline: {
-          en: "Built a Rock 'Em Sock 'Em-inspired boxing simulation in C++ on a custom course engine.",
-          es: "Desarrollé una simulación de boxeo inspirada en Rock 'Em Sock 'Em en C++ sobre un motor del curso.",
-        },
+        label: { en: "The Match" },
+        headline: { en: "Two Boxers, One Ring, ~100 Fans" },
         blocks: [
           {
+            type: "text",
+            text: {
+              en: "Two NPC boxers, Red and Blue, fight each other while the rest of the arena reacts to how the match is going.",
+            },
+          },
+          {
             type: "bullets",
+            style: "check",
             items: {
               en: [
-                "Designed and implemented multiple behavior trees to drive boxer decisions",
-                "Coded game logic and blackboard state sharing for blocking, movement, and health reactions",
-                "Modeled NPC assets in Blender and used templates for crowd wave motion, lights, and knockout stars",
-                "Placed among the class contest winners for extra credit",
-              ],
-              es: [
-                "Diseñé e implementé múltiples behavior trees para guiar las decisiones de los boxeadores",
-                "Programé la lógica de juego y el blackboard para reacciones de bloqueo, movimiento y vida",
-                "Trabajé modelos de NPCs en Blender y usé templates para la ola del público, luces y estrellas de KO",
-                "Quedé entre los ganadores de la votación de la clase para crédito extra",
+                "**Two AI boxers** that punch, block, step in and back off, and do a victory dance when they win",
+                "**96 spectators** on tiered red and blue bleachers. They wave during the fight, and at the end the winning side cheers while the losing side sits still",
+                "**115 ring lights** that follow a leader around a square path, then switch to the winner's color",
+                "**KO birds**: a V formation of birds that circles the knocked-out boxer, cartoon-style",
               ],
             },
           },
         ],
       },
       {
-        label: { en: "how", es: "cómo" },
-        headline: {
-          en: "Two AI boxers trade hits in the ring, reacting to opponent movement, blocking, and health state.",
-          es: "Dos boxeadores controlados por IA combaten en el ring reaccionando al movimiento, bloqueo y vida del rival.",
-        },
+        label: { en: "Process (How)" },
+        headline: { en: "Building the Behavior Trees" },
         blocks: [
+          {
+            type: "text",
+            text: {
+              en: "**1. Behavior Trees**\n - Built **5 trees** (Red Boxer, Blue Boxer, Boxing Crowd, Lights, KO Birds) out of about **25 custom nodes**.\n - **Control flow:** Selector, Sequencer, Parallel Sequencer, and a Random Selector that lets the boxers pick a different punch combo each time, so fights don't feel repetitive.\n - **Decorators:** health checks, enemy-health checks, win/lose/match-over checks, delays and repeaters.\n - **Leaf actions:** left/right punch, block, step forward/back, die, victory dance, cheer, wave and the light patterns.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**2. Blackboard Data**\n - Each agent stores its own health, stamina, blocking state and formation slot.\n - Other agents can read that data, which is how a boxer knows its opponent is down.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**3. Combat Logic**\n - Punches check range against the closest opponent and cost stamina.\n - A blocked hit does a third of the damage, and hits and blocks play different sounds.\n - The boxer's model switches between idle, punch and block poses.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**4. Formation Movement (extra credit)**\n - The ring lights follow a leader around the ring, and the KO birds fly in a wedge formation around the fallen boxer.",
+            },
+          },
           {
             type: "steps",
             items: {
-              en: [
-                "Used a blackboard to share boxer health, stance, and blocking cues for combat reactions",
-                "Configured template-driven crowd wave animations around the ring",
-                "Added templated lighting and knockout star formations when hits land or knockouts happen",
-              ],
-              es: [
-                "Usé un blackboard para compartir vida, postura y bloqueos y disparar reacciones en combate",
-                "Configuré animaciones en ola para el público alrededor del ring mediante templates",
-                "Añadí luces y formaciones de estrellas de KO mediante templates ante golpes y knockouts",
-              ],
+              en: ["Behavior trees", "Blackboard", "Combat", "Crowd & lights", "KO birds"],
             },
           },
         ],
       },
       {
-        label: { en: "hard parts", es: "lo difícil" },
-        headline: {
-          en: "Learning a custom engine while getting formation and AI behavior details right.",
-          es: "Adaptarme a un motor nuevo mientras afinaba formaciones y lógica de IA.",
-        },
+        label: { en: "Lessons" },
+        headline: { en: "My First Custom Engine" },
         blocks: [
           {
             type: "challenges",
             items: [
               {
                 problem: {
-                  en: "Working inside an unfamiliar custom engine while implementing formations, behavior trees, and blackboard logic.",
-                  es: "Trabajar en un motor nuevo mientras implementaba formaciones, behavior trees y lógica de blackboard.",
+                  en: "This was my first time working in a custom C++ engine (the course's Rabin Engine, built on DirectX) instead of Unity. No visual editor and no live debugging.",
                 },
                 fix: {
-                  en: "Put in focused iteration time to learn the engine hooks and test each behavior branch until the ring interactions felt responsive.",
-                  es: "Dediqué tiempo de iteración constante para dominar el motor y probar cada rama de comportamiento hasta lograr reacciones fluidas.",
+                  en: "I positioned models, tuned movement and converted assets by hand. I modeled the boxers myself in **Blender**, exported them to FBX and converted them into the engine's DirectX format, plus WAV audio for punches, blocks, swooshes and crowd ambience.",
                 },
               },
             ],
+          },
+          {
+            type: "callout",
+            tone: "win",
+            title: { en: "What I learned" },
+            text: {
+              en: "Doing everything by hand taught me a lot about how AI decision structures actually run under the hood.",
+            },
           },
         ],
       },
       {
         label: { en: "outcome", es: "resultado" },
-        headline: {
-          en: "Voted one of the top projects in the class showcase and awarded extra credit.",
-          es: "Elegido entre los mejores proyectos en la muestra de clase y ganador de crédito extra.",
-        },
+        headline: { en: "Top 4 Most Fun in Class!" },
         panel: true,
         blocks: [
           {
             type: "text",
             text: {
-              en: "A fun hands-on project that helped me apply behavior trees, blackboards, and C++ game AI structure in practice.",
-              es: "Un proyecto práctico y divertido que me permitió aplicar behavior trees, blackboards y estructuras de IA en C++.",
+              en: "The final match runs entirely on its own: the boxers fight, the crowd reacts, the lights crown the winner and the birds circle whoever got knocked out.\nThe class voted it one of the **top 4 most fun projects**, which won the extra credit contest.",
             },
+          },
+          {
+            type: "stats",
+            items: [
+              { value: "Top 4", label: { en: "Most fun, by class vote" } },
+              { value: "5", label: { en: "Behavior trees" } },
+              { value: "~25", label: { en: "Custom nodes" } },
+              { value: "96", label: { en: "Spectators reacting" } },
+            ],
           },
         ],
       },
@@ -852,6 +922,7 @@ export const PROJECTS: Project[] = [
     slug: "steam-dataset-project",
     category: "academic",
     featured: false,
+    hidden: true,
     heroImage: "/work/steam-dataset-cover.webp",
     tags: ["Python", "Polars", "Numpy", "Data Analysis"],
     title: { en: "Steam Data Set Project", es: "Proyecto Dataset de Steam" },
@@ -995,6 +1066,7 @@ export const PROJECTS: Project[] = [
     slug: "ufc-mma-prediction-in-progress",
     category: "academic",
     featured: false,
+    hidden: true,
     heroImage: "/work/ufc-mma-prediction-cover.webp",
     tags: ["Python", "Numpy", "Data Science"],
     title: { en: "UFC MMA Prediction", es: "Predicción de UFC MMA" },
@@ -1114,73 +1186,181 @@ export const PROJECTS: Project[] = [
   },
 
   {
-    slug: "a-star-algorithm-pathfinding-in-progress",
+    slug: "a-star-pathfinding",
     category: "academic",
     featured: false,
     heroImage: "/work/pathfinding-cover.webp",
-    tags: ["C++", "A* Algorithm", "Pathfinding", "Game AI"],
-    title: { en: "A* Algorithm Pathfinding", es: "Encontrando Caminos con A*" },
+    tags: ["C++20", "A* Algorithm", "Pathfinding", "Game AI"],
+    title: { en: "A* Pathfinding", es: "Pathfinding con A*" },
     kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
     years: "2026",
     startYear: 2026,
     pitch: {
-      en: "An academic contest for implementing the fastest A* pathfinding algorithm. //Results coming soon",
-      es: "[TODO: una oración de descripción]",
+      en: "A high-performance A* pathfinder on 2D grid maps, tuned until it ran about 3x faster than the instructor's reference solution.",
+      es: "",
     },
     tldr: {
       problem: {
-        en: "Implementing a fast A* pathfinding algorithm",
-        es: "[TODO: el problema que explora este proyecto]",
+        en: "Build a fast A* pathfinder for DigiPen's AI for Games course.",
+        es: "",
       },
-      built: { en: "Used techniques learned in class & C++ concepts", es: "[TODO: qué se construyó]" },
-      result: { en: "Developed and Optimized a ~500ms solution", es: "[TODO: el resultado]" },
+      built: {
+        en: "A C++ grid pathfinder with selectable heuristics, path straightening and curve smoothing, plus a stack of speed optimizations.",
+        es: "",
+      },
+      result: {
+        en: "About 0.74 ms per search on average, versus about 2.2 ms for the reference solution: roughly 3x faster.",
+        es: "",
+      },
     },
-    role: { en: "researcher + developer", es: "investigador + desarrollador" },
-    timeline: { en: "2026", es: "2026" },
-    team: { en: "solo", es: "en solitario" },
-    status: { en: "published", es: "publicado" },
+    role: { en: "developer", es: "desarrollador" },
+    timeline: { en: "2026 · ~30 hours", es: "2026 · ~30 horas" },
+    team: { en: "solo", es: "solo" },
+    status: { en: "completed", es: "completado" },
     sections: [
       {
-        label: { en: "why it existed", es: "por qué existió" },
-        headline: {
-          en: "Tasked to create an A* pathfinding algorithm from techniques learned in 'AI in Games' class taught by Steve Rabin. For further inspiration, a contest was held for the 4 fastest pathfinding algorithms",
-          es: "[TODO: por qué existe este proyecto]",
-        },
-        blocks: [{ type: "text", text: { en: "Contest still ongoing", es: "[TODO: el problema/motivación real]" } }],
-      },
-      {
-        label: { en: "what i did", es: "qué hice" },
-        headline: { en: "[TODO: explain optimization techniques]", es: "[TODO: qué hice]" },
-        blocks: [{ type: "bullets", items: { en: ["[TODO: contributions]"], es: ["[TODO: contribuciones]"] } }],
-      },
-      {
-        label: { en: "how", es: "cómo" },
-        headline: { en: "[TODO: how it works]", es: "[TODO: cómo funciona]" },
-        blocks: [{ type: "steps", items: { en: ["[TODO: build steps]"], es: ["[TODO: pasos de construcción]"] } }],
-      },
-      {
-        label: { en: "hard parts", es: "lo difícil" },
-        headline: { en: "[TODO: what broke, and how it got fixed]", es: "[TODO: qué se rompió y cómo se resolvió]" },
+        label: { en: "Needs (Why)" },
+        headline: { en: "Finding the Fastest Path" },
         blocks: [
           {
-            type: "challenges",
-            items: [
-              {
-                problem: {
-                  en: "[TODO: a real challenge from this project]",
-                  es: "[TODO: un reto real de este proyecto]",
-                },
-                fix: { en: "[TODO: how it got solved]", es: "[TODO: cómo se resolvió]" },
-              },
-            ],
+            type: "text",
+            text: {
+              en: "Another project for the **AI for Games** course at DigiPen, taught by Steve Rabin. We had to build an A* pathfinder using the techniques from class, and speed was part of the challenge.\nSo the goal wasn't just a path that works. It was a path that works, looks natural, and gets found as fast as possible.",
+            },
+          },
+          {
+            type: "beforeAfter",
+            goal: {
+              en: [
+                "Find correct, natural-looking paths on 2D grid maps",
+                "Make it as fast as possible",
+                "Beat the instructor's reference solution",
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: { en: "Pathfinder" },
+        headline: { en: "What It Does" },
+        blocks: [
+          {
+            type: "text",
+            text: {
+              en: "It runs **A* search** with 8-directional movement and no cutting corners past walls. I tested it on the course's map suites, including large game-style maps.",
+            },
+          },
+          {
+            type: "bullets",
+            title: { en: "Heuristics you can switch between" },
+            style: "dot",
+            items: {
+              en: [
+                "Octile, Manhattan, Chebyshev and Euclidean",
+                "An intentionally inconsistent heuristic, for testing",
+                "A heuristic weight that trades path quality for speed",
+              ],
+            },
+          },
+          {
+            type: "bullets",
+            title: { en: "Making paths look natural" },
+            style: "arrow",
+            items: {
+              en: [
+                "**Rubberbanding** removes unnecessary waypoints wherever a straight line is clear of walls",
+                "**Catmull-Rom spline smoothing** turns jagged grid paths into natural curves",
+                "Extra points are added back between waypoints that end up too far apart, so smoothing stays accurate after rubberbanding",
+              ],
+            },
+          },
+          {
+            type: "callout",
+            tone: "note",
+            title: { en: "Debugging" },
+            text: {
+              en: "A visual debug mode in the Rabin Engine colors the open and closed lists on the grid, and a single-step mode lets you watch the search one step at a time.",
+            },
+          },
+        ],
+      },
+      {
+        label: { en: "Process (How)" },
+        headline: { en: "Making It ~3x Faster" },
+        blocks: [
+          {
+            type: "text",
+            text: {
+              en: "Once it worked, the rest was speed. None of these change what A* does. They change how the data is stored and accessed.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**1. Bucket Priority Queue**\n - Used buckets instead of a binary heap, so pushing a node takes constant time.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**2. Search IDs**\n - Instead of resetting the whole grid between searches, each search gets an ID, so starting a new one costs almost nothing.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**3. Precomputed Neighbor Bitmasks**\n - Each cell stores which of its 8 moves are legal, calculated once when the map loads (using C++20's <bit> header and std::countr_zero).",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**4. Direction-Based Pruning**\n - Skips neighbors that can't be part of a shorter path, based on the direction the search arrived from.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**5. Compact, Cache-Friendly Nodes**\n - 16-byte nodes in one flat, pre-allocated array, with memory reused between searches.\n - Plus a fast path for the Octile heuristic that skips the function-pointer call.",
+            },
+          },
+        ],
+      },
+      {
+        label: { en: "Lessons" },
+        headline: { en: "Data Layout Matters" },
+        blocks: [
+          {
+            type: "callout",
+            tone: "win",
+            title: { en: "What I learned" },
+            text: {
+              en: "How much data layout and memory access matter for speed. The same algorithm got about 3x faster through data-structure choices alone.",
+            },
           },
         ],
       },
       {
         label: { en: "outcome", es: "resultado" },
-        headline: { en: "[TODO: outcome headline]", es: "[TODO: titular del resultado]" },
+        headline: { en: "About 3x Faster Than the Reference" },
         panel: true,
-        blocks: [{ type: "text", text: { en: "[TODO: outcome write-up]", es: "[TODO: resumen del resultado]" } }],
+        blocks: [
+          {
+            type: "text",
+            text: {
+              en: "On the course benchmark, my pathfinder averaged about **0.74 ms** per search, against about **2.2 ms** for the instructor's reference solution.",
+            },
+          },
+          {
+            type: "stats",
+            items: [
+              { value: "~0.74 ms", label: { en: "Average per search" } },
+              { value: "~2.2 ms", label: { en: "Reference solution" } },
+              { value: "~3x", label: { en: "Faster" } },
+              { value: "~30h", label: { en: "Of work" } },
+            ],
+          },
+        ],
       },
     ],
   },
@@ -1190,65 +1370,221 @@ export const PROJECTS: Project[] = [
     category: "academic",
     featured: false,
     heroImage: "/work/urban-mobility-cover.webp",
-    tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
+    tags: ["Python", "Mesa", "Unity", "C#", "IBM Cloud"],
     title: { en: "Urban Mobility", es: "Movilidad Urbana" },
-    kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
-    years: "2022",
-    startYear: 2022,
-    pitch: { en: "[TODO: one-sentence pitch]", es: "[TODO: una oración de descripción]" },
-    tldr: {
-      problem: { en: "[TODO: the problem this project explored]", es: "[TODO: el problema que explora este proyecto]" },
-      built: { en: "[TODO: what was built]", es: "[TODO: qué se construyó]" },
-      result: { en: "[TODO: the result/takeaway]", es: "[TODO: el resultado]" },
+    kindLabel: { en: "Multi-Agent Simulation", es: "Simulación Multiagente" },
+    years: "2021",
+    startYear: 2021,
+    pitch: {
+      en: "A Unity-based multi-agent simulation of an intersection, with smart traffic lights and autonomous cars looking for parking.",
+      es: "",
     },
-    role: { en: "researcher + developer", es: "investigador + desarrollador" },
-    timeline: { en: "2022", es: "2022" },
-    team: { en: "solo", es: "en solitario" },
-    status: { en: "published", es: "publicado" },
+    tldr: {
+      problem: {
+        en: "Too many cars in Mexico's cities, and a lot of them just circling around looking for a place to park.",
+        es: "",
+      },
+      built: {
+        en: "A multi-agent model in Python (Mesa) streamed through an IBM Cloud server into a 3D Unity simulation. I took ownership of the project and built most of it.",
+        es: "",
+      },
+      result: {
+        en: "Cars and traffic lights that act on their own, and parking lots that only let cars in when there's space.",
+        es: "",
+      },
+    },
+    role: { en: "lead developer", es: "desarrollador líder" },
+    timeline: { en: "Nov 2021 · 5 weeks", es: "nov 2021 · 5 semanas" },
+    team: { en: "3 people", es: "3 personas" },
+    status: { en: "completed", es: "completado" },
     sections: [
       {
-        label: { en: "why it existed", es: "por qué existió" },
-        headline: { en: "[TODO: why this project exists]", es: "[TODO: por qué existe este proyecto]" },
+        label: { en: "Needs (Why)" },
+        headline: { en: "Too Many Cars, Not Enough Parking" },
+        aside: {
+          src: "/work/urban-mobility-unity-city.webp",
+          side: "right",
+          caption: { en: "The city we built: a top-down view of the intersection, and the 3D scene with its two parking garages." },
+          alt: { en: "Top-down and 3D views of the Unity city intersection with parks, trees and parking garages" },
+        },
         blocks: [
           {
             type: "text",
-            text: { en: "[TODO: the real problem/motivation]", es: "[TODO: el problema/motivación real]" },
+            text: {
+              en: "A fun, smaller project from my undergrad at **Tec de Monterrey**: a 5-week block where we got our first real look at AI, agents and simulations.\nThe challenge was **urban mobility**: the ability to get from one place to another, which is key to a city's economy, social development and its people's quality of life. For a long time, owning a car was seen as a sign of progress. That isn't true anymore. The growth and overuse of cars has huge economic, environmental and social costs in Mexico: more traffic, more accidents, more smog. In Mexico City alone, the kilometers driven by cars tripled from 103 million in 1990 to 339 million in 2010.",
+            },
+          },
+          {
+            type: "beforeAfter",
+            goal: {
+              en: [
+                "Reduce traffic by controlling and assigning the available parking spots in an area of the city",
+                "Stop cars from driving in circles looking for a place to park",
+                "Show it as a graphic simulation of a multi-agent system",
+              ],
+            },
           },
         ],
       },
       {
-        label: { en: "what i did", es: "qué hice" },
-        headline: { en: "[TODO: what I did]", es: "[TODO: qué hice]" },
-        blocks: [{ type: "bullets", items: { en: ["[TODO: contributions]"], es: ["[TODO: contribuciones]"] } }],
+        label: { en: "Idea" },
+        headline: { en: "Agents vs. Environment" },
+        blocks: [
+          {
+            type: "text",
+            text: {
+              en: "We modeled the city with **5 elements**. Two of them are **agents**: they're autonomous and make their own decisions. The other three are part of the **environment** that the agents move through.\nCars and traffic lights don't depend on each other, but the traffic lights' signals change how the cars behave.",
+            },
+          },
+          {
+            type: "bullets",
+            title: { en: "Agents" },
+            style: "check",
+            items: {
+              en: [
+                "**Cars** check their surroundings to decide where to go, and look for a nearby parking lot with space",
+                "**Traffic lights** watch the movement and activity at the intersection and cycle on their own",
+              ],
+            },
+          },
+          {
+            type: "bullets",
+            title: { en: "Environment" },
+            style: "dot",
+            items: {
+              en: [
+                "**Roads**, each with the directions you can drive in",
+                "**Walls** that block the way",
+                "**Parking lots** that check their capacity before letting a car in",
+              ],
+            },
+          },
+        ],
+        aside: {
+          src: "/work/urban-mobility-code.webp",
+          side: "right",
+          caption: { en: "The environment in code: roads with their directions, walls, and parking lots that track their own capacity." },
+          alt: { en: "Python code defining Road, Wall and ParkingLot agent classes with Mesa" },
+        },
       },
       {
-        label: { en: "how", es: "cómo" },
-        headline: { en: "[TODO: how it works]", es: "[TODO: cómo funciona]" },
-        blocks: [{ type: "steps", items: { en: ["[TODO: build steps]"], es: ["[TODO: pasos de construcción]"] } }],
+        label: { en: "Process (How)" },
+        headline: { en: "From a 2D Grid to a 3D City" },
+        blocks: [
+          {
+            type: "text",
+            text: {
+              en: "**1. Planning**\n - Started with a class diagram and an interaction-protocol diagram to map out how cars, traffic lights, roads, walls and parking lots talk to each other.\n - Managed the project's tasks with **Jira** boards and a **Gantt** chart to keep the 5 weeks on track.",
+            },
+          },
+          {
+            type: "figure",
+            src: "/work/urban-mobility-plan.webp",
+            caption: { en: "The plan: 13 tasks across November 2021, from the first diagrams to the final presentation." },
+            alt: { en: "Gantt chart of the project's tasks and their status across November 2021" },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**2. The Model in Python + Mesa**\n - We imported the **Mesa** package to build the agent simulation. It gives you a grid to place and move every agent and environment element on. We picked it because it's simple to use and it's what we were used to from class.\n - My teammates wrote the Python side. Before going 3D, we ran everything as a 2D grid: blue circles for cars, red/green for traffic lights, black walls, white roads, and orange or purple parking lots depending on whether they had space left.",
+            },
+          },
+          {
+            type: "figure",
+            src: "/work/urban-mobility-mesa-grid.webp",
+            size: "small",
+            caption: { en: "The 2D Mesa version: cars (blue) waiting at a traffic light, with two parking lots (orange) that still have space." },
+            alt: { en: "Mesa grid simulation with black walls, a white crossroads, blue car agents, traffic lights and orange parking lots" },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**3. A Server on IBM Cloud**\n - Deployed the Python model as a **Cloud Foundry** app on **IBM Cloud**. Every step, it sends the cars' new positions as JSON.\n - I worked on the API calls that connect Unity to that server.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**4. The 3D City in Unity**\n - **Unity** receives those coordinates and moves the cars through a 3D intersection. We chose it because, with animations, it takes the simulation to another level of realism and shows the cars parking much better.\n - I designed the environment, mixing downloaded assets with models made in ProBuilder, plus lighting and textures for realism.\n - I also wrote the function that creates all the agents in the scene, and set up the whole Unity project.",
+            },
+          },
+          {
+            type: "figure",
+            src: "/work/urban-mobility-unity-editor.webp",
+            size: "medium",
+            caption: { en: "The scene in the Unity editor: the intersection, two parking garages, and the cars waiting to spawn." },
+            alt: { en: "Unity editor showing the 3D intersection scene and its hierarchy of roads, parking garages and cars" },
+          },
+          {
+            type: "callout",
+            tone: "note",
+            title: { en: "My role" },
+            text: {
+              en: "Lead developer. I took ownership of the whole project and honestly did most of it: the environment design, the function that creates all the agents, the whole Unity project, and the API calls with IBM Cloud. The only part I didn't touch was the Python model, which my teammates handled.",
+            },
+          },
+          {
+            type: "steps",
+            items: {
+              en: ["Diagrams & plan", "Mesa model", "IBM Cloud server", "Unity simulation"],
+            },
+          },
+        ],
       },
       {
-        label: { en: "hard parts", es: "lo difícil" },
-        headline: { en: "[TODO: what broke, and how it got fixed]", es: "[TODO: qué se rompió y cómo se resolvió]" },
+        label: { en: "Lessons" },
+        headline: { en: "What I'd Do Differently" },
         blocks: [
           {
             type: "challenges",
             items: [
               {
                 problem: {
-                  en: "[TODO: a real challenge from this project]",
-                  es: "[TODO: un reto real de este proyecto]",
+                  en: "Cars pick a random direction at intersections, and the whole simulation is controlled only from Mesa.",
                 },
-                fix: { en: "[TODO: how it got solved]", es: "[TODO: cómo se resolvió]" },
+                fix: {
+                  en: "A node/graph-based version would give much better movement and make room for real route optimization, and it would be more efficient in both memory and run time.",
+                },
               },
             ],
+          },
+          {
+            type: "callout",
+            tone: "win",
+            title: { en: "What I learned" },
+            text: {
+              en: "How agents interact with their environment, how to deploy a simulation's logic to a server and show it in a graphic environment, and the basics of optimization algorithms. I was hoping to go deeper, but 5 weeks only covers the fundamentals, and it got me interested in the area.",
+            },
           },
         ],
       },
       {
         label: { en: "outcome", es: "resultado" },
-        headline: { en: "[TODO: outcome headline]", es: "[TODO: titular del resultado]" },
+        headline: { en: "A Little City That Runs Itself" },
         panel: true,
-        blocks: [{ type: "text", text: { en: "[TODO: outcome write-up]", es: "[TODO: resumen del resultado]" } }],
+        blocks: [
+          {
+            type: "text",
+            text: {
+              en: "The simulation turned out the way we wanted: cars drive and look for parking on their own, traffic lights manage the intersection, and parking lots only let cars in when there's space. You can also change the streets and add more elements, and it keeps working. A small project, but a fun mix of my gaming and AI interests.",
+            },
+          },
+          {
+            type: "figure",
+            src: "/work/urban-mobility-cars.webp",
+            caption: { en: "The final simulation: cars driving through the intersection toward the parking garages." },
+            alt: { en: "3D Unity simulation with blue and yellow cars driving through a city intersection" },
+          },
+          {
+            type: "stats",
+            items: [
+              { value: "2", label: { en: "Types of agents" } },
+              { value: "5", label: { en: "Elements in the city" } },
+              { value: "5", label: { en: "Weeks" } },
+              { value: "3", label: { en: "Person team" } },
+            ],
+          },
+        ],
       },
     ],
   },
@@ -1321,3 +1657,8 @@ export const PROJECTS: Project[] = [
     ],
   },
 ];
+
+// Everything the site renders. Filtering here (not in each page) means a
+// hidden project can't leak into /work, featured cards, the switcher or
+// generateStaticParams.
+export const PROJECTS: Project[] = ALL_PROJECTS.filter((p) => !p.hidden);

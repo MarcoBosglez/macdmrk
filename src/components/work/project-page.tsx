@@ -21,6 +21,7 @@ import { useSound } from "@/components/providers/sound-provider";
 import { isGithubUrl } from "@/components/work/work-view";
 import { GhIcon } from "@/components/chrome/link-icons";
 import { ProjectNavBar } from "@/components/work/progress-nav";
+import { Enlargeable } from "@/components/work/project-figure";
 import { ProjectSections, pick, resolveSections } from "@/components/work/project-sections";
 import type { Project } from "@/lib/data/projects";
 
@@ -191,11 +192,15 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
               </div>
             </div>
 
-            <div
-              className="relative w-full overflow-hidden rounded-[20px] border"
-              style={{ aspectRatio: "4 / 3", borderColor: BORDER, background: PANEL }}
-            >
-              {project.heroImage ? (
+            {project.heroImage ? (
+              <Enlargeable
+                src={project.heroImage}
+                alt={L(project.title)}
+                enlargeLabel={t.work.enlargeLabel}
+                closeLabel={t.work.closeLabel}
+                className="rounded-[20px]"
+                style={{ aspectRatio: "4 / 3", borderColor: BORDER, background: PANEL }}
+              >
                 <Image
                   src={project.heroImage}
                   alt={L(project.title)}
@@ -204,12 +209,15 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
                   className="object-cover"
                   priority
                 />
-              ) : (
-                <div className="flex h-full items-center justify-center p-4 text-center font-mono text-[12px]" style={{ color: MUTED }}>
-                  [ hero image ]
-                </div>
-              )}
-            </div>
+              </Enlargeable>
+            ) : (
+              <div
+                className="flex w-full items-center justify-center rounded-[20px] border p-4 text-center font-mono text-[12px]"
+                style={{ aspectRatio: "4 / 3", borderColor: BORDER, background: PANEL, color: MUTED }}
+              >
+                [ hero image ]
+              </div>
+            )}
           </section>
 
           {/* ---------- facts row ---------- */}

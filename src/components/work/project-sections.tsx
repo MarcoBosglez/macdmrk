@@ -269,16 +269,21 @@ function Block({
 
     case "figure": {
       const caption = pick(block.caption, locale) || undefined;
+      const width = block.size === "small" ? "max-w-sm" : block.size === "medium" ? "max-w-xl" : "";
       return (
-        <ProjectFigure
-          src={block.src}
-          alt={pick(block.alt, locale) || caption || ""}
-          num={figNum}
-          caption={caption}
-          sizes="(max-width: 900px) 100vw, 1000px"
-          enlargeLabel={t.work.enlargeLabel}
-          closeLabel={t.work.closeLabel}
-        />
+        <div className={`w-full ${width}`}>
+          <ProjectFigure
+            src={block.src}
+            alt={pick(block.alt, locale) || caption || ""}
+            num={figNum}
+            caption={caption}
+            sizes={
+              block.size === "small" ? "384px" : block.size === "medium" ? "(max-width: 640px) 100vw, 576px" : "(max-width: 900px) 100vw, 1000px"
+            }
+            enlargeLabel={t.work.enlargeLabel}
+            closeLabel={t.work.closeLabel}
+          />
+        </div>
       );
     }
 
