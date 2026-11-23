@@ -11,3 +11,4 @@ Still in the list:
 4. Illustration redesign
 6. Improve ask_marco.sh pingu
 7. Modify site logo
+8. Update mobile menu buttons
