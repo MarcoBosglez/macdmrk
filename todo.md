@@ -12,3 +12,10 @@ Still in the list:
 6. Improve ask_marco.sh pingu
 7. Modify site logo
 8. Update mobile menu buttons
+
+key chain hanging in one of the sections
+
+I need to draw over my page for stuff I want thatd be fun
+stars around too would look cool
+
+Re-do spanish translation

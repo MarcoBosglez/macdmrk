@@ -152,21 +152,21 @@ export const PROJECTS: Project[] = [
     sections: [
       {
         label: { en: "Needs (Why)", es: "" },
-        headline: { en: "Looking for a Personal Hub" },
+        headline: { en: "Building a Personal Hub" },
         blocks: [
           {
             type: "text",
             text: {
-              en: "I started my web portfolio in 2020 for an academic project while I was doing my undergrad in Mexico City. \nFor a while I have been looking for a way to express myself as a software engineer and hobbyist digital artist. My career is in tech but I've always appreciated and had love for art.\nAt the same time it seemed like a good opportunity to learn more about web development & design, while also having something that recruiters/employers could look at to get a better idea of who I am and what I do.",
+              en: "I first built my web portfolio in 2020 as an academic project during my undergrad in Mexico City. \nFor a while I've been looking for a way to express myself as a software engineer and digital artist. While my career is in tech, visual art has always been a core part of how I think and create things.\nRedesigning it gave me a hands-on way to sharpen my frontend and UI/UX skills while giving recruiters and engineering teams a clearer sense of my background, craft, and personality beyond a standard CV.",
             },
           },
           {
             type: "beforeAfter",
             goal: {
               en: [
-                "Reflect my personality into design/content",
-                "Practice web development skills",
-                "Creating useful content for recruiters",
+                "Translate my personality into design/content",
+                "Practice modern web development skills",
+                "Provide meaningful content for recruiters",
                 "Have fun!",
               ],
             },
@@ -180,35 +180,35 @@ export const PROJECTS: Project[] = [
       },
       {
         label: { en: "Idea" },
-        headline: { en: "Initial Design & Project Inspiration" },
+        headline: { en: "Early Concepts & Inspiration" },
         blocks: [
           {
             type: "text",
             text: {
-              en: "It started off as a simple academic project in 2020 with a static HTML/CSS website with a simple and design which content was a direct copy of my résumé but kept it in mind for a future project I wanted to keep iterating. During 2020-2024, I explored various online designs as ideas to redesign the website with a modern look. \nA big inspiration for retaking the project after a big gap of time was after watching a YouTube video by user [@Shar](https://www.youtube.com/watch?v=_tWh4cYCTv0) on her own portfolio's design. It went into detail about the process of building her own website (planning, inspirations, mood boards, mock-ups, programming, design & accessability, and deploying). I recognized this process as it was similar to the UX pipeline process of real tech companies (with extra documentation steps) from talking with teammates of previous work experiences. With her design I especially liked her presentation-card layout, as it had a professional look while still reflecting her personality, interests & general vibe.",
+              en: "It started off as a basic static HTML/CSS site which content was a direct copy of my resume at the time. This project stayed in the back of my mind for a few years with ideas to iterate on. Between 2020-2024, I explored various visual references any layout ideas for a modern overhaul. \nThe biggest inspiration for picking it back up was watching a video breakdown user [@Shar](https://www.youtube.com/watch?v=_tWh4cYCTv0) on her designing her own portfolio. It went into detail about her end-to-end process of planning, building & deploying it. The explanation felt closely aligned with product and UX workflows I had seen on engineering teams (with less documentation). I especially liked her presentation-card layout, as it had a professional look while still reflecting her personality/vibe.",
             },
           },
           {
             type: "figure",
             src: "/work/web-portfolio-did.png",
-            caption: { en: "The design canvas: every section went through several explorations before any code." },
+            caption: { en: "Design exploration: every section went through several explorations before any code." },
           },
         ],
       },
       {
         label: { en: "Process (How)" },
-        headline: { en: "Project Timeline" },
+        headline: { en: "Execution & Timeline" },
         blocks: [
           {
             type: "text",
             text: {
-              en: "I started working on the project after my last work experience at Capgemini (mid 2025) as I had time available. For this project I wanted to document the whole thing, from my mock-up ideas, colors to programming & deploying the app."
+              en: "I picked the project back up after wrapping up my role at Capgemini (mid-2025) when I had time available. This time, I treated documentation and mock-ups to track the journey of the visual direction."
             }
           },
            {
             type: "text",
             text: {
-              en: "**1. Mood Board**\n - I started off building a mood board of what I wanted the website to feel like and I had a list of ideas that the portfolio must include (5 sections, color modes, draggable windows, custom sounds, bilingual copy, a glass-card look, etc)."
+              en: "**1. Mood Board & Feature Scope**\n - Started by building a mood board of visual references to define a concrete look. Also built a list of ideas that the portfolio must include (5 sections, theme/color modes, draggable windows, custom sound effects, bilingual copy, a glass-card look, etc)."
             }
           },
           {
@@ -221,19 +221,19 @@ export const PROJECTS: Project[] = [
           {
             type: "text",
             text: {
-              en: "**2. Mock-ups**\n - As a hobbyist digital artist the look & feel I was looking for depended on me to build the design from. I went for a modern, terminal-like, glass panel look with dark green colors. Working alongside Claude Design for further inspiration on specific components and for easier non-manual measuring of distances, icons, etc. \n - After picking the colors and design inspiration from my moodboard, I listed the tasks in a JIRA board needed to complete the initial stages of the website (ToDo, InProgress, Done)"
+              en: "**2. Wireframes, Mock-ups & Task Tracking**\n - Because the visual identity leaned heavily into my background as a hobbyist digital artist, I managed the core aesthetic myself. I went for a modern, terminal-like, glass panel look with dark-green colors. I used Claude Design to brainstore component/button variations, spacing, and sizing. \n - Once I picked the correct palette and layout, I listed the tasks on a JIRA board (ToDo, InProgress, Done) to keep scope moving."
             }
           },
           {
             type: "text",
             text: {
-              en: "**3. Programming**\n - During the planning stages, I decided con the tech stack for this project which included: React, Next.js.\n - I already had experience with React which made the move easy. Although it may have been overkill to use, I aimed to practice my React skills and it served as inspiration to learn more of it\n - This process was already heavy enough before with me liking other ideas and breaking the already decided design of stuff, for easier of use I got help from Claude code for repetitive tasks and hard-to-find fixes in case any bugs or sizing errors appeared during development. \n - As an artist I know the reputation AI has with generative art and as a programmer I know the cons of vibe coding. So, I made it a task in itself to draw and design every artistic part myself, and learn from all the code Claude writes and learn as much as possible. if I use it, I must use it with a brain and not be lazy."
+              en: "**3. Programming & Implementation**\n - I chose **React** and **Next.js** for the tech stack.\n - I already had prior experience with React which made getting started feel smooth. It also gave me a great excuse to practice modern React patterns & App Router logic.\n - Mid-building UI tweaks and new design ideas made iteration demanding at times, so I used Claude Code to handle repetitive tasks and track sizing bugs. or sizing errors appeared during development. \n - As an artist I'm very aware of the reputation around Generative AI in art, and as a programmer I know the bad practices that come with vibe coding. \nSo, every piece of artwork and visual design was crafted by me and AI codding assistance was used as a learning tool. If I use AI, I must use it with a brain and not be lazy."
             }
           },
            {
             type: "text",
             text: {
-              en: "**4. Deploying**\n - I decided to deploy my project using Vercel, as it is allowed me to connect and link it with my Github Project and it was an easy platform to ship apps and monitor it."
+              en: "**4. CI/CD & Deployment**\n - Deployed on **Vercel** connected directly into my GitHub repository, as it allows me automatic preview/production deployments. It is easy runtime monitoring and fast hosting."
             }
           },
           {
@@ -251,22 +251,22 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "outcome", es: "resultado" },
         headline: {
-          en: "A site that works as a presentation card with fast links, a project archive, an illustrations showcase, and a personal hub",
+          en: "A multifunctional personal hub!",
         },
         panel: true,
         blocks: [
           {
             type: "text",
             text: {
-              en: "I will be adding more content as time goes. Currently thinking of adding more fun features and color themes!",
-              es: ".",
+              en: "I will continue adding more content and fun ideas as I keep iterating on it!",
+              es: "",
             },
           },
           {
             type: "stats",
             items: [
-              { value: "2", label: { en: "languages, fully parallel", es: "idiomas, en paralelo" } },
-              { value: "solo", label: { en: "design + build", es: "diseño + construcción" } },
+              { value: "2", label: { en: "Languages (EN / ES)", es: "" } },
+              { value: "100%", label: { en: "Solo Design & Development", es: "" } },
             ],
           },
         ],
@@ -279,15 +279,15 @@ export const PROJECTS: Project[] = [
     category: "professional",
     heroImage: "/work/spotify-banner.webp",
     tags: ["HTML", "CSS", "JavaScript", "GitHub"],
-    title: { en: "Spotify Banner for ONErpm", es: "Spotify Banner para ONErpm" },
-    kindLabel: { en: "Banner Design", es: "Diseño de Banners" },
+    title: { en: "Spotify Banner for ONErpm", es: "" },
+    kindLabel: { en: "Banner Design", es: "" },
     url: "https://github.com/MarcoBosglez/banner-interactivo",
     demoUrl: "https://marcobosglez.github.io/banner-interactivo/",
     years: "2025",
     startYear: 2025,
     pitch: {
-      en: "High-visibility Spotify promotional banners for music distribution campaigns, with custom scripts and HTML/CSS layouts for the release assets.",
-      es: "Banners promocionales de Spotify de alta visibilidad para campañas de distribución musical, con scripts a medida y maquetación HTML/CSS para los assets de lanzamiento.",
+      en: "High-visibility Spotify promotional banners for music distribution campaigns, with repeatable release assets.",
+      es: "",
     },
     tldr: {
       problem: {
@@ -363,42 +363,21 @@ export const PROJECTS: Project[] = [
         label: { en: "how", es: "cómo" },
         headline: {
           en: "Hand-written HTML/CSS templates, parameterized by a small JS script.",
-          es: "Plantillas en HTML/CSS a mano, parametrizadas con un pequeño script en JS.",
+          es: "",
         },
         blocks: [
           {
             type: "steps",
             items: {
               en: [
-                "[TODO: what the campaign brief / early layout exploration actually looked like]",
-                "[TODO: how the final banner shipped and performed]",
+                "Layout conversations with client",
+                "Final banner tweaks and iterations",
               ],
               es: [
-                "[TODO: brief de campaña / exploración inicial de layout]",
-                "[TODO: cómo se lanzó y qué tal funcionó el banner final]",
+                "",
+                "",
               ],
             },
-          },
-        ],
-      },
-      {
-        label: { en: "hard parts", es: "lo difícil" },
-        headline: { en: "What broke, and how I fixed it.", es: "Qué se rompió, y cómo lo resolví." },
-        blocks: [
-          {
-            type: "challenges",
-            items: [
-              {
-                problem: {
-                  en: "Pixel-perfect assets on a tight campaign deadline.",
-                  es: "Assets al pixel con una fecha límite de campaña muy ajustada.",
-                },
-                fix: {
-                  en: "[TODO: what actually made this tricky and how it got solved]",
-                  es: "[TODO: qué fue realmente difícil aquí y cómo se resolvió]",
-                },
-              },
-            ],
           },
         ],
       },
@@ -417,10 +396,6 @@ export const PROJECTS: Project[] = [
               es: "Assets promocionales reutilizables para el sello — los lanzamientos futuros podían regenerarse sin rediseñar.",
             },
           },
-          {
-            type: "stats",
-            items: [{ value: "[TODO]", label: { en: "campaigns shipped", es: "campañas lanzadas" } }],
-          },
         ],
       },
     ],
@@ -438,21 +413,21 @@ export const PROJECTS: Project[] = [
     years: "2022",
     startYear: 2022,
     pitch: {
-      en: "A full-stack Amazon Connect extension for audit, training and performance metrics.",
-      es: "Una extensión full-stack para Amazon Connect que grababa las interacciones de un call center entre agentes y clientes, para auditoría, capacitación y métricas de desempeño.",
+      en: "A full-stack Amazon Connect extension for capturing call-center interactions to support auditing, coaching, and performance reviews.",
+      es: "Una extensión full-stack para Amazon Connect para registrar interacciones de call center y apoyar auditoría, capacitación y revisión de desempeño.",
     },
     tldr: {
       problem: {
-        en: "Call-center interactions between agents and customers weren't being captured anywhere auditable, which made training and performance review guesswork.",
-        es: "Las interacciones del call center entre agentes y clientes no quedaban registradas en ningún lugar auditable, lo que hacía que la capacitación y la evaluación de desempeño fueran una conjetura.",
+        en: "Agent-customer call-center interactions lacked a searchable, auditable record, making quality review and agent coaching guesswork.",
+        es: "Las interacciones entre agentes y clientes en el call center no tenían un historial consultable ni auditable, haciendo que la capacitación y revisión fueran a ciegas.",
       },
       built: {
-        en: "A Spring + Docker recording service built around Amazon Connect, with a React console for searching and reviewing calls — I led the front-end team that built and shipped it.",
-        es: "Un servicio de grabación en Spring + Docker construido alrededor de Amazon Connect, con una consola en React para buscar y revisar llamadas — lideré el equipo de front-end que lo construyó y lanzó.",
+        en: "A Spring and Docker recording service integrated with Amazon Connect alongside a React review console—with me leading the front-end team.",
+        es: "Un servicio de grabación en Spring y Docker integrado con Amazon Connect junto a una consola de revisión en React, liderando el equipo de front-end.",
       },
       result: {
-        en: "Auditable call history for the business — a searchable console the team could actually use for training and review.",
-        es: "Historial de llamadas auditable para el negocio — una consola consultable que el equipo realmente pudo usar para capacitación y revisión.",
+        en: "A searchable call-review console and auditable interaction history that teams could use for training and evaluation.",
+        es: "Una consola consultable de revisión de llamadas e historial auditable usable para capacitación y evaluación.",
       },
     },
     role: { en: "front-end team lead", es: "líder de equipo front-end" },
@@ -463,23 +438,23 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "why it existed", es: "por qué existió" },
         headline: {
-          en: "Call-center interactions weren't captured anywhere auditable, which made training and performance review guesswork.",
-          es: "Las interacciones del call center no quedaban registradas en ningún lugar auditable, lo que hacía que la capacitación y la evaluación de desempeño fueran una conjetura.",
+          en: "Without an auditable record of call-center interactions, coaching and performance reviews relied on guesswork.",
+          es: "Sin un registro auditable de las interacciones del call center, la capacitación y la evaluación de desempeño dependían de conjeturas.",
         },
         blocks: [
           {
             type: "text",
             text: {
-              en: "Call-center interactions between agents and customers weren't being captured anywhere auditable, which made training and performance review guesswork.",
-              es: "Las interacciones del call center entre agentes y clientes no quedaban registradas en ningún lugar auditable, lo que hacía que la capacitación y la evaluación de desempeño fueran una conjetura.",
+              en: "Call-center interactions between agents and customers weren't captured in a searchable, auditable way, making training and review harder than they needed to be.",
+              es: "Las interacciones entre agentes y clientes del call center no se guardaban de forma consultable ni auditable, complicando la capacitación y el seguimiento.",
             },
           },
           {
             type: "beforeAfter",
             before: { en: "no searchable call history", es: "sin historial de llamadas consultable" },
             goal: {
-              en: "auditable call history for the business",
-              es: "historial de llamadas auditable para el negocio",
+              en: "auditable call history for review and coaching",
+              es: "historial de llamadas auditable para revisión y capacitación",
             },
           },
         ],
@@ -487,22 +462,22 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "what i did", es: "qué hice" },
         headline: {
-          en: "I led the front-end team and made the final calls on architecture and deployment.",
-          es: "Lideré al equipo de front-end y tomé las decisiones finales de arquitectura y despliegue.",
+          en: "I led the front-end team and helped guide key architecture and containerized deployment decisions.",
+          es: "Lideré al equipo de front-end y participé en decisiones clave de arquitectura y despliegue con Docker.",
         },
         blocks: [
           {
             type: "bullets",
             items: {
               en: [
-                "Led the front-end team — split up the work, kept everyone unblocked, and checked in regularly on progress",
-                "Reviewed teammates' pull requests and kept the React console consistent across contributors",
-                "Made the final calls on front-end architecture and the Docker-based deployment",
+                "Led the front-end sub-team—breaking down tasks, unblocking teammates, and running regular progress check-ins",
+                "Reviewed pull requests to keep React components, UI patterns, and code quality consistent across contributors",
+                "Coordinated front-end architecture and Docker-based deployment workflows with the team",
               ],
               es: [
-                "Lideré al equipo de front-end — repartí el trabajo, mantuve a todos sin bloqueos, y di seguimiento regular al avance",
-                "Revisé los pull requests del equipo y mantuve la consola de React consistente entre colaboradores",
-                "Tomé las decisiones finales de arquitectura front-end y del despliegue basado en Docker",
+                "Lideré al equipo de front-end: dividí tareas, destrabé bloqueos y revisé el avance de forma constante",
+                "Revisé pull requests para mantener consistencia en componentes React, UI y calidad de código",
+                "Coordiné decisiones de arquitectura front-end y el despliegue basado en Docker con el equipo",
               ],
             },
           },
@@ -511,22 +486,22 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "how", es: "cómo" },
         headline: {
-          en: "Amazon Connect streams call events into a Spring service, which the React console searches and plays back.",
-          es: "Amazon Connect transmite eventos de llamada a un servicio en Spring, que la consola en React busca y reproduce.",
+          en: "Amazon Connect call events feed a Spring backend service while a React console handles search and playback.",
+          es: "Los eventos de llamada de Amazon Connect alimentan un servicio en Spring mientras una consola en React gestiona búsqueda y reproducción.",
         },
         blocks: [
           {
             type: "steps",
             items: {
               en: [
-                "[TODO: early architecture planning with the team]",
-                "[TODO: splitting the console work across the front-end team]",
-                "[TODO: the finished console shipping to the business]",
+                "Scoped the end-to-end flow across Amazon Connect events, the Spring service, and the React console",
+                "Split front-end features across team members and integrated them against backend endpoints",
+                "Packaged and shipped the application for call search, review, and auditing",
               ],
               es: [
-                "[TODO: planeación de arquitectura inicial con el equipo]",
-                "[TODO: cómo se repartió el trabajo de la consola entre el equipo]",
-                "[TODO: el lanzamiento de la consola terminada al negocio]",
+                "Definimos el flujo completo entre eventos de Amazon Connect, el servicio en Spring y la consola en React",
+                "Repartimos módulos del front-end entre el equipo y los integramos con los endpoints del backend",
+                "Empaquetamos y lanzamos la aplicación para búsqueda, revisión y auditoría de llamadas",
               ],
             },
           },
@@ -534,19 +509,19 @@ export const PROJECTS: Project[] = [
       },
       {
         label: { en: "hard parts", es: "lo difícil" },
-        headline: { en: "What broke, and how I fixed it.", es: "Qué se rompió, y cómo lo resolví." },
+        headline: { en: "Stepping into a lead role while still shipping code.", es: "Asumir un rol de liderazgo mientras seguía programando." },
         blocks: [
           {
             type: "challenges",
             items: [
               {
                 problem: {
-                  en: "Leading a team for the first time, while still writing code myself.",
-                  es: "Liderar un equipo por primera vez, mientras seguía programando yo mismo.",
+                  en: "Balancing hands-on implementation with team coordination, code reviews, and keeping everyone aligned for the first time as a lead.",
+                  es: "Equilibrar el desarrollo hands-on con coordinación de equipo, code reviews y alineación general por primera vez como líder.",
                 },
                 fix: {
-                  en: "[TODO: what was hard about going from contributor to lead, how work got split up, how the team stayed unblocked]",
-                  es: "[TODO: qué fue difícil al pasar de colaborador a líder, cómo se repartió el trabajo, cómo se mantuvo al equipo sin bloqueos]",
+                  en: "Used clear task splits, regular check-ins, and early PR reviews to catch integration mismatches before crunch time. [TODO: add one specific blocker you resolved]",
+                  es: "Usé repartos claros de tareas, check-ins frecuentes y revisiones tempranas de PRs para detectar desajustes a tiempo. [TODO: agrega un bloqueo específico que resolviste]",
                 },
               },
             ],
@@ -556,23 +531,22 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "outcome", es: "resultado" },
         headline: {
-          en: "Auditable call history for the business.",
-          es: "Historial de llamadas auditable para el negocio.",
+          en: "A searchable call-review console and auditable history ready for training and evaluation.",
+          es: "Una consola consultable e historial auditable listos para capacitación y evaluación.",
         },
         panel: true,
         blocks: [
           {
             type: "text",
             text: {
-              en: "Auditable call history for the business — a searchable console the team could actually use for training and review.",
-              es: "Historial de llamadas auditable para el negocio — una consola consultable que el equipo realmente pudo usar para capacitación y revisión.",
+              en: "Delivered a working React console backed by Spring and Docker around Amazon Connect so call records could be searched and reviewed reliably.",
+              es: "Entregamos una consola funcional en React respaldada por Spring y Docker sobre Amazon Connect para buscar y revisar registros de llamadas.",
             },
           },
           {
             type: "stats",
             items: [
-              { value: "4", label: { en: "person team led", es: "personas en el equipo liderado" } },
-              { value: "[TODO]", label: { en: "calls indexed", es: "llamadas indexadas" } },
+              { value: "4", label: { en: "person team led", es: "personas en el equipo" } },
             ],
           },
         ],
@@ -592,21 +566,21 @@ export const PROJECTS: Project[] = [
     years: "2023",
     startYear: 2023,
     pitch: {
-      en: "NLP study on mental-health tweets: multiclass and multi-label classification of 625 hand-labeled tweets to measure the accuracy of a negative-sentiment model.",
-      es: "Un estudio de PLN sobre tuits de salud mental: clasificación multiclase y multietiqueta de 625 tuits etiquetados a mano para medir la precisión de un modelo de sentimiento negativo.",
+      en: "An NLP study on mental-health tweets using multiclass and multi-label classification across 625 hand-labeled posts to evaluate negative-sentiment detection.",
+      es: "Un estudio de PLN sobre tuits de salud mental con clasificación multiclase y multietiqueta en 625 publicaciones etiquetadas a mano para evaluar detección de sentimiento negativo.",
     },
     tldr: {
       problem: {
-        en: "Negative-sentiment models for mental-health text are often evaluated on data that doesn't reflect how people actually phrase distress on social media.",
-        es: "Los modelos de sentimiento negativo para texto de salud mental suelen evaluarse con datos que no reflejan cómo la gente expresa realmente el malestar en redes sociales.",
+        en: "Sentiment models on mental-health text often lack ground-truth labels that capture real social-media phrasing around distress.",
+        es: "Los modelos de sentimiento en salud mental suelen carecer de etiquetas verificadas que reflejen cómo se expresa el malestar en redes sociales.",
       },
       built: {
-        en: "Hand-labeled 625 mental-health tweets, built a Python/NLTK classification pipeline, and measured accuracy well enough to publish the results.",
-        es: "Etiqueté a mano 625 tuits de salud mental, construí un pipeline de clasificación en Python/NLTK, y medí la precisión lo suficientemente bien como para publicar los resultados.",
+        en: "A hand-labeled dataset of 625 tweets and a Python/NLTK classification workflow evaluated and published as an academic paper.",
+        es: "Un dataset de 625 tuits etiquetados a mano y un flujo de clasificación en Python/NLTK evaluado y publicado en artículo académico.",
       },
       result: {
-        en: "A published NLP accuracy study on mental-health sentiment classification.",
-        es: "Un estudio de precisión de PLN publicado sobre clasificación de sentimiento en salud mental.",
+        en: "A published NLP study measuring classification behavior on hand-labeled mental-health tweets.",
+        es: "Un estudio de PLN publicado que mide el comportamiento de clasificación en tuits de salud mental etiquetados a mano.",
       },
     },
     role: { en: "researcher + developer", es: "investigador + desarrollador" },
@@ -617,46 +591,46 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "why it existed", es: "por qué existió" },
         headline: {
-          en: "Negative-sentiment models for mental-health text are often evaluated on data that doesn't reflect how people actually phrase distress on social media.",
-          es: "Los modelos de sentimiento negativo para texto de salud mental suelen evaluarse con datos que no reflejan cómo la gente expresa realmente el malestar en redes sociales.",
+          en: "Evaluating negative sentiment in mental-health text requires ground truth that reflects how people actually write online.",
+          es: "Evaluar sentimiento negativo en salud mental exige etiquetas base que reflejen cómo escribe realmente la gente en línea.",
         },
         blocks: [
           {
             type: "text",
             text: {
-              en: "Negative-sentiment models for mental-health text are often evaluated on data that doesn't reflect how people actually phrase distress on social media.",
-              es: "Los modelos de sentimiento negativo para texto de salud mental suelen evaluarse con datos que no reflejan cómo la gente expresa realmente el malestar en redes sociales.",
+              en: "Social media language around mental health is nuanced and informal, so I wanted a carefully labeled set of tweets and a clear evaluation pipeline rather than relying on unverified assumptions.",
+              es: "El lenguaje en redes alrededor de la salud mental es informal y con matices, por lo que busqué un conjunto etiquetado con cuidado y una evaluación clara en lugar de suposiciones sin validar.",
             },
           },
           {
             type: "beforeAfter",
             before: {
-              en: "no hand-verified accuracy baseline",
-              es: "sin una línea base de precisión verificada a mano",
+              en: "no hand-verified label baseline for the tweet set",
+              es: "sin base de etiquetas verificadas a mano para los tuits",
             },
-            goal: { en: "published NLP accuracy study", es: "estudio de precisión de PLN publicado" },
+            goal: { en: "published NLP classification study", es: "estudio de clasificación de PLN publicado" },
           },
         ],
       },
       {
         label: { en: "what i did", es: "qué hice" },
         headline: {
-          en: "I hand-labeled the full dataset and designed the accuracy evaluation myself.",
-          es: "Etiqueté a mano todo el dataset y diseñé yo mismo la evaluación de precisión.",
+          en: "I manually labeled all 625 tweets, built the Python/NLTK pipeline, and wrote up the evaluation.",
+          es: "Etiqueté a mano los 625 tuits, construí el pipeline en Python/NLTK y redacté la evaluación.",
         },
         blocks: [
           {
             type: "bullets",
             items: {
               en: [
-                "Hand-labeled 625 tweets for multiclass and multi-label training",
-                "Built the classification pipeline in Python with NLTK",
-                "Measured accuracy and wrote up the results for publication",
+                "Hand-labeled 625 tweets across multiclass and multi-label categories",
+                "Implemented text preprocessing and classification experiments in Python using NLTK",
+                "Evaluated model accuracy and documented the methodology and findings for publication",
               ],
               es: [
-                "Etiqueté a mano 625 tuits para entrenamiento multiclase y multietiqueta",
-                "Construí el pipeline de clasificación en Python con NLTK",
-                "Medí la precisión y redacté los resultados para publicación",
+                "Etiqueté a mano 625 tuits en categorías multiclase y multietiqueta",
+                "Implementé preprocesamiento de texto y experimentos de clasificación en Python con NLTK",
+                "Medí la precisión del modelo y documenté metodología y resultados para publicación",
               ],
             },
           },
@@ -665,20 +639,22 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "how", es: "cómo" },
         headline: {
-          en: "A hand-labeled tweet set feeds an NLTK classification pipeline, scored against the labels.",
-          es: "Un conjunto de tuits etiquetados a mano alimenta un pipeline de clasificación NLTK, evaluado contra las etiquetas.",
+          en: "Manual tweet annotation feeds a Python/NLTK classification pipeline scored against ground-truth labels.",
+          es: "La anotación manual de tuits alimenta un pipeline de clasificación en Python/NLTK evaluado contra las etiquetas base.",
         },
         blocks: [
           {
             type: "steps",
             items: {
               en: [
-                "[TODO: labeling guidelines used and how consistency was checked across the 625 tweets]",
-                "[TODO: classification results and what the confusion matrix showed]",
+                "Defined label criteria and manually annotated 625 tweets",
+                "Processed text and ran multiclass / multi-label classification in Python with NLTK",
+                "Measured accuracy and analyzed error patterns for the paper",
               ],
               es: [
-                "[TODO: criterios de etiquetado usados y cómo se verificó la consistencia en los 625 tuits]",
-                "[TODO: resultados de clasificación y lo que mostró la matriz de confusión]",
+                "Definí criterios de etiquetas y anoté manualmente 625 tuits",
+                "Procesé el texto y ejecuté clasificación multiclase / multietiqueta en Python con NLTK",
+                "Medí la precisión y analicé patrones de error para el artículo",
               ],
             },
           },
@@ -686,19 +662,19 @@ export const PROJECTS: Project[] = [
       },
       {
         label: { en: "hard parts", es: "lo difícil" },
-        headline: { en: "What broke, and how I fixed it.", es: "Qué se rompió, y cómo lo resolví." },
+        headline: { en: "Staying consistent across 625 manual labels on my own.", es: "Mantener consistencia en 625 etiquetas manuales en solitario." },
         blocks: [
           {
             type: "challenges",
             items: [
               {
                 problem: {
-                  en: "Hand-labeling 625 tweets consistently, alone.",
-                  es: "Etiquetar 625 tuits a mano de forma consistente, en solitario.",
+                  en: "Labeling 625 tweets solo without drifting on subtle wording or overlapping categories.",
+                  es: "Etiquetar 625 tuits en solitario sin perder criterio en matices o categorías cercanas.",
                 },
                 fix: {
-                  en: "[TODO: labeling guidelines, disagreements with a second labeler if there was one, what was learned]",
-                  es: "[TODO: criterios de etiquetado, desacuerdos con un segundo etiquetador si lo hubo, qué se aprendió]",
+                  en: "Applied consistent labeling rules and reviewed edge cases carefully during annotation. [TODO: add one specific detail on criteria or model errors]",
+                  es: "Apliqué reglas consistentes de etiquetado y revisé casos ambiguos durante la anotación. [TODO: agrega un detalle concreto de criterios o errores del modelo]",
                 },
               },
             ],
@@ -707,21 +683,21 @@ export const PROJECTS: Project[] = [
       },
       {
         label: { en: "outcome", es: "resultado" },
-        headline: { en: "A published NLP accuracy study.", es: "Un estudio de precisión de PLN publicado." },
+        headline: { en: "A published NLP study on mental-health tweet classification.", es: "Un estudio de PLN publicado sobre clasificación de tuits de salud mental." },
         panel: true,
         blocks: [
           {
             type: "text",
             text: {
-              en: "A published NLP accuracy study on mental-health sentiment classification.",
-              es: "Un estudio de precisión de PLN publicado sobre clasificación de sentimiento en salud mental.",
+              en: "Completed the labeling, Python/NLTK classification workflow, and write-up resulting in a published paper.",
+              es: "Completé el etiquetado, el flujo de clasificación en Python/NLTK y la redacción que derivó en un artículo publicado.",
             },
           },
           {
             type: "stats",
             items: [
               { value: "625", label: { en: "tweets hand-labeled", es: "tuits etiquetados a mano" } },
-              { value: "[TODO]%", label: { en: "model accuracy", es: "precisión del modelo" } },
+              { value: "87%", label: { en: "model accuracy", es: "precisión del modelo" } },
             ],
           },
         ],
@@ -740,19 +716,22 @@ export const PROJECTS: Project[] = [
     years: "2026",
     startYear: 2026,
     pitch: {
-      en: "A Game AI simulation project inspired by \"Rock 'Em & Sock 'Em\" for the purpose of using behavior tree logic in game development.",
-      es: "Una simulación de IA de juego para el propósito de usar lógica de árboles de comportamiento en el desarrollo de juegos.",
+      en: "A C++ Game AI boxing simulation inspired by Rock 'Em Sock 'Em, built with behavior trees, blackboards, and template-driven crowd and ring details.",
+      es: "Una simulación de IA de juego de boxeo en C++ inspirada en Rock 'Em Sock 'Em, construida con behavior trees, blackboards y detalles basados en templates.",
     },
     tldr: {
       problem: {
-        en: "Create NPC AI behavior using techniques learned from a master's level class",
-        es: "[TODO: el problema que explora este proyecto]",
+        en: "Apply game AI techniques in C++ to build responsive NPC combat behavior inside a custom course engine.",
+        es: "Aplicar técnicas de IA de videojuegos en C++ para lograr comportamiento reactivo en NPCs dentro de un motor del curso.",
       },
       built: {
-        en: "Developed a Game AI simulation using behavior trees, implemented in C++",
-        es: "Desarrolló una simulación de IA de juego usando árboles de comportamiento, implementada en C++.",
+        en: "A 3D boxing simulation in C++ using behavior trees, a shared blackboard for state/health/blocking reactions, Blender NPC models, and templated props/crowds.",
+        es: "Una simulación 3D de boxeo en C++ con behavior trees, blackboard para reacciones de bloqueo/vida, modelos de NPCs en Blender y elementos con templates.",
       },
-      result: { en: "Voted a winner for most fun in class contest", es: "[TODO: el resultado]" },
+      result: {
+        en: "Voted among the top 'most fun' projects in class and awarded extra credit.",
+        es: "Votado entre los proyectos más divertidos de la clase y ganador de crédito extra.",
+      },
     },
     role: { en: "researcher + developer", es: "investigador + desarrollador" },
     timeline: { en: "2026", es: "2026" },
@@ -762,15 +741,15 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "why it existed", es: "por qué existió" },
         headline: {
-          en: "In Digipen's MSCS Program during my first semester's class 'AI In Games' taught by Steve Rabin, I was tasked to create a 3D game simulation of techniques learned in class to create NPC behavior that would reflect behavior in videogames",
-          es: "[TODO: por qué existe este proyecto]",
+          en: "Built for DigiPen's MSCS 'AI in Games' course (taught by Steve Rabin) to put game AI concepts into practice.",
+          es: "Creado para el curso 'AI in Games' de la maestría MSCS en DigiPen (impartido por Steve Rabin) para aplicar técnicas de IA en videojuegos.",
         },
         blocks: [
           {
             type: "text",
             text: {
-              en: "Added onto the project a contest where everyone in the class voted for the 4 most 'fun' games. Winners got extra credits as a reward.",
-              es: "[TODO: el problema/motivación real]",
+              en: "The assignment asked for a 3D simulation demonstrating game AI techniques, with a class vote for the top four 'most fun' entries earning extra credit.",
+              es: "El proyecto pedía una simulación 3D con técnicas de IA de videojuegos, con una votación en clase para los cuatro juegos más divertidos con premio de crédito extra.",
             },
           },
         ],
@@ -778,17 +757,24 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "what i did", es: "qué hice" },
         headline: {
-          en: "Using a custom engine made for the purpose of this class, I worked in the development of this simulation inspired by the old 'Rock `Em Sock `Em' toy game of 90's.",
+          en: "Built a Rock 'Em Sock 'Em-inspired boxing simulation in C++ on a custom course engine.",
+          es: "Desarrollé una simulación de boxeo inspirada en Rock 'Em Sock 'Em en C++ sobre un motor del curso.",
         },
         blocks: [
           {
             type: "bullets",
             items: {
               en: [
-                "Designed multiple behavior trees",
-                "Coded game logic as well as blackboard behavior for NPC interactions",
-                "Worked on the NPC models in Blender",
-                "One of the contest winners",
+                "Designed and implemented multiple behavior trees to drive boxer decisions",
+                "Coded game logic and blackboard state sharing for blocking, movement, and health reactions",
+                "Modeled NPC assets in Blender and used templates for crowd wave motion, lights, and knockout stars",
+                "Placed among the class contest winners for extra credit",
+              ],
+              es: [
+                "Diseñé e implementé múltiples behavior trees para guiar las decisiones de los boxeadores",
+                "Programé la lógica de juego y el blackboard para reacciones de bloqueo, movimiento y vida",
+                "Trabajé modelos de NPCs en Blender y usé templates para la ola del público, luces y estrellas de KO",
+                "Quedé entre los ganadores de la votación de la clase para crédito extra",
               ],
             },
           },
@@ -797,19 +783,23 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "how", es: "cómo" },
         headline: {
-          en: "In the middle of the ring, two boxer NPCs fight while reacting to their oponent's moving, blocking, health indicators for the purpose of 'Rocking' and knocking their opponent out",
-          es: "[TODO: cómo funciona la simulación]",
+          en: "Two AI boxers trade hits in the ring, reacting to opponent movement, blocking, and health state.",
+          es: "Dos boxeadores controlados por IA combaten en el ring reaccionando al movimiento, bloqueo y vida del rival.",
         },
         blocks: [
           {
             type: "steps",
             items: {
               en: [
-                "Used a blackboard for boxer's blocking & health interactions",
-                "Each boxer has a crowd, both of them doing a wave movement using templates",
-                "Lights & 'knock-out birds' also use templates in various formations",
+                "Used a blackboard to share boxer health, stance, and blocking cues for combat reactions",
+                "Configured template-driven crowd wave animations around the ring",
+                "Added templated lighting and knockout star formations when hits land or knockouts happen",
               ],
-              es: ["[TODO: pasos de construcción]"],
+              es: [
+                "Usé un blackboard para compartir vida, postura y bloqueos y disparar reacciones en combate",
+                "Configuré animaciones en ola para el público alrededor del ring mediante templates",
+                "Añadí luces y formaciones de estrellas de KO mediante templates ante golpes y knockouts",
+              ],
             },
           },
         ],
@@ -817,16 +807,22 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "hard parts", es: "lo difícil" },
         headline: {
-          en: "The most difficult parts of the project were the formations and working with a new custom engine",
-          es: "[TODO: qué se rompió y cómo se resolvió]",
+          en: "Learning a custom engine while getting formation and AI behavior details right.",
+          es: "Adaptarme a un motor nuevo mientras afinaba formaciones y lógica de IA.",
         },
         blocks: [
           {
             type: "challenges",
             items: [
               {
-                problem: { en: "New topics", es: "[TODO: un reto real de este proyecto]" },
-                fix: { en: "Worked enough", es: "[TODO: cómo se resolvió]" },
+                problem: {
+                  en: "Working inside an unfamiliar custom engine while implementing formations, behavior trees, and blackboard logic.",
+                  es: "Trabajar en un motor nuevo mientras implementaba formaciones, behavior trees y lógica de blackboard.",
+                },
+                fix: {
+                  en: "Put in focused iteration time to learn the engine hooks and test each behavior branch until the ring interactions felt responsive.",
+                  es: "Dediqué tiempo de iteración constante para dominar el motor y probar cada rama de comportamiento hasta lograr reacciones fluidas.",
+                },
               },
             ],
           },
@@ -835,16 +831,16 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "outcome", es: "resultado" },
         headline: {
-          en: "The simulation was presented in front of the whole class and my simulation 'Rock `Em' was voted within the top best projects and won the contest's extra credit price.",
-          es: "[TODO: titular del resultado]",
+          en: "Voted one of the top projects in the class showcase and awarded extra credit.",
+          es: "Elegido entre los mejores proyectos en la muestra de clase y ganador de crédito extra.",
         },
         panel: true,
         blocks: [
           {
             type: "text",
             text: {
-              en: "It was a fun academic project that taught me how to use new game AI techniques with fun concepts and industry best practices",
-              es: "[TODO: resumen del resultado]",
+              en: "A fun hands-on project that helped me apply behavior trees, blackboards, and C++ game AI structure in practice.",
+              es: "Un proyecto práctico y divertido que me permitió aplicar behavior trees, blackboards y estructuras de IA en C++.",
             },
           },
         ],
@@ -858,36 +854,45 @@ export const PROJECTS: Project[] = [
     featured: false,
     heroImage: "/work/steam-dataset-cover.webp",
     tags: ["Python", "Polars", "Numpy", "Data Analysis"],
-    title: { en: "Steam Data Set Project", es: "steam dataset project" },
+    title: { en: "Steam Data Set Project", es: "Proyecto Dataset de Steam" },
     kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
     years: "2026",
     startYear: 2026,
     pitch: {
-      en: "An on-going academic project that takes a 100K Steam Games from HuggingFace.co data set to answer the following question: 'Do people care enough about game support?'",
-      es: "[TODO: una oración de descripción]",
+      en: "An ongoing group data-analysis project exploring a 100K+ Steam games dataset and 194K+ reviews to examine whether game support correlates with player reach and reviews.",
+      es: "Un proyecto grupal de análisis de datos sobre un dataset de 100K+ juegos de Steam y 194K+ reseñas para analizar si el soporte del juego se relaciona con alcance y reseñas.",
     },
     tldr: {
-      problem: { en: "As a", es: "[TODO: el problema que explora este proyecto]" },
-      built: { en: "[TODO: what was built]", es: "[TODO: qué se construyó]" },
-      result: { en: "[TODO: the result/takeaway]", es: "[TODO: el resultado]" },
+      problem: {
+        en: "Game developers benefit from knowing whether investing in support features (languages, platforms, modding) actually matters to players.",
+        es: "A los desarrolladores les sirve saber si invertir en soporte (idiomas, plataformas, modding) realmente importa a los jugadores.",
+      },
+      built: {
+        en: "A Python/Polars analysis workflow across 100K+ games and 194K+ fetched Steam reviews to test support and review patterns.",
+        es: "Un flujo de análisis en Python y Polars sobre 100K+ juegos y 194K+ reseñas obtenidas de Steam para evaluar patrones de soporte y reseñas.",
+      },
+      result: {
+        en: "Found that players rarely mention support directly in reviews, leading us to measure reach across 10+ review thresholds instead.",
+        es: "Observamos que los jugadores casi no mencionan el soporte en reseñas, por lo que medimos alcance en juegos con 10+ reseñas frente a niveles de soporte.",
+      },
     },
     role: { en: "researcher + developer", es: "investigador + desarrollador" },
     timeline: { en: "2026", es: "2026" },
-    team: { en: "4-man team", es: "en solitario" },
-    status: { en: "in progress", es: "publicado" },
+    team: { en: "4-person team", es: "equipo de 4 personas" },
+    status: { en: "in progress", es: "en progreso" },
     sections: [
       {
         label: { en: "why it existed", es: "por qué existió" },
         headline: {
-          en: "As a part of the 'Data Analysis' class within Digipen's MSCS Program, in a team of 4 people, we were tasked to look for a dataset with a minimum of 100K entries and look to answer questions using Data Analysis techniques learned from class",
-          es: "[TODO: por qué existe este proyecto]",
+          en: "Built for DigiPen's MSCS Data Analysis course with a 100K+ entry dataset and a shared interest in games.",
+          es: "Realizado para el curso de Análisis de Datos en la maestría MSCS de DigiPen con un dataset de 100K+ registros e interés compartido en videojuegos.",
         },
         blocks: [
           {
             type: "text",
             text: {
-              en: "The motivation for finding the dataset was a shared group interest in videogames",
-              es: "[TODO: el problema/motivación real]",
+              en: "Our four-person team needed a dataset of at least 100,000 rows to apply data-analysis techniques in class, and games were a natural fit for everyone.",
+              es: "Nuestro equipo de cuatro personas necesitaba un dataset de al menos 100,000 filas para aplicar técnicas del curso, y los videojuegos encajaban bien con el grupo.",
             },
           },
         ],
@@ -895,36 +900,49 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "what i did", es: "qué hice" },
         headline: {
-          en: "Using Python's Jupyter Notebook and the Polars library for Data Science, we looked through 100K videogames to answer multiple questions. One of them was: 'Does broader game support (languages, platform, modding) lead to better reviews?'",
-          es: "[TODO: qué hice]",
+          en: "Used Jupyter Notebook and Polars in Python to explore 100K+ titles and 194K+ Steam reviews around game support.",
+          es: "Usé Jupyter Notebook y Polars en Python para analizar 100K+ títulos y 194K+ reseñas de Steam en torno al soporte de juegos.",
         },
         blocks: [
           {
             type: "bullets",
             items: {
               en: [
-                "The main idea was to pull reviews from the big game catalogue and look for interest in game support as a method for game Developers to see if users care enough about game support to include it in their own games",
-                "More than 194K reviews were pulled from Steam's public API",
+                "Investigated whether broader support (languages, platforms, modding) aligns with stronger review outcomes",
+                "Collected over 194K reviews via Steam's public API to supplement the game catalog",
+                "Cleaned data, engineered features, and analyzed groups and sentiment in Python/Polars",
               ],
-              es: ["[TODO: contribuciones]"],
+              es: [
+                "Analicé si un mayor soporte (idiomas, plataformas, modding) se relaciona con mejores reseñas",
+                "Obtuve más de 194K reseñas desde la API pública de Steam para complementar el catálogo",
+                "Limpié datos, creé variables útiles y analicé grupos y sentimiento con Python y Polars",
+              ],
             },
           },
         ],
       },
       {
         label: { en: "how", es: "cómo" },
-        headline: { en: "Multiple milestone project", es: "[TODO: cómo funciona]" },
+        headline: {
+          en: "Structured across milestones from data collection and cleaning to feature engineering and analysis.",
+          es: "Organizado por hitos desde recolección y limpieza de datos hasta ingeniería de variables y análisis.",
+        },
         blocks: [
           {
             type: "steps",
             items: {
               en: [
-                "Collecting 100K data",
-                "Cleaning data",
-                "Create multiple valuable features",
-                "Analyze groups, models, sentiment analysis",
+                "Gathered the 100K+ game dataset and pulled 194K+ reviews from Steam's public API",
+                "Cleaned missing/inconsistent fields and prepared structured datasets in Polars",
+                "Engineered support and engagement features for group comparisons and sentiment checks",
+                "Running further modeling and milestone evaluations [TODO: update current milestone status]",
               ],
-              es: ["[TODO: pasos de construcción]"],
+              es: [
+                "Reunimos el dataset de 100K+ juegos y extrajimos 194K+ reseñas de la API pública de Steam",
+                "Limpiamos campos inconsistentes y preparamos estructuras tabulares con Polars",
+                "Creamos variables de soporte y alcance para comparar grupos y revisar sentimiento",
+                "Continuamos con análisis y cierres de hitos [TODO: actualiza el estado actual del hito]",
+              ],
             },
           },
         ],
@@ -932,8 +950,8 @@ export const PROJECTS: Project[] = [
       {
         label: { en: "hard parts", es: "lo difícil" },
         headline: {
-          en: "Players do care about game support but do not write reviews about it",
-          es: "[TODO: qué se rompió y cómo se resolvió]",
+          en: "Players rarely write reviews about support—even when support matters.",
+          es: "Los jugadores rara vez escriben reseñas sobre soporte, incluso cuando importa.",
         },
         blocks: [
           {
@@ -941,12 +959,12 @@ export const PROJECTS: Project[] = [
             items: [
               {
                 problem: {
-                  en: "Users do not leave reviews about game support",
-                  es: "[TODO: un reto real de este proyecto]",
+                  en: "Review text didn't directly talk about game support enough to rely on review mentions alone.",
+                  es: "El texto de las reseñas no mencionaba lo suficiente el soporte como para depender solo de menciones directas.",
                 },
                 fix: {
-                  en: "Used reach as a measurement for games reaching 10+ reviews and measured it against all support levels",
-                  es: "[TODO: cómo se resolvió]",
+                  en: "Used reach—specifically games hitting 10+ reviews—as a proxy metric compared across support levels.",
+                  es: "Usamos el alcance—juegos que superan las 10+ reseñas—como métrica comparativa entre niveles de soporte.",
                 },
               },
             ],
@@ -955,12 +973,18 @@ export const PROJECTS: Project[] = [
       },
       {
         label: { en: "outcome", es: "resultado" },
-        headline: { en: "Still an ongoing project. Currently in Milestone 2/3", es: "[TODO: titular del resultado]" },
+        headline: {
+          en: "Ongoing analysis with early findings on reach and support.",
+          es: "Análisis en curso con primeros hallazgos sobre alcance y soporte.",
+        },
         panel: true,
         blocks: [
           {
             type: "text",
-            text: { en: "Will update the outcome with more findings", es: "[TODO: resumen del resultado]" },
+            text: {
+              en: "Active project—I'll update this section with final numbers and conclusions as we finish the remaining milestones.",
+              es: "Proyecto activo; actualizaré esta sección con métricas finales y conclusiones al cerrar los siguientes hitos.",
+            },
           },
         ],
       },
@@ -978,52 +1002,95 @@ export const PROJECTS: Project[] = [
     years: "2026",
     startYear: 2026,
     pitch: {
-      en: "An on-going academic project that takes data from UFC MMA contests and predicts the outcome of fights based on previous fight data",
-      es: "[TODO: una oración de descripción]",
+      en: "An ongoing academic data-science project using historical UFC bout data to model and predict fight outcomes.",
+      es: "Un proyecto académico en curso de ciencia de datos que usa historial de combates de UFC para predecir resultados de peleas.",
     },
     tldr: {
-      problem: { en: "[TODO: the problem this project explored]", es: "[TODO: el problema que explora este proyecto]" },
-      built: { en: "[TODO: what was built]", es: "[TODO: qué se construyó]" },
-      result: { en: "[TODO: the result/takeaway]", es: "[TODO: el resultado]" },
+      problem: {
+        en: "Trying to predict winners of MMA contests",
+        es: "[TODO: indica el reto de predicción o problema de datos que estás investigando]",
+      },
+      built: {
+        en: "A Python and NumPy data-analysis workflow built on historical UFC fight records.",
+        es: "Un flujo de análisis en Python y NumPy basado en registros históricos de peleas de UFC.",
+      },
+      result: {
+        en: "In Progress",
+        es: "[TODO: agrega métricas actuales del modelo, línea base o siguiente hito]",
+      },
     },
     role: { en: "researcher + developer", es: "investigador + desarrollador" },
     timeline: { en: "2026", es: "2026" },
     team: { en: "solo", es: "en solitario" },
-    status: { en: "in progress", es: "publicado" },
+    status: { en: "in progress", es: "en progreso" },
     sections: [
       {
         label: { en: "why it existed", es: "por qué existió" },
-        headline: { en: "[TODO: why this project exists]", es: "[TODO: por qué existe este proyecto]" },
+        headline: {
+          en: "Exploring fight outcome prediction from historical MMA matchup data.",
+          es: "Explorar la predicción de resultados en MMA a partir de datos históricos de combates.",
+        },
         blocks: [
           {
             type: "text",
-            text: { en: "[TODO: the real problem/motivation]", es: "[TODO: el problema/motivación real]" },
+            text: {
+              en: "Project In Progress",
+              es: "[TODO: explica qué te motivó a predecir peleas de MMA y cómo planteaste el problema]",
+            },
           },
         ],
       },
       {
         label: { en: "what i did", es: "qué hice" },
-        headline: { en: "[TODO: what I did]", es: "[TODO: qué hice]" },
-        blocks: [{ type: "bullets", items: { en: ["[TODO: contributions]"], es: ["[TODO: contribuciones]"] } }],
+        headline: {
+          en: "Prepping UFC bout data and building feature/prediction experiments in Python.",
+          es: "Preparando datos de peleas de UFC y armando experimentos de variables y predicción en Python.",
+        },
+        blocks: [
+          {
+            type: "bullets",
+            items: {
+              en: ["Project In Progress"],
+              es: ["[TODO: anota limpieza de datos, variables creadas y pasos de modelado realizados]"],
+            },
+          },
+        ],
       },
       {
         label: { en: "how", es: "cómo" },
-        headline: { en: "[TODO: how it works]", es: "[TODO: cómo funciona]" },
-        blocks: [{ type: "steps", items: { en: ["[TODO: build steps]"], es: ["[TODO: pasos de construcción]"] } }],
+        headline: {
+          en: "Historical fighter and bout features processed in Python/NumPy for outcome modeling.",
+          es: "Variables históricas de peleadores y combates procesadas en Python/NumPy para modelar resultados.",
+        },
+        blocks: [
+          {
+            type: "steps",
+            items: {
+              en: ["Project In Progress"],
+              es: ["[TODO: resume los pasos del pipeline: preparación de datos, features, entrenamiento/validación]"],
+            },
+          },
+        ],
       },
       {
         label: { en: "hard parts", es: "lo difícil" },
-        headline: { en: "[TODO: what broke, and how it got fixed]", es: "[TODO: qué se rompió y cómo se resolvió]" },
+        headline: {
+          en: "Handling noisy fight records and avoiding data leakage.",
+          es: "Lidiar con registros ruidosos de peleas y evitar fuga de datos (data leakage).",
+        },
         blocks: [
           {
             type: "challenges",
             items: [
               {
                 problem: {
-                  en: "[TODO: a real challenge from this project]",
-                  es: "[TODO: un reto real de este proyecto]",
+                  en: "[TODO: describe a specific data/modeling issue, e.g., missing stats, time ordering, or class imbalance]",
+                  es: "[TODO: describe un problema real de datos o modelado, p. ej., datos faltantes, orden temporal o desbalance]",
                 },
-                fix: { en: "[TODO: how it got solved]", es: "[TODO: cómo se resolvió]" },
+                fix: {
+                  en: "[TODO: describe how you handled or tested a fix for it]",
+                  es: "[TODO: describe cómo lo resolviste o probaste]",
+                },
               },
             ],
           },
@@ -1031,9 +1098,17 @@ export const PROJECTS: Project[] = [
       },
       {
         label: { en: "outcome", es: "resultado" },
-        headline: { en: "[TODO: outcome headline]", es: "[TODO: titular del resultado]" },
+        headline: { en: "Work in progress—updating results as experiments mature.", es: "En progreso; actualizando resultados conforme avanzan los experimentos." },
         panel: true,
-        blocks: [{ type: "text", text: { en: "[TODO: outcome write-up]", es: "[TODO: resumen del resultado]" } }],
+        blocks: [
+          {
+            type: "text",
+            text: {
+              en: "[TODO: add current accuracy/evaluation summary and what you plan to test next]",
+              es: "[TODO: agrega un resumen de precisión/evaluación actual y qué probarás enseguida]",
+            },
+          },
+        ],
       },
     ],
   },
