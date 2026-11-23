@@ -15,12 +15,15 @@
 }
 
 .eyeBtn:focus-visible {
-  outline: 2px solid #7dffa8;
+  outline: 2px solid var(--eye-ink, var(--acc));
   outline-offset: 3px;
 }
 
+/* Same --eye-pupil-ink / --accink fallback pattern as --eye-ink: only a
+   scope that needs to retune the eye independently of the site's own
+   --acc/--accink (the presentation card, see its CSS) declares these. */
 .pupil {
-  fill: #062012;
+  fill: var(--eye-pupil-ink, var(--accink));
   transition: r 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
 }
 
@@ -33,4 +36,126 @@
   transform-origin: 50px -4px;
   transform: scaleY(0);
   transition: transform 0.14s ease-in-out;
+}
+
+/* Music mode: the iris+pupil+glint group sways instead of tracking the
+   cursor. Duration is set inline (derived from BPM), this just owns
+   the keyframe + easing/looping. */
+.groove {
+  animation-name: groove;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes groove {
+  0%,
+  100% {
+    transform: translateX(-9px);
+  }
+  50% {
+    transform: translateX(9px);
+  }
+}
+
+/* Floating notes layer, anchored above the name. */
+.notesLayer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -34px;
+  height: 60px;
+  pointer-events: none;
+}
+
+.note {
+  position: absolute;
+  top: 0;
+  font-family: var(--font-inter-tight, "Inter Tight", sans-serif);
+  font-weight: 700;
+  text-shadow:
+    0 2px 0 rgba(11, 15, 46, 0.55),
+    0 0 10px rgba(167, 107, 255, 0.6);
+  animation-name: float;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 14px) rotate(var(--r)) scale(0.6);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(calc(var(--dx) * 0.3), 0) rotate(var(--r)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), -46px) rotate(calc(var(--r) * -1)) scale(0.9);
+  }
+}
+
+/* Pause-music control — same corner slot as the reset button. */
+.musicControl {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.musicControl:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.musicControl:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.eqBar {
+  width: 3px;
+  background: currentColor;
+  animation: eq 0.9s ease-in-out infinite;
+}
+
+.eqBar:nth-child(1) {
+  animation-delay: 0s;
+}
+.eqBar:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.eqBar:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.eqBar:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+@keyframes eq {
+  0%,
+  100% {
+    height: 25%;
+  }
+  50% {
+    height: 100%;
+  }
+}
+
+.pauseLabel {
+  font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
+  font-size: 10px;
 }

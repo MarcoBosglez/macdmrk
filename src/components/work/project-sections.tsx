@@ -11,16 +11,18 @@ import type { Copy, CopyList, ProjectBlock, ProjectSection } from "@/lib/data/pr
 import { InlineText, RichText } from "@/components/work/rich-text";
 import { ProjectFigure } from "@/components/work/project-figure";
 
-// Same fixed dark-terminal palette as project-page.tsx.
-const PANEL = "#0f2117";
-const BORDER = "#2b5a3f";
-const INK = "#e4eee8";
-const DIM = "#c7d6cd";
-const MUTED = "#8fae9c";
-const ACCENT = "#7dffa8";
-const ACCENT_BG = "rgba(125,255,168,0.12)";
-const AMBER = "#ffb347";
-const AMBER_BG = "rgba(255,179,71,0.1)";
+// Same theme tokens as project-page.tsx. BLUE/RED stay fixed: they're
+// semantic (category identity / problem-fix callouts), not part of the
+// per-theme token set.
+const PANEL = "var(--card)";
+const BORDER = "var(--line)";
+const INK = "var(--ink)";
+const DIM = "var(--ink2)";
+const MUTED = "var(--ink2)";
+const ACCENT = "var(--acc)";
+const ACCENT_BG = "color-mix(in srgb, var(--acc) 12%, transparent)";
+const AMBER = "var(--amber)";
+const AMBER_BG = "color-mix(in srgb, var(--amber) 10%, transparent)";
 const BLUE = "#7fb2ff";
 const BLUE_BG = "rgba(127,178,255,0.1)";
 const RED = "#ff8a7a";
@@ -298,13 +300,18 @@ function Block({
     case "code":
       return (
         <figure className="flex flex-col gap-1.5">
-          <div className="overflow-hidden rounded-[12px] border" style={{ borderColor: BORDER, background: "#071209" }}>
+          {/* A code block reads as its own little terminal, so it uses
+              the --tbg/--tfg pair (same surface as ask_marco.sh) rather
+              than --card/--ink — those two pairs can diverge (aurora
+              flips --tbg to a light panel), so mixing them risks
+              low-contrast text, same bug class pingu-chat's bubbles hit. */}
+          <div className="overflow-hidden rounded-[12px] border" style={{ borderColor: BORDER, background: "var(--tbg)" }}>
             {block.file ? (
-              <div className="border-b px-3.5 py-1.5 font-mono text-[11px]" style={{ borderColor: BORDER, color: MUTED }}>
+              <div className="border-b px-3.5 py-1.5 font-mono text-[11px]" style={{ borderColor: BORDER, color: "var(--tfg)" }}>
                 {block.file}
               </div>
             ) : null}
-            <pre className="overflow-x-auto px-3.5 py-3 text-[12.5px] leading-relaxed" style={{ fontFamily: MONO, color: INK }}>
+            <pre className="overflow-x-auto px-3.5 py-3 text-[12.5px] leading-relaxed" style={{ fontFamily: MONO, color: "var(--tfg)" }}>
               <code>{block.code}</code>
             </pre>
           </div>

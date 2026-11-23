@@ -24,19 +24,21 @@ import { ProjectNavBar } from "@/components/work/progress-nav";
 import { ProjectSections, pick, resolveSections } from "@/components/work/project-sections";
 import type { Project } from "@/lib/data/projects";
 
-// Fixed literal palette (not the adaptive --accent/--line tokens) — this
-// page always reads as the dark green terminal, regardless of the
-// site's own light/dark toggle, same convention as the homepage's
-// FeaturedWork cards and the About page's receipt/cover hero.
-const BG = "#0a1a12";
-const PANEL = "#0f2117";
-const BORDER = "#2b5a3f";
-const INK = "#e4eee8";
-const DIM = "#c7d6cd";
-const MUTED = "#8fae9c";
-const ACCENT = "#7dffa8";
-const ACCENT_BG = "rgba(125,255,168,0.12)";
-const AMBER = "#ffb347";
+// Reads the 4-theme tokens (styles/themes.css) like the rest of the
+// site now does — this used to be a page-local fixed dark-green
+// palette, kept constant regardless of theme; that convention is gone
+// now that every theme needs to reach this page too. BLUE/RED stay
+// fixed: they're semantic (category identity / problem callouts), not
+// part of the per-theme token set.
+const BG = "var(--bg)";
+const PANEL = "var(--card)";
+const BORDER = "var(--line)";
+const INK = "var(--ink)";
+const DIM = "var(--ink2)";
+const MUTED = "var(--ink2)";
+const ACCENT = "var(--acc)";
+const ACCENT_BG = "color-mix(in srgb, var(--acc) 12%, transparent)";
+const AMBER = "var(--amber)";
 const BLUE = "#7fb2ff";
 const RED = "#ff8a7a";
 const RED_BG = "rgba(255,138,122,0.12)";
@@ -44,7 +46,7 @@ const BLUE_BG = "rgba(127,178,255,0.12)";
 const INTER = "var(--font-inter-tight, 'Inter Tight', sans-serif)";
 const MONO = "var(--font-jetbrains-mono, ui-monospace, monospace)";
 const FOCUS_RING =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7dffa8]";
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--acc)]";
 
 function HeroButton({
   href,
@@ -212,7 +214,7 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
 
           {/* ---------- facts row ---------- */}
           {hasFacts ? (
-            <dl className="grid grid-cols-2 divide-y divide-dashed divide-[#2b5a3f] rounded-[10px] border border-dashed border-[#3e7a57] sm:grid-cols-5 sm:divide-x sm:divide-y-0">
+            <dl className="grid grid-cols-2 divide-y divide-dashed divide-[var(--line)] rounded-[10px] border border-dashed border-[var(--acc)] sm:grid-cols-5 sm:divide-x sm:divide-y-0">
               {project.role ? (
                 <FactCell label={t.work.roleLabel} color={AMBER}>
                   {L(project.role)}
@@ -243,7 +245,7 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
                       <span
                         key={tag}
                         className="rounded-full px-2 py-0.5 font-mono text-[11px]"
-                        style={{ background: "rgba(125,255,168,0.08)", color: AMBER }}
+                        style={{ background: "color-mix(in srgb, var(--acc) 8%, transparent)", color: AMBER }}
                       >
                         {tag}
                       </span>

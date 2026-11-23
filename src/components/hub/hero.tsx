@@ -1,18 +1,12 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { useLocale } from "@/components/providers/locale-provider";
 import { ViewPane } from "@/components/chrome/view-pane";
-import { SwitchEyeName, SwitchEyeProvider, SwitchEyeReset } from "@/components/hub/switch-eye";
-import { SocialBar } from "@/components/hub/social-bar";
+import { PresentationCard } from "@/components/qr-card/PresentationCard";
 import { PinguChat } from "@/components/hub/pingu-chat";
 import FeaturedWork from "@/components/featured-work/FeaturedWork";
 
-const PANEL_GLASS =
-  "rounded-[22px] border border-line bg-glass [backdrop-filter:blur(22px)_saturate(1.3)] [box-shadow:var(--shadow)]";
-
 export function Hero() {
-  const { t } = useLocale();
   const leftRef = useRef<HTMLDivElement>(null);
   const [chatHeight, setChatHeight] = useState<number | null>(null);
 
@@ -51,39 +45,12 @@ export function Hero() {
           labeled subsection, not a separate page section. */}
       <div className="flex w-full max-w-[1040px] flex-col gap-[32px]">
         <div className="grid grid-cols-1 items-stretch gap-3.5 md:grid-cols-2">
-          {/* Left — presentation card + social bar. self-start so this
-              column keeps its own natural height instead of being
-              stretched by the grid row (which would otherwise feed back
-              into the ResizeObserver measurement below). */}
+          {/* Left — presentation card. self-start so this column keeps
+              its own natural height instead of being stretched by the
+              grid row (which would otherwise feed back into the
+              ResizeObserver measurement below). */}
           <div ref={leftRef} className="flex @container flex-col gap-3.5 self-start">
-            <SwitchEyeProvider>
-              <div className={`relative flex flex-col gap-3.5 p-6 ${PANEL_GLASS}`}>
-                <SwitchEyeReset className="absolute top-4 right-4" />
-                <div>
-                  <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent">
-                    {t.hub.eyebrow}
-                  </span>
-                  <div className="mt-1">
-                    <SwitchEyeName />
-                    <div className="mt-3 font-mono text-[15px] text-dim">{t.hub.role}</div>
-                    <div className="mt-1.5 font-mono text-[13px] text-muted">{t.hub.location}</div>
-                  </div>
-                </div>
-                <div className="h-px" style={{ background: "var(--line-hot)", opacity: 0.7 }} />
-                {t.hub.bio ? <p className="text-[13px] leading-relaxed text-dim">{t.hub.bio}</p> : null}
-                <div className="mt-auto flex flex-wrap gap-2">
-                  {t.hub.chips.map((chip) => (
-                    <span
-                      key={chip}
-                      className="rounded-full border border-line px-2.5 py-1.5 font-mono text-[11px] text-dim transition-[transform,background] duration-200 hover:-translate-y-0.5 hover:bg-wash"
-                    >
-                      {chip}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </SwitchEyeProvider>
-            <SocialBar />
+            <PresentationCard />
           </div>
 
           {/* Right — ask_marco.sh */}

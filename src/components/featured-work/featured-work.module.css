@@ -5,20 +5,26 @@
 
 .section {
   --fw-mono: var(--font-jetbrains-mono);
-  --fw-display: var(--font-archivo);
-  --fw-accent: #7dffa8;
-  --fw-amber: #ffb347;
+  --fw-display: var(--disp);
+  --fw-accent: var(--acc);
+  --fw-amber: var(--amber);
   --fw-blue: #7fb2ff;
-  --fw-border: #2b5a3f;
-  --fw-border-hover: #3e7a57;
-  --fw-control: #2c5c42;
-  --fw-soft: #183a29;
-  --fw-soft-hover: #1f4a33;
-  --fw-rule: #1f4733;
-  --fw-pill-bg: #10261b;
-  --fw-pill-text: #cfe3d6;
-  --fw-text: #e3f5ea;
-  --fw-dim: #cfe3d6;
+  --fw-border: var(--line);
+  --fw-border-hover: var(--acc);
+  --fw-control: var(--card);
+  --fw-soft: color-mix(in srgb, var(--ink) 10%, transparent);
+  --fw-rule: var(--line);
+  --fw-pill-bg: var(--tbg);
+  --fw-pill-text: var(--tfg);
+  /* The "all work" pill sits on --tbg, not the card/--bg surface the
+     rest of this component uses — so its hover state needs --tp (the
+     accent paired with --tbg) instead of --acc. In electric, --acc and
+     --tbg happen to be the same black, which made the hover text (and
+     the fill tinted from it) disappear into the pill's own background. */
+  --fw-pill-hot: var(--tp);
+  --fw-soft-hover: color-mix(in srgb, var(--tp) 18%, transparent);
+  --fw-text: var(--ink);
+  --fw-dim: var(--ink2);
 
   box-sizing: border-box;
   width: 100%;
@@ -62,7 +68,7 @@
   flex: none;
   align-items: center;
   gap: 8px;
-  min-height: 36px;
+  min-height: 38px;
   padding: 0 14px;
   overflow: hidden;
   border-radius: 999px;
@@ -90,8 +96,8 @@
 
 .allWork:hover,
 .allWork:focus-visible {
-  border-color: var(--fw-accent);
-  color: var(--fw-accent);
+  border-color: var(--fw-pill-hot);
+  color: var(--fw-pill-hot);
 }
 
 .allWork:hover::before,
@@ -107,8 +113,10 @@
   justify-content: center;
   padding: 0 5px;
   border-radius: 999px;
-  background: var(--fw-soft);
-  color: var(--fw-accent);
+  /* Also on the pill's --tbg surface, not the card/--bg one — same
+     reason as --fw-pill-hot above. */
+  background: color-mix(in srgb, var(--tp) 16%, transparent);
+  color: var(--fw-pill-hot);
   font-size: 10px;
 }
 
@@ -149,9 +157,10 @@
   flex-direction: column;
   gap: 10px;
   padding: 10px;
-  border-radius: 18px;
+  border-radius: var(--r);
   border: 1px solid var(--fw-border);
-  background: linear-gradient(160deg, #143023, #0f2419);
+  background: var(--card);
+  box-shadow: var(--shadow);
   color: inherit;
   text-decoration: none;
   transition: border-color 0.2s ease, background 0.2s ease;
@@ -160,14 +169,20 @@
 .card:hover,
 .card:focus-visible {
   border-color: var(--fw-border-hover);
-  background: linear-gradient(160deg, #1a3b2b, #133327);
+  box-shadow: var(--shadow), inset 0 0 0 999px color-mix(in srgb, var(--acc) 10%, transparent);
+}
+
+:global([data-theme="electric"]) .card:hover,
+:global([data-theme="electric"]) .card:focus-visible {
+  outline: 1px solid var(--acc);
+  outline-offset: 6px;
 }
 
 .thumb {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 11px;
+  border-radius: 14px;
   overflow: hidden;
   background: var(--fw-control);
 }
@@ -199,8 +214,14 @@
   padding: 2px 8px;
   border-radius: 999px;
   background: var(--fw-soft);
-  font-size: 10px;
+  font-size: 11px;
   text-transform: capitalize;
+}
+
+:global([data-theme="electric"]) .pill {
+  background: var(--acc);
+  color: var(--accink);
+  border-radius: 0;
 }
 
 .cat_personal {
@@ -222,8 +243,9 @@
 
 .name {
   font-family: var(--fw-display, inherit);
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   color: var(--fw-text);
 }
 
@@ -232,10 +254,92 @@
   overflow: hidden;
   margin: 0;
   font-size: 12px;
-  line-height: 1.4;
+  line-height: 1.5;
   color: var(--fw-dim);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+/* Aurora: taller cards with the project image full-bleed behind the
+   text, a bottom scrim for legibility, and the title/description
+   pinned to the bottom — poster-card treatment. Projects without an
+   image fall back to the dome-glow placeholder the standalone
+   reference uses. */
+:global([data-theme="aurora"]) .card {
+  position: relative;
+  overflow: hidden;
+  min-height: 330px;
+  padding: 18px;
+  justify-content: flex-end;
+}
+
+:global([data-theme="aurora"]) .card .thumb {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 0;
+}
+
+:global([data-theme="aurora"]) .card .thumbImg {
+  opacity: 0.55;
+}
+
+:global([data-theme="aurora"]) .card::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  bottom: -62%;
+  width: 135%;
+  aspect-ratio: 1 / 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, var(--acc) 70%, white) 0%,
+    var(--acc) 28%,
+    rgba(59, 75, 255, 0.6) 48%,
+    transparent 66%
+  );
+  transition: bottom 0.5s ease;
+  pointer-events: none;
+}
+
+:global([data-theme="aurora"]) .card:hover::before,
+:global([data-theme="aurora"]) .card:focus-visible::before {
+  bottom: -52%;
+}
+
+/* A project with a real image skips the dome placeholder and its
+   hover-grow animation entirely. */
+:global([data-theme="aurora"]) .card:has(.thumb)::before {
+  display: none;
+}
+
+:global([data-theme="aurora"]) .card::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0 0;
+  height: 75%;
+  background: linear-gradient(to top, var(--bg) 18%, transparent);
+  pointer-events: none;
+}
+
+:global([data-theme="aurora"]) .card:not(:has(.thumb))::after {
+  display: none;
+}
+
+:global([data-theme="aurora"]) .card .body {
+  position: relative;
+  z-index: 2;
+  flex: none;
+}
+
+:global([data-theme="aurora"]) .name {
+  font-size: 25px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
 }
 
 .section a:focus-visible {

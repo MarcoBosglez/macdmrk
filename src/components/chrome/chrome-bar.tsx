@@ -4,11 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
-import { Volume2, VolumeX } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Volume2, VolumeX, Sun, Moon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
+import { useSwitchEye } from "@/components/hub/switch-eye";
 import { NAV_ITEMS, isMinimalChromePage } from "@/lib/data/nav";
+import s from "./chrome-bar.module.css";
 
 // How long the logo's "open mouth" honk pose (public/logo-open.svg)
 // stays up after a click before swapping back to the resting mark.
@@ -17,19 +20,14 @@ const HONK_POSE_MS = 480;
 const CAPSULE =
   "flex items-center gap-1.5 rounded-[14px] border border-line bg-glass px-2.5 py-1.5 [backdrop-filter:blur(16px)_saturate(1.3)] sm:gap-2.5 sm:px-3.5 sm:py-2";
 
-// The combined bar on a project page always uses the case study's
-// dark-terminal palette (that page ignores the light/dark toggle), so
-// it pins the theme tokens to those values inside the box.
+// The combined bar on a project page reads the same live theme tokens
+// as everywhere else now (project pages used to pin a fixed dark-green
+// palette regardless of the site's theme — that's gone now that every
+// theme needs to reach this page too).
 const PROJECT_BOX = {
-  borderColor: "#2b5a3f",
-  background: "rgba(10,26,18,0.92)",
+  borderColor: "var(--line)",
+  background: "color-mix(in srgb, var(--bg) 92%, transparent)",
   backdropFilter: "blur(16px)",
-  "--ink": "#e4eee8",
-  "--dim": "#c7d6cd",
-  "--muted": "#8fae9c",
-  "--accent": "#7dffa8",
-  "--line": "#2c5c42",
-  "--line-soft": "#2b5a3f",
 } as React.CSSProperties;
 
 // The one bar on top of every view: identity capsule (left), the nav
@@ -52,6 +50,8 @@ export function ChromeBar() {
   const ctl = projectPage ? "h-9 rounded-[10px] px-2.5" : "h-5 rounded-[20px] px-1.5 sm:h-6 sm:px-2";
   const { muted, toggleMute, playClick } = useSound();
   const { locale, setLocale, t } = useLocale();
+  const { resolvedTheme, setTheme } = useTheme();
+  const { reset: resetEyes } = useSwitchEye();
 
   // Theme / clock both depend on client-only state, so render neutral
   // until mounted to avoid a hydration mismatch.
@@ -86,13 +86,30 @@ export function ChromeBar() {
     closeTimer.current = setTimeout(() => setMouthOpen(false), HONK_POSE_MS);
   }
 
+  // Light/dark toggle. Dark is the only "dark" state; everything else
+  // (including mint, reached via the eyes) reads as "light" here and
+  // flips back to electric → dark. Always wins over the eyes — forcing
+  // a theme this way un-lights both of them so the two controls don't
+  // fight each other.
+  const isLight = mounted && resolvedTheme === "electric";
+  function handleThemeToggle() {
+    const next = isLight ? "dark" : "electric";
+    playClick(next === "electric" ? "themeLight" : "themeDark");
+    resetEyes();
+    setTheme(next);
+  }
+
   // Left — identity. Simple squash on press.
   const logo = (
       <Link
         href="/"
         onClick={handleLogoClick}
         aria-label="Home"
-        className={projectPage ? "flex shrink-0 items-center gap-1.5 rounded-[10px] px-2 py-1 active:scale-90" : `${CAPSULE} active:scale-90`}
+        className={
+          projectPage
+            ? "flex shrink-0 items-center gap-1.5 rounded-[10px] px-2 py-1 active:scale-90"
+            : `${CAPSULE} ${s.logo} active:scale-90`
+        }
         style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1)" }}
       >
         <Image
@@ -104,23 +121,43 @@ export function ChromeBar() {
           priority
           className="h-5 w-5 sm:h-[26px] sm:w-[26px]"
         />
-        <span className="font-mono text-[11px] font-bold tracking-[0.02em] whitespace-nowrap text-ink sm:text-xs">
+        <span className={`${s.logoText} font-mono tracking-[0.02em] whitespace-nowrap text-ink`}>
           ~\marco.
           <span className="animate-blink text-accent">▌</span>
         </span>
       </Link>
   );
 
-  // Right — status + controls.
+  // Right — status + controls. Font size cascades from the wrapper
+  // (not set per-span) so the aurora-only statusPill override below
+  // still reaches it in the normal (non-project) case.
   const status = (
-      <div className={projectPage ? "flex items-center gap-1.5 px-1 sm:gap-2" : CAPSULE}>
+      <div className={projectPage ? "flex items-center gap-1.5 px-1 text-[11px] sm:gap-2" : `${CAPSULE} ${s.statusPill}`}>
         <span className="animate-pulse-dot h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-        <span className={`hidden font-mono text-[11px] whitespace-nowrap text-accent ${projectPage ? "xl:inline" : "sm:inline"}`}>
+        <span className={`hidden font-mono whitespace-nowrap text-accent ${projectPage ? "xl:inline" : "sm:inline"}`}>
           {t.chrome.openToWork}
         </span>
-        <span className="font-mono text-[11px] whitespace-nowrap text-muted tabular-nums">
+        <span className="font-mono whitespace-nowrap text-muted tabular-nums">
           {mounted ? clock : "--:--"}
         </span>
+
+        <button
+          onClick={handleThemeToggle}
+          aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
+          className={`flex ${ctl} items-center justify-center border border-line text-muted hover:text-accent active:scale-90`}
+          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
+        >
+          <span className="relative flex h-3.5 w-3.5 items-center justify-center">
+            <Moon
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: isLight ? 0 : 1 }}
+            />
+            <Sun
+              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+              style={{ opacity: isLight ? 1 : 0 }}
+            />
+          </span>
+        </button>
 
         <button
           onClick={() => {
@@ -150,7 +187,11 @@ export function ChromeBar() {
             setLangPulse((k) => k + 1);
           }}
           aria-label={`Switch language to ${locale === "en" ? "Español" : "English"}`}
-          className={`relative isolate ${ctl} overflow-hidden border border-line font-mono text-[11px] font-bold text-ink hover:scale-110 hover:text-accent active:scale-90`}
+          className={
+            projectPage
+              ? `relative isolate flex ${ctl} items-center justify-center overflow-hidden border border-line font-mono text-[11px] font-bold text-ink hover:scale-110 hover:text-accent active:scale-90`
+              : `relative isolate flex items-center justify-center overflow-hidden rounded-[20px] border border-line font-mono text-[11px] font-bold text-ink hover:scale-110 hover:text-accent active:scale-90 ${s.lang}`
+          }
           style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
         >
           {langPulse > 0 ? (
@@ -199,7 +240,7 @@ export function ChromeBar() {
           Dropped entirely on a project's own page — reduced chrome. */}
       <nav
         aria-label="Primary"
-        className={`${reduced ? "hidden" : "hidden md:flex"} items-center gap-1.5 rounded-[14px] border border-line-soft bg-glass-soft p-1.5 [backdrop-filter:blur(16px)]`}
+        className={`${reduced ? "hidden" : "hidden md:flex"} ${s.navCard} items-center border border-line-soft bg-glass-soft [backdrop-filter:blur(16px)]`}
       >
         {NAV_ITEMS.map((item) => {
           const active =
@@ -212,7 +253,7 @@ export function ChromeBar() {
               href={item.href}
               onClick={() => playClick("nav")}
               aria-current={active ? "page" : undefined}
-              className="relative rounded-[10px] px-3.5 py-1.5 text-[13px] transition-[color,font-variation-settings] duration-200"
+              className={`relative flex items-center justify-center rounded-[10px] transition-[color,font-variation-settings] duration-200 ${s.pill}`}
               style={{
                 color: active ? "var(--bg)" : "var(--dim)",
                 fontVariationSettings: active

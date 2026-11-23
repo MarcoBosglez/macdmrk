@@ -1,0 +1,211 @@
+/* ─── 4-theme system ──────────────────────────────────────────────────
+   Tokens copied verbatim (hex/gradients/radii/weights) from the design
+   mockups at repo root: hub-all-themes.html (the master — every
+   theme's tokens + per-component CSS live in its <style> block),
+   hub-aurora.html and hub-electric.html (standalone references; source
+   of truth for their theme where they differ from the master).
+
+   Each block is self-contained (no cross-theme CSS cascade the way the
+   mockup's `.th .th-aurora` combo classes worked), so every variable is
+   restated per theme even where the mockup only set it once on `.th`
+   and let the others inherit it.
+
+   Below the verbatim tokens, a "bridge" section maps this site's
+   pre-existing token names (--accent, --dim, --panel, --glass, --wash,
+   --grid, the aurora-field --blob-*) onto the new ones, so every
+   existing component that already reads var(--accent) etc. re-themes
+   automatically without being rewritten. Components that need a look
+   the old tokens can't express (the About card's per-theme background,
+   the name's per-theme size) read the new tokens directly instead. */
+
+:root[data-theme="dark"] {
+  --bg: #0a1a12;
+  --bgimg: radial-gradient(circle at 12% 0%, rgba(60, 140, 90, 0.28), transparent 38%),
+    linear-gradient(rgba(125, 255, 168, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 255, 168, 0.045) 1px, transparent 1px);
+  --bgsize: auto, 56px 56px, 56px 56px;
+  --card: linear-gradient(160deg, #183a29, #10261b);
+  --line: #2b5a3f;
+  --ink: #e3f5ea;
+  --ink2: #8fb7a0;
+  --acc: #7dffa8;
+  --accink: #062012;
+  --hl: #7dffa8;
+  --hlfont: "Inter Tight", sans-serif;
+  --disp: "Inter Tight", sans-serif;
+  --name-font: "Archivo", sans-serif;
+  --namew: 900;
+  --shadow: none;
+  --tbg: #0b1c13;
+  --tfg: #cfe3d6;
+  --tp: #7dffa8;
+  --aboutbg: var(--card);
+  --aboutink: var(--ink);
+  --chk: none;
+  --cover: #0b1c13;
+  --l-bg: #0a1a12;
+  --l-body: #7dffa8;
+  --l-face: #0a1a12;
+  --l-beak: #ffb347;
+  --l-cur: #e3f5ea;
+  --l-cheek: #7fb2ff;
+  --amber: #ffb347;
+  --r: 22px;
+  --name-size: 48px;
+  --name-lh: 0.92;
+  --name-ls: -0.045em;
+  --about-minh: auto;
+}
+
+:root[data-theme="mint"] {
+  --bg: #9afb98;
+  --bgimg: linear-gradient(rgba(20, 20, 20, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 20, 20, 0.07) 1px, transparent 1px);
+  --bgsize: 56px 56px, 56px 56px;
+  --card: #acfdaa;
+  --line: #141414;
+  --ink: #141414;
+  --ink2: #2c4a2d;
+  --acc: #141414;
+  --accink: #9afb98;
+  --hl: #141414;
+  --hlfont: "Silkscreen", monospace;
+  --disp: "Inter Tight", sans-serif;
+  --name-font: "Archivo", sans-serif;
+  --namew: 900;
+  --shadow: 4px 4px 0 #141414;
+  --tbg: #acfdaa;
+  --tfg: #141414;
+  --tp: #141414;
+  --aboutbg: var(--card);
+  --aboutink: var(--ink);
+  --chk: block;
+  --cover: #141414;
+  --l-bg: #141414;
+  --l-body: #9afb98;
+  --l-face: #141414;
+  --l-beak: #ff6140;
+  --l-cur: #9afb98;
+  --l-cheek: #ff6140;
+  --amber: #7a4300;
+  --r: 22px;
+  --name-size: 48px;
+  --name-lh: 0.92;
+  --name-ls: -0.045em;
+  --about-minh: auto;
+}
+
+:root[data-theme="aurora"] {
+  --bg: #0a0b26;
+  --bgimg: radial-gradient(ellipse 60% 40% at 50% -5%, rgba(120, 90, 255, 0.45), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 0% 70%, rgba(40, 70, 255, 0.35), transparent 70%),
+    radial-gradient(ellipse 45% 40% at 100% 100%, rgba(255, 120, 60, 0.35), transparent 70%),
+    radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  --bgsize: auto, auto, auto, 3px 3px;
+  --card: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  --line: rgba(255, 255, 255, 0.14);
+  --ink: #e8e9ff;
+  --ink2: #9a9cc8;
+  --acc: #ff8a4c;
+  --accink: #0a0b26;
+  --hl: #12132b;
+  --hlfont: "Inter Tight", sans-serif;
+  --disp: "Inter Tight", sans-serif;
+  --name-font: "Inter Tight", sans-serif;
+  --namew: 600;
+  --shadow: none;
+  --tbg: #f4f4f8;
+  --tfg: #12132b;
+  --tp: #4b5bff;
+  --aboutbg: linear-gradient(180deg, transparent 55%, rgba(255, 170, 130, 0.85)),
+    repeating-linear-gradient(
+      90deg,
+      #6f7cff 0 14%,
+      #9d8cff 14% 28%,
+      #cbb9ff 28% 42%,
+      #7f86ff 42% 56%,
+      #e8b4c0 56% 70%,
+      #a99cff 70% 84%,
+      #6577ff 84% 100%
+    );
+  --aboutink: #12132b;
+  --chk: none;
+  --cover: #0d0e2e;
+  --l-bg: #0a0b26;
+  --l-body: #b06cff;
+  --l-face: #0a0b26;
+  --l-beak: #ff8a4c;
+  --l-cur: #5dffa0;
+  --l-cheek: #4b5bff;
+  --amber: #ff9a5a;
+  --r: 22px;
+  --name-size: 60px;
+  --name-lh: 0.9;
+  --name-ls: -0.05em;
+  --about-minh: 340px;
+}
+
+:root[data-theme="electric"] {
+  --bg: #f3f2ee;
+  --bgimg: radial-gradient(#cfcdc5 1.2px, transparent 1.2px);
+  --bgsize: 22px 22px;
+  --card: #ffffff;
+  --line: #e1dfd7;
+  --ink: #111111;
+  --ink2: #6b6a64;
+  --acc: #111111;
+  --accink: #ffffff;
+  --hl: #ffffff;
+  --hlfont: "Archivo", sans-serif;
+  --disp: "Archivo", sans-serif;
+  --name-font: "Archivo", sans-serif;
+  --namew: 900;
+  --shadow: none;
+  --tbg: #111111;
+  --tfg: #f3f2ee;
+  --tp: #8fa2ff;
+  --aboutbg: #2440ff;
+  --aboutink: #ffffff;
+  --chk: none;
+  --cover: #2440ff;
+  --l-bg: #2440ff;
+  --l-body: #141414;
+  --l-face: #ece8de;
+  --l-beak: #ffb347;
+  --l-cur: #7dffa8;
+  --l-cheek: #ff6140;
+  --amber: #2440ff;
+  --r: 22px;
+  --name-size: 48px;
+  --name-lh: 0.92;
+  --name-ls: -0.045em;
+  --about-minh: auto;
+}
+
+/* ─── Bridge: old token names → new ones ──────────────────────────────
+   Keeps every component that was never touched for this feature
+   (work-view, project-page, contact, gallery, the chrome bar's own
+   CSS…) re-theming for free, since they already read these names. */
+:root[data-theme] {
+  /* --ink and --shadow are NOT rebound here on purpose: they already
+     share a name with a per-theme token above, and redeclaring
+     `--ink: var(--ink)` at equal specificity (both are `:root[attr]`
+     selectors) creates a self-reference — CSS spec makes a custom
+     property that cyclically references itself invalid at
+     computed-value time, which silently broke every --aboutink that
+     chains through var(--ink) (mint, dark). Only bridge names that
+     actually differ from the new tokens. */
+  --dim: var(--ink2);
+  --muted: var(--ink2);
+  --accent: var(--acc);
+  --glass: var(--card);
+  --glass-soft: var(--card);
+  --panel: var(--card);
+  --line-soft: var(--line);
+  --line-hot: var(--acc);
+  --wash: color-mix(in srgb, var(--acc) 14%, transparent);
+  --grid: color-mix(in srgb, var(--ink) 6%, transparent);
+  --blob-a: color-mix(in srgb, var(--acc) 20%, transparent);
+  --blob-b: color-mix(in srgb, var(--acc) 32%, transparent);
+  --blob-c: color-mix(in srgb, var(--acc) 13%, transparent);
+}

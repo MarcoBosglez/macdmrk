@@ -21,6 +21,11 @@ export const es: Dictionary = {
     switchEye: {
       ariaLabel: "Interruptor de ojo",
       reset: "↺ reiniciar",
+      stopMusicLabel: "Detener la música",
+      pauseMusicLabel: "Pausar música",
+      statusNone: "haz clic en ambos ojos",
+      statusOne: "un ojo más…",
+      statusPlaying: "reproduciendo · haz clic en un ojo o en pausa para detener",
     },
   },
   work: {

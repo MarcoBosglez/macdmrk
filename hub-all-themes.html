@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hub — every theme, typing terminal</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&amp;family=Archivo:wght@700;800;900&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Silkscreen:wght@400&amp;display=swap">
+<style>
+body{margin:0}
+.th{--bg:#0a1a12;--bgimg:radial-gradient(circle at 12% 0%,rgba(60,140,90,.28),transparent 38%),linear-gradient(rgba(125,255,168,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(125,255,168,.045) 1px,transparent 1px);--bgsize:auto,56px 56px,56px 56px;--card:linear-gradient(160deg,#183a29,#10261b);--line:#2b5a3f;--ink:#e3f5ea;--ink2:#8fb7a0;--acc:#7dffa8;--accink:#062012;--hl:#7dffa8;--hlfont:'Inter Tight',sans-serif;--disp:'Inter Tight',sans-serif;--namew:700;--shadow:none;--tbg:#0b1c13;--tfg:#cfe3d6;--tp:#7dffa8;--aboutbg:var(--card);--aboutink:var(--ink);--chk:none;--cover:#0b1c13;--l-bg:#0a1a12;--l-body:#7dffa8;--l-face:#0a1a12;--l-beak:#ffb347;--l-cur:#e3f5ea;--l-cheek:#7fb2ff;--amber:#ffb347;--r:22px}
+.th-mint{--bg:#9afb98;--bgimg:linear-gradient(rgba(20,20,20,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(20,20,20,.07) 1px,transparent 1px);--bgsize:56px 56px,56px 56px;--card:#acfdaa;--line:#141414;--ink:#141414;--ink2:#2c4a2d;--acc:#141414;--accink:#9afb98;--hl:#141414;--hlfont:'Silkscreen',monospace;--shadow:4px 4px 0 #141414;--chk:block;--cover:#141414;--tbg:#acfdaa;--tfg:#141414;--tp:#141414;--l-bg:#141414;--l-body:#9afb98;--l-face:#141414;--l-beak:#ff6140;--l-cur:#9afb98;--l-cheek:#ff6140;--amber:#7a4300}
+.th-aurora{--bg:#0a0b26;--bgimg:radial-gradient(ellipse 60% 40% at 50% -5%,rgba(120,90,255,.45),transparent 70%),radial-gradient(ellipse 40% 40% at 0% 70%,rgba(40,70,255,.35),transparent 70%),radial-gradient(ellipse 45% 40% at 100% 100%,rgba(255,120,60,.35),transparent 70%),radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);--bgsize:auto,auto,auto,3px 3px;--card:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));--line:rgba(255,255,255,.14);--ink:#e8e9ff;--ink2:#9a9cc8;--acc:#ff8a4c;--accink:#0a0b26;--hl:#12132b;--hlfont:'Inter Tight',sans-serif;--tbg:#f4f4f8;--tfg:#12132b;--tp:#4b5bff;--namew:600;--aboutbg:linear-gradient(180deg,transparent 55%,rgba(255,170,130,.85)),repeating-linear-gradient(90deg,#6f7cff 0 14%,#9d8cff 14% 28%,#cbb9ff 28% 42%,#7f86ff 42% 56%,#e8b4c0 56% 70%,#a99cff 70% 84%,#6577ff 84% 100%);--aboutink:#12132b;--cover:#0d0e2e;--l-bg:#0a0b26;--l-body:#b06cff;--l-face:#0a0b26;--l-beak:#ff8a4c;--l-cur:#5dffa0;--l-cheek:#4b5bff;--amber:#ff9a5a}
+.th-electric{--bg:#f3f2ee;--bgimg:radial-gradient(#cfcdc5 1.2px,transparent 1.2px);--bgsize:22px 22px;--card:#ffffff;--line:#e1dfd7;--ink:#111111;--ink2:#6b6a64;--acc:#111111;--accink:#ffffff;--hl:#ffffff;--hlfont:'Archivo',sans-serif;--disp:'Archivo',sans-serif;--namew:900;--tbg:#111111;--tfg:#f3f2ee;--tp:#8fa2ff;--aboutbg:#2440ff;--aboutink:#ffffff;--cover:#2440ff;--l-bg:#2440ff;--l-body:#141414;--l-face:#ece8de;--l-beak:#ffb347;--l-cur:#7dffa8;--l-cheek:#ff6140;--amber:#2440ff}
+.th-tag{padding:5px 10px;border-radius:999px;border:1px solid currentColor}
+.th-sun,.th-knobs{display:none}
+.th-mint .th-chip{border-color:#141414;color:#141414}.th-mint .th-chip:hover,.th-mint .th-chip:focus-visible{background:#141414;color:#9afb98}
+.th-mint .th-log .th-first{display:inline-block;padding:8px 10px;border-radius:10px;background:#141414;color:#9afb98 !important}
+.th-aurora .th-tag{background:rgba(255,255,255,.72);border-color:transparent;font-weight:600}
+.th-aurora .th-chip{background:#fff;border-color:#d9dbe8;color:#1b1d3a}.th-aurora .th-chip:hover{border-color:#4b5bff;color:#4b5bff;background:#eef0ff}
+.th-aurora .th-term{background:#0d0e2e}
+.th-aurora .th-sun{display:block;position:relative;height:96px;overflow:hidden;background:repeating-conic-gradient(from 180deg at 50% 100%,rgba(255,255,255,.07) 0 .4deg,transparent .4deg 12deg)}
+.th-aurora .th-sun::after{content:'';position:absolute;left:50%;bottom:-170px;width:420px;height:280px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 50% 60%,#ffb36b 0%,#ff7a4c 18%,#b05cff 42%,#3b4bff 62%,transparent 75%)}
+.th-aurora .th-termhead{position:absolute;left:0;right:0;top:0;border-bottom:0 !important;color:#c9cbf2;z-index:1;text-transform:uppercase;letter-spacing:.14em;font-size:10px !important}
+.th-aurora .th-screen-in{position:relative}
+.th-aurora .th-cta,.th-aurora .th-soc:hover{background:linear-gradient(90deg,#4b5bff,#a46bff 50%,#ff8a4c);border-color:transparent;color:#fff !important}
+.th-aurora .th-cta{font-family:'Inter Tight',sans-serif;letter-spacing:.04em}
+.th-aurora .th-about h1{font-size:60px !important;line-height:.9 !important;letter-spacing:-.05em !important}
+.th-aurora .th-about{min-height:340px}
+.th-aurora .th-log{height:118px !important;font-family:'Inter Tight',sans-serif !important;font-size:15px !important;line-height:1.4 !important;padding:16px 18px 8px !important}
+.th-aurora .th-log .th-first{font-size:19px;font-weight:500;letter-spacing:-.02em;color:#12132b !important}
+.th-aurora .th-sun{height:150px}
+.th-austatus{display:none}
+.th-aurora .th-austatus{display:flex;flex-direction:column;gap:8px;margin:4px 18px 0;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #e3e4ee;font:500 12px 'Inter Tight',sans-serif;color:#12132b}
+.th-aurora .th-inrow{margin:10px 18px 0;border-radius:12px;background:#fff !important;border:1px solid #e3e4ee !important;padding:0 12px !important}
+.th-aurora .th-inrow label{color:#4b5bff !important}
+.th-aurora .th-in{font-family:'Inter Tight',sans-serif;font-size:14px}
+.th-aurora .th-chips{padding-top:12px !important}
+.th-aurora .th-cover{display:none !important}
+.th-aurora .th-feat{position:relative;overflow:hidden;min-height:330px;justify-content:flex-end;padding:18px;background-color:#0d0e2e !important;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px) !important;background-size:28px 28px !important}
+.th-aurora .th-feat::before{content:'';position:absolute;left:50%;bottom:-62%;width:135%;aspect-ratio:1/1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 50% 50%,var(--au1) 0%,var(--au2) 28%,rgba(59,75,255,.6) 48%,transparent 66%);transition:bottom .5s ease;pointer-events:none}
+.th-aurora .th-feat:hover::before{bottom:-52%}
+.th-aurora .th-feat > *{position:relative;z-index:1}
+.th-aurora .th-on,.th-aurora .th-on:hover,.th-aurora .th-sw-on{background:#ffffff;color:#0a0b26 !important;border-color:#ffffff}
+.th-aurora .th-ftitle{font-size:25px !important;line-height:1.05;letter-spacing:-.04em}
+.th-aurora .th-feat .th-fdesc{color:#e3e4ff !important}
+.th-aurora-x{background-color:#0d0e2e;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:28px 28px}
+.th-aurora .th-cover{background-color:#0d0e2e !important;background-image:radial-gradient(ellipse 85% 95% at 50% 125%,#ffd08a 0%,#ff7a4c 22%,#b05cff 45%,rgba(59,75,255,.7) 62%,transparent 80%) !important}
+.th-aurora .th-cat{background:rgba(255,255,255,.1);border-color:transparent !important}
+.th-aurora .th-feat:hover{border-color:rgba(255,154,90,.5)}
+.th-electric .th-term{background:#111 !important;border:0 !important}
+.th-electric .th-termhead{background:#111;color:#f3f2ee;border-bottom-color:rgba(255,255,255,.12) !important}
+.th-electric .th-termhead span:first-child,.th-electric .th-termhead span:nth-child(2){border-color:#8fa2ff !important}
+.th-electric .th-termhead span:first-child{background:#8fa2ff !important}
+.th-electric .th-chip{border-color:rgba(255,255,255,.3);color:#f3f2ee}.th-electric .th-chip:hover,.th-electric .th-chip:focus-visible{background:#f3f2ee;color:#111;border-color:#f3f2ee}
+.th-electric .th-log .th-first{display:inline-block;padding:3px 7px;background:#2440ff;color:#fff !important}
+.th-electric .th-cta{background:#111;color:#fff !important;border:0;border-radius:999px;font-family:'Archivo',sans-serif;letter-spacing:.02em;font-size:13px}.th-electric .th-cta:hover{background:#2440ff}
+.th-electric .th-soc{color:#2440ff}.th-electric .th-soc:hover{background:#2440ff;color:#fff}
+.th-electric .th-card:hover{outline:1px solid #2440ff;outline-offset:6px}
+.th-electric .th-cat{background:#2440ff;color:#fff;border-color:#2440ff !important;border-radius:0 !important}
+.th-electric .th-all{background:#111;color:#fff !important;border-color:#111}.th-electric .th-all:hover{background:#2440ff;border-color:#2440ff}
+.au-only,.au-only-flex{display:none}
+.th-aurora .au-only{display:inline}.th-aurora .au-only-flex{display:flex}.th-aurora .au-hide{display:none !important}
+.th-aurora .au-mono{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.th-aurora .th-termhead > span:nth-child(-n+2){display:none}
+.th-aurora .th-sun{height:170px !important}
+.th-aurora .th-log{height:96px !important}
+.th-aurora .th-feat .au-top{margin-bottom:auto}
+.th-aurora .th-pill{color:#c9cbf2}.th-aurora .th-pill:hover{background:rgba(255,255,255,.08);color:#fff}
+.th-aurora #th-feat{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#ff9a5a}
+.th-aurora .th-all{font-family:'Inter Tight',sans-serif;letter-spacing:0;font-size:12px}
+.th-status{display:flex;align-items:center;gap:8px;padding:4px 5px 4px 12px;border-radius:16px;font:500 11px 'JetBrains Mono',monospace}
+.th-otw{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+.th-otw-dot{color:var(--acc)}
+.th-time{opacity:.7}
+.th-lang{min-width:32px;height:32px;border-radius:999px;border:1px solid var(--line);background:transparent;color:inherit;font:700 11px 'JetBrains Mono',monospace;cursor:pointer}
+.th-lang:hover{border-color:var(--acc)}
+@keyframes th-blink{50%{opacity:0}}
+.th-electric .th-otw-dot{color:#2440ff;animation:th-blink 1.1s steps(1) infinite}
+.th-electric .th-lang:hover{border-color:#2440ff;color:#2440ff}
+.th-mint .th-otw-dot{color:#141414}
+.th-aurora .th-status{background:transparent !important;border:0 !important;box-shadow:none !important;padding:0;gap:12px;letter-spacing:.14em;text-transform:uppercase;font-size:10px;color:#c9cbf2}
+.th-aurora .th-otw{font-weight:500;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14)}
+.th-aurora .th-otw-dot{color:#5dffa0}
+.th-aurora .th-time{opacity:1}
+.th-aurora .th-lang{border:0;min-width:0;height:auto;color:#fff;font-size:10px;letter-spacing:.14em;font-weight:500;padding:0}
+@media (prefers-reduced-motion:reduce){.th-electric .th-otw-dot{animation:none}}
+.th-themes{position:fixed;right:20px;bottom:20px;z-index:20;display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:5px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.th-themes .th-sw{justify-content:flex-start;min-height:32px;padding:0 12px}
+.th-aurora .th-themes{background:rgba(18,19,58,.85);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14)}
+.th a{color:inherit}
+.th a:focus-visible,.th button:focus-visible,.th input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.th-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);transition:background .35s,border-color .35s,box-shadow .35s,transform .2s}
+.th-pill{min-height:34px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;text-decoration:none;font:600 13px var(--disp);transition:background .15s,color .15s}
+.th-pill:hover{background:rgba(127,127,127,.15)}
+.th-on{background:var(--acc);color:var(--accink) !important}.th-on:hover{background:var(--acc)}
+.th-sw{min-height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font:500 11px 'JetBrains Mono',monospace;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.th-sw:hover{border-color:var(--acc)}
+.th-sw-on{background:var(--acc);color:var(--accink);border-color:var(--acc)}
+.th-dot{width:10px;height:10px;border-radius:50%;display:block;border:1px solid rgba(127,127,127,.5)}
+.th-soc{width:48px;height:48px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);box-shadow:var(--shadow);color:var(--ink);display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s,color .15s}
+.th-soc:hover,.th-soc:focus-visible{transform:translateY(-2px);background:var(--acc);color:var(--accink)}
+.th-cta{flex:1 1 180px;min-height:48px;display:flex;align-items:center;justify-content:center;gap:12px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);box-shadow:var(--shadow);color:var(--ink) !important;text-decoration:none;font:700 12px 'JetBrains Mono',monospace;letter-spacing:.16em;transition:background .15s,color .15s}
+.th-cta:hover,.th-cta:focus-visible{background:var(--acc);color:var(--accink) !important}
+.th-chip{min-height:28px;padding:0 9px;border-radius:999px;border:1px solid rgba(127,127,127,.4);background:transparent;color:var(--tfg);font:500 11px 'JetBrains Mono',monospace;cursor:pointer}
+.th-chip:hover,.th-chip:focus-visible{border-color:var(--tp);color:var(--tp)}
+.th-in{flex:1;min-width:0;min-height:40px;border:0;background:transparent;color:var(--tfg);font:500 13px 'JetBrains Mono',monospace;outline:none;caret-color:var(--tp)}
+.th-feat{display:flex;flex-direction:column;gap:10px;padding:10px;text-decoration:none;color:var(--ink) !important}
+.th-feat:hover,.th-feat:focus-visible{transform:translateY(-4px)}
+.th-all{display:inline-flex;align-items:center;gap:10px;min-height:38px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink) !important;text-decoration:none;font:700 11px 'JetBrains Mono',monospace;letter-spacing:.12em}
+.th-all:hover{background:var(--acc);color:var(--accink) !important}
+.th-line{animation:th-in .2s ease}
+@keyframes th-in{from{opacity:0;transform:translateY(4px)}}
+@keyframes th-blink{50%{opacity:0}}
+.th-blink{animation:th-blink 1.1s steps(1) infinite}
+@media (prefers-reduced-motion: reduce){.th *{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div class="{{rootCls}}" style="background-color: var(--bg); background-image: var(--bgimg); background-size: var(--bgsize); color: var(--ink); font-family: 'JetBrains Mono', ui-monospace, monospace; min-height: 100vh; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; transition: background-color .35s, color .35s">
+<div aria-hidden="true" style="display: var(--chk); height: 32px; background: conic-gradient(#141414 25%, transparent 0 50%, #141414 0 75%, transparent 0) 0 0 / 32px 32px"></div>
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 24px">
+<a href="#" class="th-card" style="display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 14px 0 6px; border-radius: 14px; text-decoration: none; font-weight: 700; font-size: 14px">
+<svg width="34" height="34" viewBox="0 0 200 200" aria-hidden="true"><rect width="200" height="200" rx="40" style="fill: var(--l-bg)"></rect><rect x="93" y="30" width="14" height="22" style="fill: var(--l-cur)"></rect><ellipse cx="100" cy="114" rx="82" ry="60" style="fill: var(--l-body)"></ellipse><ellipse cx="72" cy="122" rx="36" ry="38" style="fill: var(--l-face)"></ellipse><ellipse cx="128" cy="122" rx="36" ry="38" style="fill: var(--l-face)"></ellipse><rect x="62" y="104" width="14" height="22" rx="7" style="fill: var(--l-body)"></rect><rect x="124" y="104" width="14" height="22" rx="7" style="fill: var(--l-body)"></rect><rect x="38" y="134" width="18" height="9" rx="4.5" style="fill: var(--l-cheek)"></rect><rect x="144" y="134" width="18" height="9" rx="4.5" style="fill: var(--l-cheek)"></rect><path d="M82 132 H118 L100 150 Z" style="fill: var(--l-beak)"></path></svg>
+~\marco.<span class="th-blink" aria-hidden="true" style="display: inline-block; width: 8px; height: 15px; background: var(--ink); margin-left: -6px"></span></a>
+<nav aria-label="Main" class="th-card" style="display: flex; flex-wrap: wrap; gap: 2px; padding: 4px; border-radius: 16px">
+<a href="#" class="th-pill th-on" aria-current="page">hub</a><a href="#" class="th-pill">project work</a><a href="#" class="th-pill">about</a><a href="#" class="th-pill">illustrations</a><a href="#" class="th-pill">contact</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
+<div class="th-card th-status"><span class="th-otw"><span class="th-otw-dot" aria-hidden="true">●</span> open to work</span><span class="th-time" title="Seattle time">{{clock}}</span><button type="button" class="th-lang" onClick="{{toggleLang}}" aria-label="{{langLabel}}">{{lang}}</button></div>
+</div>
+</header>
+<div role="radiogroup" aria-label="Theme" class="th-card th-themes">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="4"><button type="button" role="radio" class="{{t.cls}}" onClick="{{t.pick}}" aria-checked="{{t.on}}"><span class="th-dot" aria-hidden="true" style="background: {{t.dot}}"></span>{{t.label}}</button></sc-for>
+</div>
+
+<main style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 20px 20px 36px">
+<div style="max-width: 1040px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<section aria-label="About" class="th-card th-about" style="flex: 1; padding: 24px; display: flex; flex-direction: column; background: var(--aboutbg); color: var(--aboutink)">
+<div class="au-hide" style="font-size: 12px; letter-spacing: 0.2em; font-weight: 700">WHO AM I</div>
+<div class="au-only-flex au-mono" style="justify-content: space-between; color: #fff"><span>01 / who am i</span><span>since mexico city</span></div>
+<h1 class="au-hide" style="margin: 10px 0 0; font-family: var(--disp); font-weight: var(--namew); font-size: 48px; line-height: 0.92; letter-spacing: -0.045em">MA<span style="font-family: var(--hlfont); color: var(--hl)">R</span>CO<br>BOS<span style="font-family: var(--hlfont); color: var(--hl)">QU</span>EZ</h1>
+<h1 class="au-only-flex" style="margin: auto 0 0; padding-top: 40px; font-family: 'Inter Tight', sans-serif; font-size: 60px; line-height: 0.9; font-weight: 600; letter-spacing: -0.05em; flex-direction: column"><span>Marco</span><span>Bosquez.</span></h1>
+<p class="au-only-flex" style="margin: 10px 0 0; font-size: 16px; font-weight: 500; font-family: 'Inter Tight', sans-serif">Software Engineer · Seattle, WA</p>
+<p class="au-hide" style="margin: 14px 0 0; font-size: 15px">Software Engineer</p>
+<p class="au-hide" style="margin: 4px 0 0; font-size: 13px; opacity: .75">Based in Seattle, WA · from Mexico City &lt;3</p>
+<div style="margin-top: auto; padding-top: 16px; display: flex; flex-wrap: wrap; gap: 6px; font-size: 11px">
+<span class="th-tag">4 Years Back-End</span><span class="th-tag">LLM integrations</span><span class="th-tag">M.S. CS @ DigiPen</span><span class="th-tag">Digital Illustration</span>
+</div>
+</section>
+<nav aria-label="Social links" style="display: flex; flex-wrap: wrap; gap: 8px">
+<a href="[instagram]" class="th-soc" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle></svg></a>
+<a href="[linkedin]" class="th-soc" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"></rect><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"></path></svg></a>
+<a href="[email]" class="th-soc" aria-label="Email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg></a>
+<a href="[resume]" class="th-soc" aria-label="Résumé"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"></path><path d="M9 12h6M9 16h6"></path></svg></a>
+<a href="[contact]" class="th-cta">MORE IN CONTACT <span aria-hidden="true">⟶</span></a>
+</nav>
+</div>
+
+<section aria-label="Terminal: ask about Marco" class="th-card th-term" style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; overflow: hidden">
+<div class="th-screen" style="flex: 1; display: flex; flex-direction: column">
+<div class="th-screen-in" style="flex: 1; display: flex; flex-direction: column">
+<div class="th-sun" aria-hidden="true"></div>
+<div class="th-termhead" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1.5px solid var(--line); font-size: 11px">
+<span style="width: 9px; height: 9px; border-radius: 50%; background: var(--acc); display: block" aria-hidden="true"></span>
+<span style="width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--acc); display: block; box-sizing: border-box" aria-hidden="true"></span>
+<span class="au-hide" style="margin-left: 6px">ask_marco.sh</span>
+<span class="au-hide" style="margin-left: auto; opacity: .75">type a command ↓</span>
+<span class="au-only">02 / ask_marco.sh</span>
+<span class="au-only" style="margin-left: auto"><span style="color: #5dffa0">●</span> pingu online</span>
+</div>
+<div role="log" aria-live="polite" class="th-log" style="flex: 1; height: 200px; background: var(--tbg); color: var(--tfg); padding: 12px 16px; font-size: 12px; line-height: 1.6; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; transition: background .35s">
+<sc-for list="{{lines}}" as="l" hint-placeholder-count="4"><div class="th-line" style="white-space: pre-wrap; color: {{l.c}}; margin-top: {{l.m}}"><span class="{{l.cls}}">{{l.t}}</span></div></sc-for>
+</div>
+<div class="th-austatus" aria-hidden="true"><div style="display: flex; align-items: center; gap: 8px"><span style="color: #19b46a">●</span> session · encrypted with good vibes<span style="margin-left: auto; width: 30px; height: 16px; border-radius: 999px; background: #4b5bff; display: flex; align-items: center; justify-content: flex-end; padding: 2px; box-sizing: border-box"><span style="width: 12px; height: 12px; border-radius: 50%; background: #fff; display: block"></span></span></div><div style="height: 4px; border-radius: 4px; background: #e6e7f2; overflow: hidden"><span style="display: block; width: 72%; height: 100%; background: linear-gradient(90deg, #4b5bff, #b06cff, #ff8a4c)"></span></div></div>
+<div class="th-inrow" style="display: flex; align-items: center; gap: 8px; padding: 2px 16px; background: var(--tbg); border-top: 1px solid rgba(127,127,127,.25)">
+<label for="th-cmd" style="color: var(--tp); font-size: 12px; white-space: nowrap">marco@portfolio:~$</label>
+<input id="th-cmd" class="th-in" type="text" autocomplete="off" spellcheck="false" placeholder="try: help" value="{{input}}" onChange="{{onInput}}" onKeyDown="{{onKey}}">
+</div>
+<div role="group" aria-label="Suggested commands" class="th-chips" style="display: flex; flex-wrap: wrap; gap: 5px; padding: 10px 16px 14px; background: var(--tbg)">
+<sc-for list="{{quick}}" as="q" hint-placeholder-count="6"><button type="button" class="th-chip" onClick="{{q.run}}">{{q.t}}</button></sc-for>
+</div>
+</div>
+</div>
+<div class="th-knobs" aria-hidden="true"><span>MB—26</span><span style="margin-left: auto; color: #2440ff">●</span><span style="width: 12px; height: 12px; border-radius: 50%; background: #c9bfa9; display: block"></span><span style="width: 12px; height: 12px; border-radius: 50%; background: #c9bfa9; display: block"></span></div>
+</section>
+</div>
+
+<section aria-labelledby="th-feat" style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; gap: 14px">
+<h2 id="th-feat" style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--amber)">★ FEATURED WORK</h2>
+<span aria-hidden="true" style="flex: 1; height: 1px; background: var(--line)"></span>
+<a href="#all-work" class="th-all">ALL WORK · 3 —&gt;</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px">
+<sc-for list="{{featured}}" as="p" hint-placeholder-count="3">
+<a href="[case study]" class="th-card th-feat" style="--au1: {{p.au1}}; --au2: {{p.au2}}">
+<span class="au-only-flex au-top" style="justify-content: space-between; align-items: flex-start"><span class="au-mono" style="color: #9a9cc8">{{p.num}} / {{p.catLow}}</span><span aria-hidden="true" style="display: grid; grid-template-columns: repeat(4, 8px); gap: 2px"><sc-for list="{{p.mosaic}}" as="m" hint-placeholder-count="12"><span style="width: 8px; height: 8px; background: {{m}}; display: block"></span></sc-for></span></span>
+<span class="th-cover" style="display: flex; aspect-ratio: 16/9; border-radius: 14px; align-items: center; justify-content: center; background-color: var(--cover); background-image: radial-gradient(circle at 20% 30%, {{p.g1}}, transparent 55%), radial-gradient(circle at 85% 80%, {{p.g2}}, transparent 50%); color: #e3f5ea; font-size: 10px">[ {{p.slug}} ]</span>
+<span style="padding: 0 4px; display: flex; flex-direction: column; gap: 6px">
+<span class="au-only" style="align-self: flex-start; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.1); font-size: 11px; font-family: 'Inter Tight', sans-serif"><span style="color: #5dffa0">●</span> {{p.year}}</span>
+<span class="au-hide" style="display: flex; align-items: center; gap: 8px; font-size: 11px"><span style="color: var(--amber); font-weight: 700">{{p.num}}</span><span class="th-cat" style="padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line)">{{p.cat}}</span><span style="color: var(--ink2)">{{p.year}}</span></span>
+<span class="th-ftitle" style="font-family: var(--disp); font-size: 20px; font-weight: 700; letter-spacing: -0.03em">{{p.name}}</span>
+<span class="th-fdesc" style="font-size: 12px; line-height: 1.5; color: var(--ink2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{p.desc}}</span>
+<span class="au-only-flex au-mono" style="justify-content: space-between; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.15); color: #fff"><span>case study</span><span>→</span></span>
+</span>
+</a>
+</sc-for>
+</div>
+</section>
+</div>
+</main>
+<footer style="display: flex; justify-content: space-between; gap: 10px; padding: 0 24px 14px; font-size: 11px; color: var(--ink2)"><span>© 2026 Marco Bosquez</span><span class="au-hide">tip: type "theme mint" in the terminal</span><span class="au-only au-mono">software · illustration · seattle</span></footer>
+<div aria-hidden="true" style="display: var(--chk); height: 32px; background: conic-gradient(#141414 25%, transparent 0 50%, #141414 0 75%, transparent 0) 0 0 / 32px 32px"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1100}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { theme: 'dark', lang: 'en', input: '', hist: [], hi: -1, lines: [
+{ t: 'hi, i\'m pingu. this terminal is real, try typing.', c: 'var(--tp)', m: '0', cls: 'th-first' },
+{ t: 'type "help", or tap a command below.', c: 'inherit', m: '0' }
+] };
+}
+run(raw) {
+const cmd = raw.trim().toLowerCase();
+if (!cmd) return;
+const S = this.state;
+const out = [];
+const say = (t, c) => out.push({ t, c: c || 'inherit', m: '0' });
+let theme = S.theme;
+const names = ['dark', 'mint', 'aurora', 'electric'];
+if (cmd === 'help') say('whoami · ls projects · cat stack.txt · pwd · hobbies · echo $FAV_COLOR · theme <dark|mint|aurora|electric> · contact · clear');
+else if (cmd === 'clear') { this.setState({ lines: [], input: '', hist: S.hist.concat(raw), hi: -1 }); return; }
+else if (cmd === 'whoami') { say('marco bosquez. software engineer & hobbyist digital artist.'); say('m.s. computer science (ai) @ digipen.', 'var(--tp)'); }
+else if (cmd === 'pwd') say('/seattle/wa   # originally /mexico-city <3');
+else if (cmd === 'ls projects' || cmd === 'ls') say('web-portfolio/   amazon-recorder/   ml-sentiment/');
+else if (cmd === 'cat stack.txt' || cmd === 'stack') say('typescript  python  react  node  llm-integration');
+else if (cmd === 'hobbies') say('videogames · drawing · mixed martial arts');
+else if (cmd === 'echo $fav_color') say('green. obviously.', 'var(--tp)');
+else if (cmd === 'contact' || cmd === 'sudo hire marco') say(cmd.indexOf('sudo') === 0 ? 'permission granted. opening contact...' : 'opening contact... [links to your contact page]', 'var(--tp)');
+else if (cmd.indexOf('theme') === 0) {
+const n = cmd.split(/\s+/)[1];
+if (names.indexOf(n) >= 0) { theme = n; say('theme set to ' + n + '. ✓', 'var(--tp)'); }
+else say('themes: ' + names.join(' · ') + '   (current: ' + S.theme + ')');
+}
+else say('command not found: ' + raw.trim() + '. try "help".', '#ff8a7a');
+this.setState({ theme, input: '', hist: S.hist.concat(raw.trim()), hi: -1, lines: S.lines.concat({ t: '$ ' + raw.trim(), c: 'var(--tp)', m: '8px' }, out).slice(-12) });
+}
+renderVals() {
+const S = this.state;
+const T = [['dark', 'dark', '#0a1a12'], ['mint', 'mint', '#9afb98'], ['aurora', 'aurora', '#7b5cff'], ['electric', 'electric', '#2440ff']];
+const clock = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Los_Angeles' });
+const lang = S.lang === 'es' ? 'EN' : 'ES';
+const langLabel = S.lang === 'es' ? 'Switch to English' : 'Cambiar a español';
+const toggleLang = () => this.setState({ lang: S.lang === 'es' ? 'en' : 'es' });
+const themes = T.map(([k, label, dot]) => ({ label, dot, on: S.theme === k ? 'true' : 'false', cls: S.theme === k ? 'th-sw th-sw-on' : 'th-sw', pick: () => this.setState({ theme: k }) }));
+const featured = [
+{ slug: 'web-portfolio', name: 'Web Portfolio', cat: 'Personal', year: '2026', desc: 'An interactive personal platform built to show both my Computer Science background and my digital art in one place.', g1: '#2a5bd7', g2: '#c76b2a', au1: '#ffd08a', au2: '#ff7a4c' },
+{ slug: 'amazon-recorder', name: 'Amazon Recorder System Helper', cat: 'Academic', year: '2022', desc: 'A full-stack extension for Amazon Connect that recorded call-center interactions.', g1: '#1f6fd6', g2: '#0fb59a', au1: '#b9a2ff', au2: '#7a5cff' },
+{ slug: 'ml-sentiment', name: 'ML Sentiment Analysis', cat: 'Academic', year: '2023', desc: 'An NLP study on mental-health tweets: multiclass and multi-label classification.', g1: '#d68a0f', g2: '#0fb59a', au1: '#ffb36b', au2: '#d45cff' }
+].map((p, i) => ({ ...p, num: String(i + 1).padStart(2, '0'), catLow: p.cat.toLowerCase(), mosaic: Array.from({ length: 12 }, (_, k) => ['#ff8a4c', '#4b5bff', '#b06cff', '#2a2c5a', 'transparent'][(k * 7 + i * 3 + 1) % 5]) }));
+const quick = ['help', 'whoami', 'ls projects', 'cat stack.txt', 'hobbies', 'theme aurora'].map((t) => ({ t, run: () => this.run(t) }));
+return { clock, lang, langLabel, toggleLang,
+rootCls: 'th' + (S.theme === 'dark' ? '' : ' th-' + S.theme),
+themes, featured, quick, lines: S.lines.map((l) => ({ ...l, cls: l.cls || '' })), input: S.input,
+onInput: (e) => this.setState({ input: e.target.value }),
+onKey: (e) => {
+if (e.key === 'Enter') { e.preventDefault(); this.run(S.input); }
+else if (e.key === 'ArrowUp' && S.hist.length) { e.preventDefault(); const hi = S.hi < 0 ? S.hist.length - 1 : Math.max(0, S.hi - 1); this.setState({ hi, input: S.hist[hi] }); }
+else if (e.key === 'ArrowDown' && S.hi >= 0) { e.preventDefault(); const hi = S.hi + 1; this.setState(hi >= S.hist.length ? { hi: -1, input: '' } : { hi, input: S.hist[hi] }); }
+}
+};
+}
+}
+</script>
+</body>
+</html>

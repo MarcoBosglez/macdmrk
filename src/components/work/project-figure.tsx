@@ -9,14 +9,14 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Maximize2, X } from "lucide-react";
 
-const BORDER = "#2b5a3f";
-const BORDER_HOT = "#3e7a57";
-const BG = "#0a1a12";
-const MUTED = "#8fae9c";
-const AMBER = "#ffb347";
+const BORDER = "var(--line)";
+const BORDER_HOT = "var(--acc)";
+const BG = "var(--bg)";
+const MUTED = "var(--ink2)";
+const AMBER = "var(--amber)";
 const MONO = "var(--font-jetbrains-mono, ui-monospace, monospace)";
 const FOCUS_RING =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7dffa8]";
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--acc)]";
 
 export function ProjectFigure({
   src,
@@ -44,7 +44,7 @@ export function ProjectFigure({
         type="button"
         onClick={() => dialogRef.current?.showModal()}
         aria-label={`${enlargeLabel}: ${alt}`}
-        className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-[14px] border transition-colors hover:border-[#3e7a57] ${FOCUS_RING}`}
+        className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-[14px] border transition-colors hover:border-[var(--acc)] ${FOCUS_RING}`}
         style={{ borderColor: BORDER, background: BG }}
       >
         {/* width/height 0 + width:100%/height:auto = render at the file's
@@ -52,7 +52,7 @@ export function ProjectFigure({
         <Image src={src} alt={alt} width={0} height={0} sizes={sizes} className="block h-auto w-full" />
         <span
           className="pointer-events-none absolute right-2 top-2 flex items-center gap-1 rounded-full border px-2 py-1 font-mono text-[10px] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
-          style={{ borderColor: BORDER_HOT, background: "rgba(10,26,18,0.85)", color: MUTED }}
+          style={{ borderColor: BORDER_HOT, background: "color-mix(in srgb, var(--bg) 85%, transparent)", color: MUTED }}
           aria-hidden="true"
         >
           <Maximize2 size={11} /> {enlargeLabel}
@@ -89,7 +89,7 @@ export function ProjectFigure({
             onClick={() => dialogRef.current?.close()}
             aria-label={closeLabel}
             className={`absolute right-6 top-6 flex h-8 w-8 items-center justify-center rounded-full border ${FOCUS_RING}`}
-            style={{ borderColor: BORDER_HOT, background: "rgba(10,26,18,0.9)", color: MUTED }}
+            style={{ borderColor: BORDER_HOT, background: "color-mix(in srgb, var(--bg) 90%, transparent)", color: MUTED }}
           >
             <X size={15} />
           </button>

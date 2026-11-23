@@ -34,6 +34,11 @@ export type Dictionary = {
     switchEye: {
       ariaLabel: string;
       reset: string;
+      stopMusicLabel: string;
+      pauseMusicLabel: string;
+      statusNone: string;
+      statusOne: string;
+      statusPlaying: string;
     };
   };
   work: {

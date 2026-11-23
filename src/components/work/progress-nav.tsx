@@ -10,11 +10,9 @@ import type { Project } from "@/lib/data/projects";
 import { ProjectSwitcher } from "@/components/work/project-switcher";
 import s from "@/components/work/switcher.module.css";
 
-// Same fixed literal palette as project-page.tsx — this page always
-// reads as the dark green terminal regardless of the site's own
-// light/dark toggle, so it can't lean on the adaptive tokens.
-const BORDER = "#2b5a3f";
-const ACCENT = "#7dffa8";
+// Same tokens as project-page.tsx — reads the active 4-theme palette.
+const BORDER = "var(--line)";
+const ACCENT = "var(--acc)";
 
 export type NavSection = { anchor: string; num: string; label: string };
 

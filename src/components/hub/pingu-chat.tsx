@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/hooks/use-reduced-motion";
+import s from "./pingu-chat.module.css";
 
 type MessageStatus = "thinking" | "typing" | "done";
 type ChatMessage = { id: number; role: "bot" | "user"; text: string; status: MessageStatus };
@@ -121,11 +122,12 @@ export function PinguChat({ height }: { height?: number }) {
       className="flex h-[460px] min-h-0 flex-col overflow-hidden rounded-[22px] border border-line bg-panel [backdrop-filter:blur(22px)] [box-shadow:var(--shadow)]"
       style={height ? { height } : undefined}
     >
-      <div className="flex shrink-0 items-center gap-1.5 border-b border-line px-4 py-3">
+      <div className={s.sunrise} aria-hidden="true" />
+      <div className={`flex shrink-0 items-center gap-1.5 border-b border-line px-4 py-3 ${s.header}`}>
         <span className="h-2 w-2 rounded-full bg-line-hot" />
-        <span className="h-2 w-2 rounded-full bg-line" />
-        <span className="ml-1.5 font-mono text-[9px] text-muted">ask_marco.sh</span>
-        <span className="ml-auto flex items-center gap-1.5 font-mono text-[9px] text-accent">
+        <span className={`h-2 w-2 rounded-full ${s.headerRing}`} />
+        <span className="ml-1.5 font-mono text-muted">ask_marco.sh</span>
+        <span className="ml-auto flex items-center gap-1.5 font-mono text-accent">
           <span className="h-[5px] w-[5px] rounded-full bg-accent animate-pulse-dot" />
           pingu is online
         </span>
@@ -133,21 +135,21 @@ export function PinguChat({ height }: { height?: number }) {
 
       <div
         ref={listRef}
-        className="pingu-scroll flex min-h-0 flex-1 flex-col gap-[9px] overflow-y-auto px-4 py-3.5"
+        className={`pingu-scroll flex min-h-0 flex-1 flex-col gap-[9px] overflow-y-auto px-4 py-3.5 ${s.log}`}
       >
         {messages.map((m) => (
           <Bubble key={m.id} message={m} />
         ))}
       </div>
 
-      <div className="flex shrink-0 flex-wrap gap-1.5 border-t border-line px-4 py-3">
+      <div className={`flex shrink-0 flex-wrap border-t border-line px-4 py-3 ${s.chipsRow}`}>
         {QA.map(({ q }) => (
           <button
             key={q}
             type="button"
             disabled={busy}
             onClick={() => ask(q)}
-            className={`rounded-full border px-2.5 py-1.5 font-mono text-[9px] transition-colors disabled:cursor-default disabled:opacity-60 ${
+            className={`rounded-full border font-mono transition-colors disabled:cursor-default disabled:opacity-60 ${s.chip} ${
               activeQ === q
                 ? "border-accent bg-wash text-dim"
                 : "border-line bg-transparent text-dim hover:border-line-hot hover:bg-wash hover:text-ink"
@@ -165,10 +167,7 @@ function Bubble({ message }: { message: ChatMessage }) {
   if (message.role === "user") {
     return (
       <div className="flex justify-end">
-        <div
-          className="max-w-[78%] rounded-[14px_14px_4px_14px] border px-3 py-2 font-mono text-[11px] leading-[1.55] whitespace-pre-wrap text-ink"
-          style={{ background: "var(--wash)", borderColor: "var(--line-hot)" }}
-        >
+        <div className={`max-w-[78%] rounded-[14px_14px_4px_14px] border px-3 py-2 font-mono whitespace-pre-wrap ${s.bubbleUser}`}>
           {message.text}
         </div>
       </div>
@@ -178,16 +177,13 @@ function Bubble({ message }: { message: ChatMessage }) {
   return (
     <div className="flex items-start gap-2">
       <PenguinAvatar />
-      <div
-        className="max-w-[78%] rounded-[14px_14px_14px_4px] px-3 py-2 font-mono text-[11px] leading-[1.55] whitespace-pre-wrap text-dim"
-        style={{ background: "var(--glass-soft)" }}
-      >
+      <div className={`max-w-[78%] rounded-[14px_14px_14px_4px] px-3 py-2 font-mono whitespace-pre-wrap ${s.bubbleBot}`}>
         {message.status === "thinking" ? (
           <ThinkingDots />
         ) : (
           <>
             {message.text}
-            {message.status === "typing" ? <span className="animate-blink text-accent">▌</span> : null}
+            {message.status === "typing" ? <span className={`animate-blink ${s.cursor}`}>▌</span> : null}
           </>
         )}
       </div>
@@ -198,9 +194,9 @@ function Bubble({ message }: { message: ChatMessage }) {
 function ThinkingDots() {
   return (
     <span className="inline-flex items-center gap-1 py-1">
-      <span className="h-[5px] w-[5px] rounded-full bg-accent [animation:pingu-dot_1s_ease-in-out_infinite]" />
-      <span className="h-[5px] w-[5px] rounded-full bg-accent [animation:pingu-dot_1s_ease-in-out_.16s_infinite]" />
-      <span className="h-[5px] w-[5px] rounded-full bg-accent [animation:pingu-dot_1s_ease-in-out_.32s_infinite]" />
+      <span className={`h-[5px] w-[5px] rounded-full [animation:pingu-dot_1s_ease-in-out_infinite] ${s.dot}`} />
+      <span className={`h-[5px] w-[5px] rounded-full [animation:pingu-dot_1s_ease-in-out_.16s_infinite] ${s.dot}`} />
+      <span className={`h-[5px] w-[5px] rounded-full [animation:pingu-dot_1s_ease-in-out_.32s_infinite] ${s.dot}`} />
     </span>
   );
 }
@@ -208,10 +204,7 @@ function ThinkingDots() {
 // A simple monoline penguin, just for the bot avatar.
 function PenguinAvatar() {
   return (
-    <span
-      className="mt-0.5 flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[10px] border"
-      style={{ background: "var(--wash)", borderColor: "var(--line)" }}
-    >
+    <span className={`mt-0.5 flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[10px] border ${s.avatar}`}>
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -219,7 +212,7 @@ function PenguinAvatar() {
         strokeWidth={1.6}
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="h-[17px] w-[17px] text-accent"
+        className="h-[17px] w-[17px]"
         aria-hidden="true"
       >
         <path d="M12 3c-3.3 0-5.5 2.6-5.5 6.4 0 3-.9 5-1.8 7.1-.5 1.2.2 2.5 1.5 2.5h11.6c1.3 0 2-1.3 1.5-2.5-.9-2.1-1.8-4.1-1.8-7.1C17.5 5.6 15.3 3 12 3z" />
