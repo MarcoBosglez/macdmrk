@@ -151,13 +151,13 @@ export const PROJECTS: Project[] = [
     status: { en: "shipped, iterating", es: "" },
     sections: [
       {
-        label: { en: "Needs", es: "Por qué existió" },
+        label: { en: "Needs (Why)", es: "" },
         headline: { en: "Looking for a Personal Hub" },
         blocks: [
           {
             type: "text",
             text: {
-              en: "I started my web portfolio journey in 2020 while I was doing my undergrad in Mexico City. \nFor a while I have been looking for a way to express myself as a software engineer and hobbyist digital artist. My career is in tech but I've always appreciated and had love for art.\nAt the same time it seemed like a good opportunity to learn more about web development & design, while also having something that recruiters/employers could look at to get a better idea of who I am and what I do.",
+              en: "I started my web portfolio in 2020 for an academic project while I was doing my undergrad in Mexico City. \nFor a while I have been looking for a way to express myself as a software engineer and hobbyist digital artist. My career is in tech but I've always appreciated and had love for art.\nAt the same time it seemed like a good opportunity to learn more about web development & design, while also having something that recruiters/employers could look at to get a better idea of who I am and what I do.",
             },
           },
           {
@@ -179,23 +179,13 @@ export const PROJECTS: Project[] = [
         ],
       },
       {
-        label: { en: "Implementation" },
-        headline: { en: "Designing & Coding the Portfolio" },
+        label: { en: "Idea" },
+        headline: { en: "Initial Design & Project Inspiration" },
         blocks: [
           {
             type: "text",
             text: {
-              en: "This is where I explain.",
-            },
-          },
-          {
-            type: "bullets",
-            items: {
-              en: [
-                "Designed the whole visual language and drew every illustration",
-                "Built the site on Next.js with bilingual copy and a theme switch",
-                "Wrote the draggable gallery windows and synthesized UI sounds",
-              ],
+              en: "It started off as a simple academic project in 2020 with a static HTML/CSS website with a simple and design which content was a direct copy of my résumé but kept it in mind for a future project I wanted to keep iterating. During 2020-2024, I explored various online designs as ideas to redesign the website with a modern look. \nA big inspiration for retaking the project after a big gap of time was after watching a YouTube video by user [@Shar](https://www.youtube.com/watch?v=_tWh4cYCTv0) on her own portfolio's design. It went into detail about the process of building her own website (planning, inspirations, mood boards, mock-ups, programming, design & accessability, and deploying). I recognized this process as it was similar to the UX pipeline process of real tech companies (with extra documentation steps) from talking with teammates of previous work experiences. With her design I especially liked her presentation-card layout, as it had a professional look while still reflecting her personality, interests & general vibe.",
             },
           },
           {
@@ -206,25 +196,54 @@ export const PROJECTS: Project[] = [
         ],
       },
       {
-        label: { en: "Timeline" },
+        label: { en: "Process (How)" },
         headline: { en: "Project Timeline" },
         blocks: [
           {
-            type: "steps",
-            items: {
-              en: [
-                "Started in 2020 as a static HTML/CSS copy of my résumé, with very few features or animations.",
-                "In 2025, started exploring a modern redesign after a YouTube video by @shar on her own portfolio's design. I especially liked her presentation-card layout.",
-                "Built a mood board from similar portfolios, then listed the features I actually wanted: 5 sections, color modes, draggable windows, custom sounds, bilingual copy, a glass-card look.",
-                "Still actively adding ideas on the fly, new sections and small, fun experiments as they come.",
-              ],
-            },
+            type: "text",
+            text: {
+              en: "I started working on the project after my last work experience at Capgemini (mid 2025) as I had time available. For this project I wanted to document the whole thing, from my mock-up ideas, colors to programming & deploying the app."
+            }
+          },
+           {
+            type: "text",
+            text: {
+              en: "**1. Mood Board**\n - I started off building a mood board of what I wanted the website to feel like and I had a list of ideas that the portfolio must include (5 sections, color modes, draggable windows, custom sounds, bilingual copy, a glass-card look, etc)."
+            }
           },
           {
             type: "figure",
             src: "/work/web-portfolio-how.png",
             caption: {
               en: "Where it landed: the current hub, with the presentation card, Pingu chat, and featured work.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**2. Mock-ups**\n - As a hobbyist digital artist the look & feel I was looking for depended on me to build the design from. I went for a modern, terminal-like, glass panel look with dark green colors. Working alongside Claude Design for further inspiration on specific components and for easier non-manual measuring of distances, icons, etc. \n - After picking the colors and design inspiration from my moodboard, I listed the tasks in a JIRA board needed to complete the initial stages of the website (ToDo, InProgress, Done)"
+            }
+          },
+          {
+            type: "text",
+            text: {
+              en: "**3. Programming**\n - During the planning stages, I decided con the tech stack for this project which included: React, Next.js.\n - I already had experience with React which made the move easy. Although it may have been overkill to use, I aimed to practice my React skills and it served as inspiration to learn more of it\n - This process was already heavy enough before with me liking other ideas and breaking the already decided design of stuff, for easier of use I got help from Claude code for repetitive tasks and hard-to-find fixes in case any bugs or sizing errors appeared during development. \n - As an artist I know the reputation AI has with generative art and as a programmer I know the cons of vibe coding. So, I made it a task in itself to draw and design every artistic part myself, and learn from all the code Claude writes and learn as much as possible. if I use it, I must use it with a brain and not be lazy."
+            }
+          },
+           {
+            type: "text",
+            text: {
+              en: "**4. Deploying**\n - I decided to deploy my project using Vercel, as it is allowed me to connect and link it with my Github Project and it was an easy platform to ship apps and monitor it."
+            }
+          },
+          {
+            type: "steps",
+            items: {
+              en: [
+                "Mood board",
+                "Programming",
+                "Deploying"
+              ],
             },
           },
         ],

@@ -8,6 +8,10 @@ import { useSound } from "@/components/providers/sound-provider";
 //   \n         starts a new paragraph
 //   "- item"   at the start of a line makes a bullet list
 //   https://…  becomes a link
+//   [text](https://…)  a link that shows `text` instead of the URL
+//   **text**   bold
+//   ~~text~~   strikethrough
+//   (bold/strikethrough can wrap links and each other: **~~old~~ new**)
 //   <3, ^_^ …  any key below, as its own word, gets its colour
 
 // Same candy colours as the project page's terminal accents.
@@ -27,8 +31,11 @@ const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // Reactions must stand alone so "n<3" or the ":/" in a URL don't match.
 // No lookbehind here on purpose: Safari before 16.4 throws on it at
 // parse time, which would take the whole bundle down with it.
+// Alternatives, in priority order: **bold**, ~~strike~~, [label](url),
+// bare url, reaction. Bold/strike are lazy (.+?) so two on one line
+// stay separate, and their insides are formatted again recursively.
 const INLINE = new RegExp(
-  `(https?://[^\\s)]+)|(^|[\\s(])(${Object.keys(REACTIONS).map(escapeRegExp).join("|")})(?=$|[\\s.,!?)])`,
+  `\\*\\*(.+?)\\*\\*|~~(.+?)~~|\\[([^\\]]+)\\]\\((https?://[^\\s)]+)\\)|(https?://[^\\s)]+)|(^|[\\s(])(${Object.keys(REACTIONS).map(escapeRegExp).join("|")})(?=$|[\\s.,!?)])`,
   "g"
 );
 
@@ -38,26 +45,46 @@ export function InlineText({ text }: { text: string }) {
   const parts: ReactNode[] = [];
   let cursor = 0;
 
+  const link = (key: number, href: string, label: ReactNode) => (
+    <a
+      key={key}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() => playClick("nav")}
+      className="text-accent underline underline-offset-2 [overflow-wrap:anywhere] hover:brightness-110"
+    >
+      {label}
+    </a>
+  );
+
   Array.from(text.matchAll(INLINE)).forEach((match) => {
-    const [whole, rawUrl, before = "", reaction] = match;
+    const [whole, bold, strike, label, labelUrl, rawUrl, before = "", reaction] = match;
     const index = match.index ?? 0;
 
-    if (rawUrl) {
-      // Sentence punctuation straight after a URL isn't part of it.
-      const url = rawUrl.replace(/[.,!?;:'"]+$/, "");
+    if (bold) {
       parts.push(
         text.slice(cursor, index),
-        <a
-          key={index}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => playClick("nav")}
-          className="text-accent underline underline-offset-2 [overflow-wrap:anywhere] hover:brightness-110"
-        >
-          {url}
-        </a>
+        <strong key={index} className="font-bold">
+          <InlineText text={bold} />
+        </strong>
       );
+      cursor = index + whole.length;
+    } else if (strike) {
+      parts.push(
+        text.slice(cursor, index),
+        <s key={index} className="opacity-75">
+          <InlineText text={strike} />
+        </s>
+      );
+      cursor = index + whole.length;
+    } else if (label && labelUrl) {
+      parts.push(text.slice(cursor, index), link(index, labelUrl, <InlineText text={label} />));
+      cursor = index + whole.length;
+    } else if (rawUrl) {
+      // Sentence punctuation straight after a URL isn't part of it.
+      const url = rawUrl.replace(/[.,!?;:'"]+$/, "");
+      parts.push(text.slice(cursor, index), link(index, url, url));
       cursor = index + url.length;
     } else {
       parts.push(
