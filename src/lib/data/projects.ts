@@ -1591,68 +1591,145 @@ const ALL_PROJECTS: Project[] = [
 
   {
     slug: "nds-cognitive-labs-journal-publication",
-    category: "academic",
+    category: "professional",
     featured: false,
     heroImage: "/work/journal-publication-cover.webp",
-    tags: ["Behavior Trees", "C++", "Game Development", "Game AI"],
-    title: { en: "Journal Publication", es: "Publicación en Revista" },
-    kindLabel: { en: "Master's Project", es: "Proyecto de Maestría" },
-    years: "2026",
+    tags: ["React", "Material UI", "Axios", "MongoDB", "IBM Watson"],
+    title: { en: "Chatbot Retraining Platform", es: "Plataforma de Reentrenamiento de Chatbots" },
+    kindLabel: { en: "Journal Publication", es: "Publicación en Revista" },
+    url: "https://rcs.cic.ipn.mx/2023_152_12/Development%20of%20a%20Front-End%20with%20Dynamic%20Searches%20for%20Chatbot%20Retraining%20Using%20ReactJS.pdf",
+    years: "2022 – 2023",
     startYear: 2022,
-    pitch: { en: "[TODO: one-sentence pitch]", es: "[TODO: una oración de descripción]" },
-    tldr: {
-      problem: { en: "[TODO: the problem this project explored]", es: "[TODO: el problema que explora este proyecto]" },
-      built: { en: "[TODO: what was built]", es: "[TODO: qué se construyó]" },
-      result: { en: "[TODO: the result/takeaway]", es: "[TODO: el resultado]" },
+    pitch: {
+      en: "A React front-end with dynamic search for retraining an IBM Watson chatbot, built during my internship at NDS Cognitive Labs and published in a journal.",
+      es: "",
     },
-    role: { en: "researcher + developer", es: "investigador + desarrollador" },
-    timeline: { en: "2022", es: "2022" },
-    team: { en: "solo", es: "en solitario" },
+    tldr: {
+      problem: {
+        en: "Retraining a chatbot means managing hundreds of intents and entities, and finding the right one quickly.",
+        es: "",
+      },
+      built: {
+        en: "A ReactJS web app with dynamic search for intents, entities and suggestions, connected to MongoDB and IBM Watson.",
+        es: "",
+      },
+      result: {
+        en: "Co-authored a journal publication about it in Research in Computing Science (2023).",
+        es: "",
+      },
+    },
+    role: { en: "front-end developer + co-author", es: "desarrollador front-end + coautor" },
+    timeline: { en: "Aug – Dec 2022", es: "ago – dic 2022" },
+    team: { en: "7 students (2 on front-end)", es: "7 estudiantes (2 en front-end)" },
     status: { en: "published", es: "publicado" },
     sections: [
       {
-        label: { en: "why it existed", es: "por qué existió" },
-        headline: { en: "[TODO: why this project exists]", es: "[TODO: por qué existe este proyecto]" },
+        label: { en: "Needs (Why)" },
+        headline: { en: "A Real Internship, a Real Chatbot" },
         blocks: [
           {
             type: "text",
-            text: { en: "[TODO: the real problem/motivation]", es: "[TODO: el problema/motivación real]" },
+            text: {
+              en: "In August 2022, Tec de Monterrey and **NDS Cognitive Labs** (a cognitive computing company in Mexico and the US) opened professional internships to give students real work experience. Each student was matched to an \"experience\" based on their profile, and I landed on **Experience 3: Virtual Assistant Management Platform**, a Natural Language Processing platform.\nThe idea: a chatbot built with **IBM Watson** answers customers' questions. To answer well, it needs to be trained on **intents** (the verbs and actions a user wants to do) and **entities** (the nouns: objects, places, things related to the business). Our job was the platform to manage all of that.",
+            },
+          },
+          {
+            type: "beforeAfter",
+            goal: {
+              en: [
+                "Create, edit, view, delete and search intents and entities in one place",
+                "Use that data to retrain the IBM Watson chatbot",
+                "Make it work from a computer or a phone",
+              ],
+            },
           },
         ],
       },
       {
-        label: { en: "what i did", es: "qué hice" },
-        headline: { en: "[TODO: what I did]", es: "[TODO: qué hice]" },
-        blocks: [{ type: "bullets", items: { en: ["[TODO: contributions]"], es: ["[TODO: contribuciones]"] } }],
-      },
-      {
-        label: { en: "how", es: "cómo" },
-        headline: { en: "[TODO: how it works]", es: "[TODO: cómo funciona]" },
-        blocks: [{ type: "steps", items: { en: ["[TODO: build steps]"], es: ["[TODO: pasos de construcción]"] } }],
-      },
-      {
-        label: { en: "hard parts", es: "lo difícil" },
-        headline: { en: "[TODO: what broke, and how it got fixed]", es: "[TODO: qué se rompió y cómo se resolvió]" },
+        label: { en: "Team" },
+        headline: { en: "7 Students, 2 on Front-End" },
         blocks: [
           {
-            type: "challenges",
-            items: [
-              {
-                problem: {
-                  en: "[TODO: a real challenge from this project]",
-                  es: "[TODO: un reto real de este proyecto]",
-                },
-                fix: { en: "[TODO: how it got solved]", es: "[TODO: cómo se resolvió]" },
-              },
-            ],
+            type: "text",
+            text: {
+              en: "Seven students from Tec took part. The work was split into a **back-end team** of 5 (Python, Flask and MongoDB) and a **front-end team** of 2 (ReactJS).\nI was on the front-end team with one teammate. We were picked because of our previous experience with **React**, and since we also knew Python and MongoDB, we got to collaborate with the back-end team too. Before building, the leaders had us take MongoDB's official courses to understand the database behind the platform.",
+            },
+          },
+          {
+            type: "callout",
+            tone: "note",
+            title: { en: "My role" },
+            text: {
+              en: "Front-end developer: building the views for intents, entities and suggestions in React, and connecting them to the back-end's endpoints. Then co-author of the journal article about it.",
+            },
+          },
+        ],
+      },
+      {
+        label: { en: "Process (How)" },
+        headline: { en: "Building the Front-End" },
+        blocks: [
+          {
+            type: "text",
+            text: {
+              en: "**1. Starting From a Base Platform**\n - We got a base platform with the components already defined, ready to be made functional. We tested it first, simulating how end users would move through it.\n - Our work: the creation, editing, viewing and deletion screens, in ReactJS, using the endpoints the back-end team built to bring in the data.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**2. Working Like a Real Team**\n - Weekly meetings on Google Meet to show progress and plan the next features, plus weekly logs to keep a record of everything.\n - Our project leader reviewed our work, and we jumped on video calls whenever we needed help.\n - The front-end lived in a **GitLab** repo, and we worked on our own branch for the intents, entities and suggestions views.\n - To move fast, we each took different components so they'd get up and running quickly, and teamed up whenever a problem needed both of us.",
+            },
+          },
+          {
+            type: "text",
+            text: {
+              en: "**3. The Dynamic Search Bar**\n - Built a search bar component that ended up in most of the platform's views: intents, entities, suggestions and requests.\n - It calls a **GET** endpoint in **Flask** with **Axios**, stores the list of intents or entities from **MongoDB** in **useState**, and filters it as you type with **useEffect**, using components from **Material UI**.\n - Pagination updates with every search, so only a limited number of results render at a time.\n - In the suggestions view, a dropdown lets you show only intents, only entities, or both.",
+            },
+          },
+          {
+            type: "steps",
+            items: {
+              en: ["MongoDB courses", "Base platform", "CRUD screens", "Dynamic search", "Journal article"],
+            },
+          },
+        ],
+      },
+      {
+        label: { en: "Lessons" },
+        headline: { en: "From Data to a Better Chatbot" },
+        blocks: [
+          {
+            type: "callout",
+            tone: "win",
+            title: { en: "Why the search mattered" },
+            text: {
+              en: "Searching intents and entities by name means you get to the one you need fast, and from there you can do anything with it: edit it, view its details, create new ones or delete it from the database. Less time looking for information, more time actually improving the chatbot.",
+            },
           },
         ],
       },
       {
         label: { en: "outcome", es: "resultado" },
-        headline: { en: "[TODO: outcome headline]", es: "[TODO: titular del resultado]" },
+        headline: { en: "Published in a Journal!" },
         panel: true,
-        blocks: [{ type: "text", text: { en: "[TODO: outcome write-up]", es: "[TODO: resumen del resultado]" } }],
+        blocks: [
+          {
+            type: "text",
+            text: {
+              en: "We built a platform (still in progress when the internship ended) for creating, editing, viewing, linking and deleting intents, entities and suggestions, the data used to retrain the chatbot.\nI co-authored an article about it, **\"Development of a Front-End with Dynamic Searches for Chatbot Retraining Using ReactJS\"**, published in **Research in Computing Science** (vol. 152, no. 12, 2023). [Read the paper](https://rcs.cic.ipn.mx/2023_152_12/Development%20of%20a%20Front-End%20with%20Dynamic%20Searches%20for%20Chatbot%20Retraining%20Using%20ReactJS.pdf).",
+            },
+          },
+          {
+            type: "stats",
+            items: [
+              { value: "336", label: { en: "Intents in the workspace" } },
+              { value: "124", label: { en: "Entities in the workspace" } },
+              { value: "5", label: { en: "Co-authors" } },
+              { value: "2023", label: { en: "Published" } },
+            ],
+          },
+        ],
       },
     ],
   },

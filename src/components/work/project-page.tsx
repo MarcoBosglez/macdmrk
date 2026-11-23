@@ -186,7 +186,7 @@ export function ProjectPage({ project, projects }: { project: Project; projects:
                 {project.url ? (
                   <HeroButton href={project.url} onClick={onNav}>
                     {isGithubUrl(project.url) ? <GhIcon className="h-4 w-4" /> : <ExternalLink className="h-4 w-4" />}
-                    {t.work.viewCode}
+                    {isGithubUrl(project.url) ? t.work.viewCode : t.work.viewProject}
                   </HeroButton>
                 ) : null}
               </div>
