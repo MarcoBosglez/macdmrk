@@ -183,29 +183,6 @@
   letter-spacing: -0.02em;
 }
 
-.stats {
-  margin-top: auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--bl);
-  border: 1px solid var(--bl);
-}
-
-.statCell {
-  background: var(--bcell);
-  padding: 10px;
-}
-
-.statValue {
-  display: block;
-  font: 800 13px var(--rf);
-}
-
-.statAccent {
-  color: var(--bacc);
-}
-
 @media (max-width: 560px) {
   .card {
     grid-template-columns: 1fr;
@@ -377,9 +354,6 @@
   --bbg: #0b1c13;
   --bfg: #e3f5ea;
   --iw: 700;
-  --bl: #2b5a3f;
-  --bcell: #0f2419;
-  --bacc: #7dffa8;
   --sb: #062012;
   --sbg: #7dffa8;
   --si: #062012;
@@ -413,9 +387,6 @@
   --bbg: #141414;
   --bfg: #9afb98;
   --iw: 800;
-  --bl: #2c4a2d;
-  --bcell: #141414;
-  --bacc: #9afb98;
   --sb: #141414;
   --sbg: #acfdaa;
   --si: #141414;
@@ -453,9 +424,6 @@
   --bbg: #f4f4f8;
   --bfg: #12132b;
   --iw: 600;
-  --bl: #e3e4ee;
-  --bcell: #ffffff;
-  --bacc: #4b5bff;
   --sb: rgba(255, 255, 255, 0.14);
   --sbg: rgba(255, 255, 255, 0.04);
   --si: #ff8a4c;
@@ -489,9 +457,6 @@
   --bbg: #f3f2ee;
   --bfg: #111111;
   --iw: 800;
-  --bl: #e1dfd7;
-  --bcell: #ffffff;
-  --bacc: #2440ff;
   --sb: rgba(255, 255, 255, 0.55);
   --sbg: #2440ff;
   --si: #ffffff;

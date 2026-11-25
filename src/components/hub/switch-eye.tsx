@@ -43,7 +43,9 @@ type Note = {
 };
 
 // ─── Shared state: lit eyes, music mode, and the controls that reach
-// into the card from elsewhere (reset / pause button, top-right) ─────
+// in from elsewhere — the pause button (top-right of the kicker row)
+// and the chrome bar's light/dark toggle, which force-resets both eyes
+// so it never fights with them over the theme. ───────────────────────
 type SwitchEyeState = {
   lit: Record<EyeId, boolean>;
   musicMode: boolean;
@@ -631,28 +633,9 @@ export function SwitchEyeName({ id }: { id?: string } = {}) {
   );
 }
 
-export function SwitchEyeReset({ className = "" }: { className?: string }) {
-  const { reset, musicMode } = useSwitchEye();
-  const { t } = useLocale();
-  if (musicMode) return null;
-  return (
-    <button
-      type="button"
-      onClick={reset}
-      // Inherits its color from wherever it's placed (the --ck-colored
-      // kicker row, on the presentation card) rather than hardcoding
-      // the site's own ink tokens, which only made sense back when
-      // this sat directly on the hub's --aboutbg/--aboutink surface.
-      className={`font-mono text-[11px] opacity-70 transition-opacity hover:opacity-100 ${className}`}
-    >
-      {t.hub.switchEye.reset}
-    </button>
-  );
-}
-
-// Replaces SwitchEyeReset in the same corner while music mode is
-// active — a mini equalizer + "PAUSE ❚❚" that stops the song and turns
-// both eyes back off.
+// Sits in the card's kicker row while music mode is active — a mini
+// equalizer + "PAUSE ❚❚" that stops the song and turns both eyes back
+// off.
 export function SwitchEyeMusicControl({ className = "" }: { className?: string }) {
   const { musicMode, stopMusic } = useSwitchEye();
   const { t } = useLocale();

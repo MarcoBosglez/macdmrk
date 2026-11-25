@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSound } from "@/components/providers/sound-provider";
 import { useLocale } from "@/components/providers/locale-provider";
 import { useSwitchEye } from "@/components/hub/switch-eye";
+import { IconTooltip } from "@/components/chrome/icon-tooltip";
 import { NAV_ITEMS, isMinimalChromePage } from "@/lib/data/nav";
 import s from "./chrome-bar.module.css";
 
@@ -121,10 +122,16 @@ export function ChromeBar() {
           priority
           className="h-5 w-5 sm:h-[26px] sm:w-[26px]"
         />
-        <span className={`${s.logoText} font-mono tracking-[0.02em] whitespace-nowrap text-ink`}>
-          ~\marco.
-          <span className="animate-blink text-accent">▌</span>
-        </span>
+        {/* The project box is tight on room for the project nav itself
+            (switcher, section dropdown, prev/next) — this text is the
+            first thing to go there; the icon alone still reads as
+            "home" and still links there. */}
+        {!projectPage && (
+          <span className={`${s.logoText} font-mono tracking-[0.02em] whitespace-nowrap text-ink`}>
+            ~\marco.
+            <span className="animate-blink text-accent">▌</span>
+          </span>
+        )}
       </Link>
   );
 
@@ -133,52 +140,63 @@ export function ChromeBar() {
   // still reaches it in the normal (non-project) case.
   const status = (
       <div className={projectPage ? "flex items-center gap-1.5 px-1 text-[11px] sm:gap-2" : `${CAPSULE} ${s.statusPill}`}>
-        <span className="animate-pulse-dot h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-        <span className={`hidden font-mono whitespace-nowrap text-accent ${projectPage ? "xl:inline" : "sm:inline"}`}>
-          {t.chrome.openToWork}
-        </span>
-        <span className="font-mono whitespace-nowrap text-muted tabular-nums">
-          {mounted ? clock : "--:--"}
-        </span>
+        {/* Status dot + "open to work" + clock give up their room on the
+            project box, too — the project nav (switcher, section
+            dropdown, prev/next) needs it more than this does there. */}
+        {!projectPage && (
+          <>
+            <span className="animate-pulse-dot h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+            <span className="hidden font-mono whitespace-nowrap text-accent sm:inline">
+              {t.chrome.openToWork}
+            </span>
+            <span className="font-mono whitespace-nowrap text-muted tabular-nums">
+              {mounted ? clock : "--:--"}
+            </span>
+          </>
+        )}
 
-        <button
-          onClick={handleThemeToggle}
-          aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
-          className={`flex ${ctl} items-center justify-center border border-line text-muted hover:text-accent active:scale-90`}
-          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
-        >
-          <span className="relative flex h-3.5 w-3.5 items-center justify-center">
-            <Moon
-              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
-              style={{ opacity: isLight ? 0 : 1 }}
-            />
-            <Sun
-              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
-              style={{ opacity: isLight ? 1 : 0 }}
-            />
-          </span>
-        </button>
+        <IconTooltip label={isLight ? "Switch to dark theme" : "Switch to light theme"}>
+          <button
+            onClick={handleThemeToggle}
+            aria-label={isLight ? "Switch to dark theme" : "Switch to light theme"}
+            className={`flex ${ctl} items-center justify-center border border-line text-muted hover:text-accent active:scale-90`}
+            style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
+          >
+            <span className="relative flex h-3.5 w-3.5 items-center justify-center">
+              <Moon
+                className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+                style={{ opacity: isLight ? 0 : 1 }}
+              />
+              <Sun
+                className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+                style={{ opacity: isLight ? 1 : 0 }}
+              />
+            </span>
+          </button>
+        </IconTooltip>
 
-        <button
-          onClick={() => {
-            playClick(muted ? "unmute" : "mute");
-            toggleMute();
-          }}
-          aria-label={muted ? "Unmute" : "Mute"}
-          className={`flex ${ctl} items-center justify-center border border-line text-muted hover:text-accent active:scale-90`}
-          style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
-        >
-          <span className="relative flex h-3.5 w-3.5 items-center justify-center">
-            <Volume2
-              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
-              style={{ opacity: muted ? 0 : 1 }}
-            />
-            <VolumeX
-              className="absolute h-3.5 w-3.5 transition-opacity duration-200"
-              style={{ opacity: muted ? 1 : 0 }}
-            />
-          </span>
-        </button>
+        <IconTooltip label={muted ? "Unmute" : "Mute"}>
+          <button
+            onClick={() => {
+              playClick(muted ? "unmute" : "mute");
+              toggleMute();
+            }}
+            aria-label={muted ? "Unmute" : "Mute"}
+            className={`flex ${ctl} items-center justify-center border border-line text-muted hover:text-accent active:scale-90`}
+            style={{ transition: "transform .2s cubic-bezier(.34,1.56,.64,1), color .2s ease" }}
+          >
+            <span className="relative flex h-3.5 w-3.5 items-center justify-center">
+              <Volume2
+                className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+                style={{ opacity: muted ? 0 : 1 }}
+              />
+              <VolumeX
+                className="absolute h-3.5 w-3.5 transition-opacity duration-200"
+                style={{ opacity: muted ? 1 : 0 }}
+              />
+            </span>
+          </button>
+        </IconTooltip>
 
         <button
           onClick={() => {

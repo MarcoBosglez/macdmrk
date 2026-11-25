@@ -1,0 +1,1 @@
+stop with the indicator lights and one-line slogans

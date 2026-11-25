@@ -20,12 +20,8 @@ export const es: Dictionary = {
     note: "→ nuevo diseño! el sitio es interactivo, pasa el cursor por todas partes",
     switchEye: {
       ariaLabel: "Interruptor de ojo",
-      reset: "↺ reiniciar",
       stopMusicLabel: "Detener la música",
       pauseMusicLabel: "Pausar música",
-      statusNone: "haz clic en ambos ojos",
-      statusOne: "un ojo más…",
-      statusPlaying: "reproduciendo · haz clic en un ojo o en pausa para detener",
     },
   },
   work: {

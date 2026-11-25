@@ -29,24 +29,6 @@ function useReducedMotion() {
   return reduced;
 }
 
-function useLocalClock() {
-  const [clock, setClock] = useState("");
-  useEffect(() => {
-    const tick = () =>
-      setClock(
-        new Date().toLocaleTimeString("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZone: "America/Los_Angeles",
-        }),
-      );
-    tick();
-    const id = setInterval(tick, 20000);
-    return () => clearInterval(id);
-  }, []);
-  return clock;
-}
-
 // A single <path> of 1x1 squares, one per dark module — same technique
 // the reference's own mockup QR uses. `qrcode`'s `create()` is a pure,
 // synchronous computation (no network/canvas), safe to memoize.
@@ -68,7 +50,6 @@ export function PresentationCard() {
   const { t } = useLocale();
   const { playClick } = useSound();
   const reducedMotion = useReducedMotion();
-  const clock = useLocalClock();
   const [flipped, setFlipped] = useState(false);
   const nameId = useId();
   const url = LINKS.site;
@@ -89,7 +70,7 @@ export function PresentationCard() {
   }, [flipped]);
 
   function toggleFlip() {
-    playClick("toggle");
+    playClick("cardFlip");
     setFlipped((f) => !f);
   }
 

@@ -11,6 +11,7 @@ export const pageTips: Record<string, Tip[]> = {
     { tag: "welcome", text: "This is my hub: who I am, a terminal you can type in, and my featured work." },
     { tag: "how-to", text: "Type help in the terminal to see what it can do." },
     { tag: "how-to", text: "Featured cards open the full case study." },
+    { tag: "tip", text: "Click both eyes in my name for a surprise." },
   ],
   "/work": [
     { tag: "how-to", text: "Filter by personal, academic or professional." },

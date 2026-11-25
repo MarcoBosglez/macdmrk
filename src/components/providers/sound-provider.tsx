@@ -18,7 +18,8 @@ export type SoundVariant =
   | "hover"
   | "projectHover"
   | "eye"
-  | "mintSwitch";
+  | "mintSwitch"
+  | "cardFlip";
 
 type SoundContextValue = {
   muted: boolean;
@@ -35,7 +36,10 @@ const SoundContext = createContext<SoundContextValue | null>(null);
 // projectHover / eye play real recorded clips instead — see
 // SOUND_FILES.)
 const SOUND_VARIANTS: Record<
-  Exclude<SoundVariant, "nav" | "toggle" | "honk" | "pageOpen" | "hover" | "projectHover" | "eye" | "mintSwitch">,
+  Exclude<
+    SoundVariant,
+    "nav" | "toggle" | "honk" | "pageOpen" | "hover" | "projectHover" | "eye" | "mintSwitch" | "cardFlip"
+  >,
   { type: OscillatorType; start: number; end: number; duration: number; gain: number }
 > = {
   open: { type: "sine", start: 420, end: 880, duration: 0.1, gain: 0.06 }, // rising pop
@@ -77,7 +81,7 @@ function playPageOpen(ctx: AudioContext) {
 // every play() lets a rapid-fire trigger (hovering across several cards
 // fast) retrigger cleanly instead of queuing.
 const SOUND_FILES: Record<
-  "toggle" | "honk" | "hover" | "projectHover" | "nav" | "eye" | "mintSwitch",
+  "toggle" | "honk" | "hover" | "projectHover" | "nav" | "eye" | "mintSwitch" | "cardFlip",
   { src: string; volume: number }
 > = {
   toggle: { src: "/sounds/mixkit-cool-interface-click-tone-2568.wav", volume: 0.45 },
@@ -87,6 +91,7 @@ const SOUND_FILES: Record<
   nav: { src: "/sounds/mixkit-gate-latch-click-1924.wav", volume: 0.4 },
   eye: { src: "/sounds/mixkit-typewriter-soft-click-1125.wav", volume: 0.4 },
   mintSwitch: { src: "/sounds/mixkit-on-or-off-light-switch-tap-2585.wav", volume: 0.5 },
+  cardFlip: { src: "/sounds/mixkit-poker-card-flick-2002.wav", volume: 0.45 },
 };
 
 function playFile(
@@ -129,6 +134,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
       if (variant === "nav") return playFile(audioElsRef, "nav");
       if (variant === "eye") return playFile(audioElsRef, "eye");
       if (variant === "mintSwitch") return playFile(audioElsRef, "mintSwitch");
+      if (variant === "cardFlip") return playFile(audioElsRef, "cardFlip");
 
       const ctx = audioCtxRef.current ?? new AudioContext();
       audioCtxRef.current = ctx;

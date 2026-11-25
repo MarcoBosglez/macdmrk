@@ -19,3 +19,7 @@ I need to draw over my page for stuff I want thatd be fun
 stars around too would look cool
 
 Re-do spanish translation
+
+Play flip card sound when flipping 
+
+Do something about 2026 Marco Bosquez being too present in project work
