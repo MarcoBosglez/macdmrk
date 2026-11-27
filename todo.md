@@ -23,3 +23,8 @@ Re-do spanish translation
 Play flip card sound when flipping 
 
 Do something about 2026 Marco Bosquez being too present in project work
+
+Add UFC prediction project to my website and usign an API pull the most recent fights and try to predict them based on the trained data and add checks to which predictions the model got right -> Might publish
+-> Add to kaggle or publish the research project
+
+Add it to macdmrk and build a new website hosted in vercel for people to visit
